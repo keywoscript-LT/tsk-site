@@ -1166,6 +1166,10 @@ const st=document.createElement('style');st.textContent=`
 .rtb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;padding:6px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
 .rtb button{min-width:32px;height:32px;padding:0 8px;border-radius:8px;background:rgba(255,255,255,.06);color:#e2e8f0;font-weight:800;font-size:12px}
 .rtb button:hover{background:rgba(0,240,255,.15);color:#00F0FF}.rtb i{width:1px;background:rgba(255,255,255,.12);margin:2px 2px}
+main,main#v,#v{min-width:0;max-width:100%}main#v>*,#v>*{min-width:0;max-width:100%}
+.hs{min-width:0;max-width:100%;-webkit-overflow-scrolling:touch}.hs>*{flex-shrink:0}
+.flex>.inp,.flex>input,.flex>select{min-width:0}#admL,#admL>*{min-width:0;max-width:100%}#admL .g{overflow:hidden}
+@media(max-width:480px){main .flex.gap-2.mb-2>.btn{padding-left:.7rem;padding-right:.7rem}}
 .nbody,.nbody *{overflow-wrap:anywhere;max-width:100%}.nbody{min-width:0}
 #F{grid-template-columns:minmax(0,1fr)}#F>*,#F label{min-width:0}#F input,#F select,#F textarea{max-width:100%;min-width:0;box-sizing:border-box}
 #F input[type=datetime-local],#F input[type=file]{width:100%;font-size:16px}
