@@ -270,6 +270,22 @@ var f=function(){var a=b.querySelector('.bn.on'),p=b.querySelector('#bp');if(!p)
 f();var t0=performance.now();(function r(){f();if(performance.now()-t0<500)requestAnimationFrame(r)})()};
 addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b.querySelector('.bn.on'),p=b&&b.querySelector('#bp');if(a&&p){p.style.width=a.offsetWidth+'px';p.style.transform='translateX('+a.offsetLeft+'px)'}});
 </script>
+<style id="mfix">
+/* ===== мобильная нижняя панель: подписи не вылезают, кнопка «наверх» выше панели ===== */
+@media(max-width:767px){
+#bot{gap:2px!important;padding:5px!important;overflow:hidden}
+#bot .bn{min-width:0;overflow:hidden;padding:10px 2px!important;gap:5px!important}
+#bot .bn .ic{flex:0 0 auto;width:21px;height:21px}
+#bot .bn .bl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+#bot .bn.on{flex:2.6 1 0!important;font-size:11.5px!important;padding-left:6px!important;padding-right:6px!important}
+#bot .bn:not(.on) .bl{display:none}
+#toTop{bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;right:12px!important}
+}
+@media(max-width:380px){
+#bot .bn.on{font-size:10.5px!important;gap:4px!important;padding-left:4px!important;padding-right:4px!important}
+#bot .bn .ic{width:19px;height:19px}
+}
+</style>
 </head><body>
 <header class="sticky top-0 z-40 bg-[rgba(7,9,14,.88)] backdrop-blur-lg border-b border-white/5">
 <div class="max-w-5xl mx-auto px-3 md:px-6 py-2 flex items-center gap-2">
@@ -433,7 +449,7 @@ meHdr();
 $('#ad').innerHTML=S.user?ic('out')+'<span class="hidden sm:inline">'+t('out')+'</span>':ic('lock')+'<span>'+t('admin')+'</span>';
 $('#ft').innerHTML=`<div class="max-w-5xl mx-auto px-3 md:px-6 pt-5 pb-24 md:pb-8 border-t border-white/10 mt-4"><div class="flex items-center gap-2"><img src="${L}" class="logo h-9" alt="TSK"><span class="font-head font-black text-lg tracking-wider">TSK <span class="text-[#00F0FF]">ESPORTS</span></span></div><p class="text-[13px] text-slate-400 mt-3 leading-snug">${t('fdesc')}</p><div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 text-[13px] text-slate-400"><a href="#" class="hover:text-white transition" onclick="openReg('team');return false">${R('Регистрация','Registration')}</a><a href="#" class="hover:text-white transition" onclick="go('rules');return false">${R('Правила','Rules')}</a><a href="#" class="hover:text-white transition" onclick="go('lfg');return false">${R('Поиск команды','Find a team')}</a>${pwaLink()}<a href="#" class="hover:text-white transition" onclick="adminBtn();return false">${S.user?t('out'):t('title')}</a><span class="flex items-center gap-1.5">${R('Язык','Language')}: ${['ru','en','uk','kk'].map(l=>`<button class="px-2.5 py-1 rounded-lg font-bold transition active:scale-95 ${S.lang==l?'bg-[#00F0FF]/15 text-[#00F0FF] ring-1 ring-[#00F0FF]/30':'text-slate-400'}" onclick="S.lang='${l}';ui()">${({ru:'Русский',en:'English',uk:'Українська',kk:'Қазақша'})[l]}</button>`).join('')}</span></div><p class="mt-4 pt-3 border-t border-white/10 text-[11px] leading-relaxed text-slate-500">${t('disc').replace('{L}',(u=>`<a href="${u}" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-300">${u.replace('https://','')}</a>`)(S.lang=='ru'?'https://supercell.com/en/fan-content-policy/ru/':'https://supercell.com/en/fan-content-policy/'))}</p><a href="https://t.me/TSKesports" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center gap-2 text-[13px] text-slate-300 hover:text-white transition active:scale-95"><svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="#27A7E7" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span class="font-bold">Telegram</span><span class="text-slate-500">t.me/TSKesports</span></a></div>`;
 $('#top').innerHTML=NAV.map(k=>`<a href="#" class="tab ${at(k)?'on':''}" onclick="go('${k}');return false">${t(k)}</a>`).join('')+(S.user?`<a href="#" class="tab ${S.tab=='admin'?'on':''}" onclick="go('admin');return false">${ic('cog')}${t('panel')}</a>`:'');
-botSet(NAV.concat(S.user?['admin']:[]).map(k=>[k,at(k),ic(k=='admin'?'cog':k,'!w-[22px] !h-[22px]')+(k=='admin'?t('panel'):t(k))]));render()}
+botSet(NAV.concat(S.user?['admin']:[]).map(k=>[k,at(k),ic(k=='admin'?'cog':k,'!w-[22px] !h-[22px]')+'<span class="bl">'+(k=='admin'?t('panel'):t(k))+'</span>']));render()}
 
 function render(quiet){$('#v').innerHTML=`<div class="${quiet===true?'':'fd'}">${V[S.tab](S.q.toLowerCase())}</div>`}
 function go(k){S.tab=k;ui();scrollTo({top:0,behavior:'smooth'})}
@@ -976,7 +992,7 @@ async function demo(){const d=seed();for(const k of['teams','players','matches',
 const PUSH_PK='BMB_n3Wu19C_DsbhOtG8Iy6ZoqCSsFILVION7DBM61YOZcvMD_i5CobxE8pfGIs8c1zqiqdTBlydjpwTO-PLCg4',_u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())};
 const _swReady=()=>Promise.race([navigator.serviceWorker.ready,new Promise((_,j)=>setTimeout(()=>j(new Error('Service Worker не запущен (sw.js)')),8000))]);
 async function pushSync(){if(!sb||!S.me||!window.Notification||Notification.permission!='granted'||!('serviceWorker' in navigator)||!('PushManager' in window))return;const reg=await _swReady();let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:_u8(PUSH_PK)});const r=await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'});if(r.error)throw r.error}
-async function staffPushOn(){if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return toast(R('Пуши не поддерживаются. На iPhone: добавь сайт на экран «Домой» и открой оттуда','Push not supported. On iPhone: add the site to Home Screen and open it from there'),6000);if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в настройках браузера','Notifications blocked in browser settings'),4000);try{await pushSync();toast(R('Уведомления на телефон включены','Phone notifications enabled'))}catch(e){toast(R('Не удалось включить: ','Failed: ')+((e&&e.message)||e),6000)}window._ps=1;notifyApps()}
+async function staffPushOn(){if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return toast(R('Пуши не поддерживаются в этом браузере. Открой сайт в Chrome (не во встроенном браузере Telegram/Instagram). На iPhone: добавь сайт на экран «Домой» и открой оттуда','Push not supported here. Open the site in Chrome (not an in-app browser like Telegram/Instagram). On iPhone: add the site to Home Screen and open it from there'),6000);if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в настройках браузера','Notifications blocked in browser settings'),4000);try{await pushSync();toast(R('Уведомления на телефон включены','Phone notifications enabled'))}catch(e){toast(R('Не удалось включить: ','Failed: ')+((e&&e.message)||e),6000)}window._ps=1;notifyApps()}
 function pushAskHide(){try{localStorage.setItem('tsk_pushask','1')}catch{}notifyApps()}
 function pushAsk(){if(!window.Notification||Notification.permission!='default'){return''}try{if(localStorage.getItem('tsk_pushask'))return''}catch{}return`<div class="g p-3" style="pointer-events:auto;border:1px solid #00F0FF"><div class="flex items-center gap-2"><div class="flex-1 text-[13px]"><b>${R('Уведомления о заявках','Application alerts')}</b><div class="text-[11px] text-slate-400">${R('Получай пуш на телефон, когда приходит новая заявка','Get a push on your phone for each new application')}</div></div><button class="btn" onclick="staffPushOn()">${R('Включить','Enable')}</button><button class="btn k !p-1.5" onclick="pushAskHide()" aria-label="x">✕</button></div></div>`}
 
@@ -997,7 +1013,7 @@ function notifyApps(){
  const P=(DB.apps||[]).filter(a=>a.status=='pending');
  document.title=(P.length?'('+P.length+') ':'')+base;
  const seen=new Set(_seen()),fresh=P.filter(a=>!seen.has(a.id)),nw=fresh.filter(a=>!_known.has(a.id));
- if(nw.length){_beep();try{if(window.Notification&&Notification.permission=='granted'){const n=new Notification('TSK · '+R('Новая заявка','New application'),{body:appLabel(nw[0])+(P.length>1?' (+'+(P.length-1)+')':''),tag:'tsk-app-'+nw[0].id,icon:'icon-192.png'});n.onclick=()=>{window.focus();appNoteOpen(nw[0].id);n.close()}}}catch{}}
+ if(nw.length){_beep();try{if(window.Notification&&Notification.permission=='granted'){const tt='TSK · '+R('Новая заявка','New application'),oo={body:appLabel(nw[0])+(P.length>1?' (+'+(P.length-1)+')':''),tag:'tsk-app-'+nw[0].id,icon:'icon-192.png',badge:'icon-192.png',data:{url:'/'}};if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(r=>r.showNotification(tt,oo)).catch(()=>{});else{const n=new Notification(tt,oo);n.onclick=()=>{window.focus();appNoteOpen(nw[0].id);n.close()}}}}catch{}}
  P.forEach(a=>_known.add(a.id));_ntInit=1;
  if(!fresh.length){box.innerHTML=pushAsk();return}
  const a=fresh[0],id=esc(a.id),more=fresh.length-1,perm=window.Notification&&Notification.permission=='default';
@@ -1094,7 +1110,7 @@ window.rlist=function(q){const all=sortedT(),rn=(S.rn||'').toLowerCase(),l=all.f
  return pod+`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-1.5">${rest.map((x,k)=>{const r=all.indexOf(x)+1,w=Math.round(100*x.w/Math.max(1,x.w+x.l));
  return`<div class="edge cursor-pointer active:scale-[.98] transition fd" style="animation-delay:${Math.min(k,12)*35}ms" onclick="openT('${esc(x.id)}')"><div class="cut bg-[#0b0f16] flex items-center gap-2.5 px-3 py-2"><b class="w-6 font-head text-lg text-white/40">${r}</b>${lg(x,'h-9 w-9')}<div class="flex-1 min-w-0"><div class="flex items-center gap-1.5 min-w-0"><b class="truncate text-sm">${esc(x.name)}</b>${bdg(x)}${fl(x.country)}</div><div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="truncate">${x.w}W · ${x.l}L · ${w}%</span>${form(x)}</div><div class="h-0.5 rounded-full bg-white/10 mt-1 overflow-hidden"><i class="block h-full rounded-full bg-gradient-to-r from-[#00F0FF] to-[#FF2E63]" style="width:${Math.round(100*(x.pps||0)/mx)}%"></i></div></div><b class="font-head text-[#00F0FF]">${x.pps}</b></div></div>`}).join('')}</div>`};
 /* кнопка наверх */
-const b=document.createElement('button');b.setAttribute('aria-label','Наверх / Back to top');b.innerHTML=ic('back','!w-5 !h-5 rotate-90');
+const b=document.createElement('button');b.id='toTop';b.setAttribute('aria-label','Наверх / Back to top');b.innerHTML=ic('back','!w-5 !h-5 rotate-90');
 b.className='fixed right-3 bottom-[72px] md:bottom-6 z-40 grid place-items-center h-10 w-10 rounded-full bg-[#0b0f16]/90 border border-white/15 text-[#00F0FF] backdrop-blur transition-all opacity-0 pointer-events-none translate-y-2';
 b.onclick=()=>scrollTo({top:0,behavior:'smooth'});document.body.appendChild(b);
 let on=0;addEventListener('scroll',()=>{const v=scrollY>700;if(v===on)return;on=v;b.classList.toggle('opacity-0',!v);b.classList.toggle('pointer-events-none',!v);b.classList.toggle('translate-y-2',!v)},{passive:true});
