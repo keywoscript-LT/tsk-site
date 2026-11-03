@@ -252,6 +252,11 @@ main .g{border-left:3px solid #2a3446}
 .bn.on .ic{animation:bnpop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes bnpop{0%{transform:scale(.7) translateY(3px)}60%{transform:scale(1.2) translateY(-3px)}100%{transform:none}}
 .light #bp{background:#0284c7;box-shadow:0 3px 0 #075985}
+/* ===== v15: статические размеры (страховка, если Tailwind CDN не успел сгенерировать классы, iOS) ===== */
+.h-4{height:1rem}.w-4{width:1rem}.h-5{height:1.25rem}.w-5{width:1.25rem}.h-6{height:1.5rem}.w-6{width:1.5rem}.h-7{height:1.75rem}.w-7{width:1.75rem}.h-8{height:2rem}.w-8{width:2rem}.h-9{height:2.25rem}.w-9{width:2.25rem}.h-10{height:2.5rem}.w-10{width:2.5rem}.h-11{height:2.75rem}.w-11{width:2.75rem}.h-12{height:3rem}.w-12{width:3rem}.h-14{height:3.5rem}.w-14{width:3.5rem}.h-16{height:4rem}.w-16{width:4rem}.h-20{height:5rem}.w-20{width:5rem}.h-24{height:6rem}.w-24{width:6rem}
+.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}
+.grid-cols-\[1fr_auto_1fr\]{grid-template-columns:1fr auto 1fr}.mx-auto{margin-left:auto;margin-right:auto}.shrink-0{flex-shrink:0}
+.tilt-fix{}main img.logo,main .rounded-full>img{max-width:100%}
 </style><script>
 /* анимация нижних вкладок: вкладки не пересоздаются, «таблетка» плавно едет за активной */
 window.botSet=function(L){var b=document.getElementById('bot');if(!b)return;
@@ -419,7 +424,7 @@ pod=top.length?`<div class="grid grid-cols-3 gap-2 items-end mb-3">${[1,0,2].map
 return pod+`<div class="grid gap-1.5 md:grid-cols-2">${rest.map(x=>{const r=all.indexOf(x)+1,w=Math.round(100*x.w/Math.max(1,x.w+x.l));return`<div class="edge cursor-pointer active:scale-[.98] transition" onclick="openT('${x.id}')"><div class="cut bg-[#0b0f16] flex items-center gap-2.5 px-3 py-2"><b class="w-6 font-head text-lg text-white/40">${r}</b>${lg(x,'h-9 w-9')}<div class="flex-1 min-w-0"><div class="flex items-center gap-1.5"><b class="truncate text-sm">${esc(x.name)}</b>${bdg(x)}${fl(x.country)}</div><div class="text-[11px] text-slate-500">${x.w}W · ${x.l}L · ${w}%</div></div><b class="font-head text-[#00F0FF]">${x.pps}</b></div></div>`}).join('')}</div>`}
 const rl=dbn(()=>$('#rl').innerHTML=rlist(S.q.toLowerCase()));
 const pl=dbn(()=>$('#pl').innerHTML=plist(S.q.toLowerCase()));
-const NAV=['news','rank','players','matches','tourn'];
+const NAV=['news','rank','players','matches','tourn','games'];
 function ui(){mtApply();$('#lg').innerHTML=ic('globe')+S.lang.toUpperCase();
 meHdr();
 $('#ad').innerHTML=S.user?ic('out')+'<span class="hidden sm:inline">'+t('out')+'</span>':ic('lock')+'<span>'+t('admin')+'</span>';
@@ -1396,7 +1401,7 @@ const BR=[['Shelly','Шелли','Дробовик в упор; супер ло�
 ['Edgar','Эдгар','Ассасин с шарфом: прыгает на врагов и лечится ударами','Scarf assassin who jumps on enemies and heals by hitting'],
 ['Mortis','Мортис','Ассасин с лопатой: рывками добирается до цели','Shovel assassin dashing to his target'],
 ['Max','Макс','Саппорт-спринтер: супер ускоряет всю команду','Speedy support: her super speeds up the team']];
-const NZ=s=>String(s).toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]/g,''),dgS=()=>ld('dg',{streak:0,best:0,last:'',d:'',ok:null});
+window.BRL=BR;const NZ=s=>String(s).toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9]/g,''),dgS=()=>ld('dg',{streak:0,best:0,last:'',d:'',ok:null});
 const dgPick=()=>{let h=0;for(const c of ds(0))h=(h*31+c.charCodeAt())>>>0;return BR[h%BR.length]};
 window.dgGo=()=>{const s=dgS(),b=dgPick(),v=NZ(($('#dg-i')||{}).value);if(!v)return;if(s.d==ds(0))return;const ok=v==NZ(b[0])||v==NZ(b[1]);
 s.d=ds(0);s.ok=ok;s.streak=ok?(s.last==ds(1)?s.streak+1:1):0;if(ok)s.last=ds(0);s.best=Math.max(s.best,s.streak);sv('dg',s);window.hap&&hap([30]);render(true)};
@@ -1497,4 +1502,135 @@ c.toBlob(b=>{const f=new File([b],p.nick+'.png',{type:'image/png'});if(navigator
 const _op=window.openP;window.openP=function(id){_op.apply(this,arguments);const b=document.querySelector('#m .su');if(b&&!b.querySelector('.pshare')){const d=document.createElement('button');d.className='btn k w-full mt-3 pshare';d.innerHTML=ic('share')+' '+R('Поделиться карточкой','Share card');d.onclick=()=>dlP(id);b.appendChild(d)}};
 })();
 </script>
+<script>
+/* ===== v16: вкладка «Игры» ===== */
+(()=>{
+const K='tsk_g_',ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(K+k))??d}catch{return d}},sv=(k,v)=>{try{localStorage.setItem(K+k,JSON.stringify(v))}catch{}},
+rnd=a=>a[Math.floor(Math.random()*a.length)],shuf=a=>[...a].sort(()=>Math.random()-.5),ru=()=>S.lang=='ru';
+Object.assign(T.ru,{games:'Игры'});Object.assign(T.en,{games:'Games'});Object.assign(T.uk,{games:'Ігри'});Object.assign(T.kk,{games:'Ойындар'});
+P.games='<path fill-rule="evenodd" d="M7.5 6h9a5.5 5.5 0 015.4 6.5l-.7 3.8a3.2 3.2 0 01-5.6 1.5L14 16h-4l-1.6 1.8a3.2 3.2 0 01-5.6-1.5l-.7-3.8A5.5 5.5 0 017.5 6zM7 9.5v1.7H5.3v1.6H7v1.7h1.6v-1.7h1.7v-1.6H8.6V9.5zm9.6 1.2a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2zm2.4 1.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/>';
+const G={g:null,s:0,q:null,pick:null,over:false,rt:null,mm:null},bst=k=>ld('b_'+k,0),sb_=(k,v,low)=>{const b=bst(k);if(!b||(low?v<b:v>b))sv('b_'+k,v)};
+const back=`<button class="btn k !py-1.5 !px-3 text-xs mb-3" onclick="gmBack()">← ${R('Все игры','All games')}</button>`,
+again=(k,msg)=>`<div class="g p-4 text-center mt-3"><div class="font-head font-black text-lg">${msg}</div><div class="text-[12px] text-slate-400 mt-1">${R('Счёт','Score')}: <b class="text-white">${G.s}</b> · ${R('рекорд','best')}: ${bst(k)}</div><button class="btn mt-3" onclick="gmOpen('${k}')">${R('Играть снова','Play again')}</button></div>`,
+stat=k=>`<div class="text-[12px] text-slate-400 mb-3">${R('Счёт','Score')}: <b class="text-white">${G.s}</b> · ${R('рекорд','best')}: ${bst(k)}</div>`;
+const nm=x=>esc(x.name||x.nick),poolHL=()=>{const T=DB.teams.filter(x=>+x.pps);return T.length>=3?T.map(x=>[x.name,+x.pps]):DB.players.filter(x=>+x.pps).map(x=>[x.nick,+x.pps])};
+const nxHL=()=>{const P=poolHL();if(P.length<3)return null;const a=G.q?G.q.b:rnd(P);let b=rnd(P.filter(x=>x!=a));return{a,b}};
+const mkTQ=()=>{const T=DB.teams;if(T.length<2)return null;const a=rnd(T),o=shuf([a,...shuf(T.filter(x=>x.id!=a.id)).slice(0,3)]),n=DB.players.filter(p=>p.team==a.id).length;return{ans:a.id,o:o.map(x=>[x.id,x.name]),clue:`PPS ${a.pps} · W/L ${a.w}/${a.l} · ${R('игроков','players')}: ${n}`}};
+const mkBQ=()=>{const B=window.BRL||[],a=rnd(B);if(!a)return null;const o=shuf([a,...shuf(B.filter(x=>x!=a)).slice(0,3)]);return{ans:a[0],o:o.map(x=>[x[0],ru()?x[1]:x[0]]),clue:ru()?a[2]:a[3]}};
+const H=[['hl','rank',R('Выше или ниже','Higher or lower'),R('Чей PPS больше?','Whose PPS is higher?')],['tq','players',R('Угадай команду','Guess the team'),R('По статистике','By the stats')],['bq','target',R('Бравлер-квиз','Brawler quiz'),R('По описанию, 4 варианта','By description')],['rt','fire',R('Реакция','Reaction'),R('Жми, когда позеленеет','Tap on green')],['mm','star',R('Мемори','Memory'),R('Найди все пары','Match the pairs')]];
+window.gmOpen=k=>{clearTimeout(G.t);Object.assign(G,{g:k,s:0,pick:null,over:false,q:null,rt:null,mm:null});
+if(k=='hl')G.q=nxHL();if(k=='tq')G.q=mkTQ();if(k=='bq')G.q=mkBQ();
+if(k=='rt')G.rt={st:'idle'};
+if(k=='mm'){const e=['🔥','💀','⚡','🎯','👑','🛡️'];G.mm={c:shuf([...e,...e]),o:[],d:[],m:0,lock:false}}
+render(true);scrollTo({top:0})};
+window.gmBack=()=>{clearTimeout(G.t);G.g=null;render(true)};
+window.hlGo=up=>{const{a,b}=G.q;if(G.pick!==null)return;G.pick=up;const ok=up?b[1]>=a[1]:b[1]<=a[1];G.ok=ok;render(true);G.t=setTimeout(()=>{if(ok){G.s++;sb_('hl',G.s);G.pick=null;G.q=nxHL()}else{sb_('hl',G.s);G.over=true}render(true)},900)};
+window.qzGo=id=>{if(G.pick!==null)return;G.pick=id;const ok=id==G.q.ans;render(true);G.t=setTimeout(()=>{if(ok){G.s++;sb_(G.g,G.s);G.pick=null;G.q=(G.g=='tq'?mkTQ:mkBQ)()}else{sb_(G.g,G.s);G.over=true}render(true)},ok?600:1100)};
+window.rtTap=()=>{const r=G.rt,up=()=>{if(S.tab=='games'&&G.g=='rt')render(true)};
+if(r.st=='idle'||r.st=='res'||r.st=='early'){r.st='wait';up();G.t=setTimeout(()=>{r.st='go';r.t0=performance.now();up()},1500+Math.random()*2500)}
+else if(r.st=='wait'){clearTimeout(G.t);r.st='early';up()}
+else if(r.st=='go'){r.ms=Math.round(performance.now()-r.t0);r.st='res';G.s=r.ms;sb_('rt',r.ms,1);up()}};
+window.mmFlip=i=>{const m=G.mm;if(m.lock||m.o.includes(i)||m.d.includes(i))return;m.o.push(i);
+if(m.o.length==2){m.m++;const[a,b]=m.o;if(m.c[a]==m.c[b]){m.d.push(a,b);m.o=[];if(m.d.length==12){sb_('mm',m.m,1);G.over=true}}else{m.lock=true;render(true);G.t=setTimeout(()=>{m.o=[];m.lock=false;render(true)},800);return}}render(true)};
+const tile=(c,t,d,k,b)=>`<button class="g r p-3 text-left active:scale-[.98] transition" onclick="${k}"><span class="grid place-items-center w-10 h-10 rounded-xl ${c}">${ic(b,'!w-5 !h-5')}</span><div class="font-head font-black text-[15px] mt-2">${t}</div><div class="text-[11px] text-slate-400">${d}</div></button>`,
+cols=['bg-[#00F0FF]/10 text-[#00F0FF]','bg-[#FF2E63]/10 text-[#FF2E63]','bg-[#FFD700]/10 text-[#FFD700]','bg-[#7CFF6B]/10 text-[#7CFF6B]','bg-white/10 text-white'];
+const fmtB=(k,v)=>v?(k=='rt'?v+' ms':k=='mm'?v+' '+R('ходов','moves'):v):'—';
+const view=()=>{const g=G.g;
+if(!g)return hd(R('Мини-игры','Mini-games'))+`<div class="grid grid-cols-2 gap-2.5">${H.map((x,i)=>tile(cols[i%5],x[2],x[3]+' · '+R('рекорд','best')+': '+fmtB(x[0],bst(x[0])),`gmOpen('${x[0]}')`,x[1])).join('')}${tile('bg-[#FFD700]/10 text-[#FFD700]',R('Бравлер дня','Brawler of the day'),R('Одна попытка в день · на главной','Once a day · on Home'),"go('news')",'crown')}</div>`;
+const q=G.q;
+if(g=='hl'){if(!q)return back+`<p class="text-slate-400 text-sm">${R('Недостаточно данных для игры.','Not enough data.')}</p>`;
+return back+stat('hl')+`<div class="g p-4 text-center"><div class="text-[11px] uppercase tracking-wider text-slate-500">${R('PPS известен','Known PPS')}</div><div class="font-head font-black text-xl mt-1">${esc(q.a[0])}</div><div class="font-head font-black text-4xl text-[#00F0FF]">${q.a[1]}</div></div>
+<div class="g p-4 text-center mt-2.5"><div class="font-head font-black text-xl">${esc(q.b[0])}</div><div class="font-head font-black text-4xl ${G.pick===null?'text-slate-500':G.ok?'text-[#7CFF6B]':'text-[#FF2E63]'}">${G.pick===null?'?':q.b[1]}</div>
+<div class="text-[12px] text-slate-400 mt-1">${R('PPS выше или ниже, чем у','PPS is higher or lower than')} ${esc(q.a[0])}?</div>${G.pick===null?`<div class="grid grid-cols-2 gap-2 mt-3"><button class="btn" onclick="hlGo(true)">▲ ${R('Выше','Higher')}</button><button class="btn k" onclick="hlGo(false)">▼ ${R('Ниже','Lower')}</button></div>`:''}</div>`+(G.over?again('hl',R('Не угадал!','Wrong!')):'')}
+if(g=='tq'||g=='bq'){if(!q)return back+`<p class="text-slate-400 text-sm">${R('Недостаточно данных для игры.','Not enough data.')}</p>`;
+return back+stat(g)+`<div class="g p-4"><div class="text-[11px] uppercase tracking-wider text-slate-500">${g=='tq'?R('Что за команда?','Which team?'):R('Что за бравлер?','Which brawler?')}</div><p class="text-[15px] mt-1.5 font-semibold">«${esc(q.clue)}»</p></div><div class="grid grid-cols-2 gap-2 mt-2.5">${q.o.map(o=>{const st=G.pick===null?'':o[0]==q.ans?'border-[#7CFF6B] bg-[#7CFF6B]/15':o[0]==G.pick?'border-[#FF2E63] bg-[#FF2E63]/15':'opacity-50';return`<button class="g r p-3 text-sm font-bold border ${st}" onclick="qzGo('${esc(String(o[0]))}')">${esc(o[1])}</button>`}).join('')}</div>`+(G.over?again(g,R('Мимо!','Missed!')):'')}
+if(g=='rt'){const r=G.rt,m={idle:['bg-[#00F0FF]/15 border-[#00F0FF]',R('Нажми, чтобы начать','Tap to start')],wait:['bg-[#FF2E63]/20 border-[#FF2E63]',R('Жди зелёного…','Wait for green…')],go:['bg-[#7CFF6B]/30 border-[#7CFF6B]',R('ЖМИ!','TAP!')],early:['bg-[#FFD700]/15 border-[#FFD700]',R('Рано! Нажми, чтобы повторить','Too early! Tap to retry')],res:['bg-[#00F0FF]/15 border-[#00F0FF]',(r.ms||0)+' ms · '+R('ещё раз?','again?')]}[r.st];
+return back+`<div class="text-[12px] text-slate-400 mb-3">${R('Лучший результат','Best')}: ${fmtB('rt',bst('rt'))}</div><button class="w-full h-56 rounded-2xl border-2 font-head font-black text-2xl select-none ${m[0]}" onpointerdown="rtTap()">${m[1]}</button>`}
+if(g=='mm'){const m=G.mm;return back+`<div class="text-[12px] text-slate-400 mb-3">${R('Ходов','Moves')}: <b class="text-white">${m.m}</b> · ${R('рекорд','best')}: ${fmtB('mm',bst('mm'))}</div><div class="grid grid-cols-4 gap-2">${m.c.map((e,i)=>{const sh=m.o.includes(i)||m.d.includes(i);return`<button class="h-20 rounded-xl border text-3xl ${sh?'bg-[#00F0FF]/10 border-[#00F0FF]/40':'g'} ${m.d.includes(i)?'opacity-60':''}" onclick="mmFlip(${i})">${sh?e:'?'}</button>`}).join('')}</div>`+(G.over?`<div class="g p-4 text-center mt-3"><div class="font-head font-black text-lg">${R('Все пары найдены!','All pairs found!')}</div><div class="text-[12px] text-slate-400 mt-1">${m.m} ${R('ходов','moves')}</div><button class="btn mt-3" onclick="gmOpen('mm')">${R('Ещё раз','Again')}</button></div>`:'')}
+return''};
+V.games=()=>view();
+})();
+</script>
+<script>
+/* ===== v17: ещё игры (крестики-нолики, лови бравлера, правда/ложь, быстрый счёт, колесо судьбы) ===== */
+(()=>{
+const K='tsk_h_',ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(K+k))??d}catch{return d}},sv=(k,v)=>{try{localStorage.setItem(K+k,JSON.stringify(v))}catch{}},
+rnd=a=>a[Math.floor(Math.random()*a.length)],shuf=a=>[...a].sort(()=>Math.random()-.5),ru=()=>S.lang=='ru',bst=k=>ld('b_'+k,0),sbs=(k,v)=>{if(v>bst(k))sv('b_'+k,v)},
+today=()=>new Date().toISOString().slice(0,10),X={g:null,s:0},clr=()=>{clearTimeout(X.t);clearInterval(X.i)},live=g=>S.tab=='games'&&X.g==g;
+const back=`<button class="btn k !py-1.5 !px-3 text-xs mb-3" onclick="gmBack()">← ${R('Все игры','All games')}</button>`,
+stat=(k,l)=>`<div class="text-[12px] text-slate-400 mb-3">${l||R('Счёт','Score')}: <b class="text-white">${X.s}</b> · ${R('рекорд','best')}: ${bst(k)}</div>`,
+again=(k,msg)=>`<div class="g p-4 text-center mt-3"><div class="font-head font-black text-lg">${msg}</div><div class="text-[12px] text-slate-400 mt-1">${R('Счёт','Score')}: <b class="text-white">${X.s}</b> · ${R('рекорд','best')}: ${bst(k)}</div><button class="btn mt-3" onclick="xOpen('${k}')">${R('Играть снова','Play again')}</button></div>`;
+const _go=window.gmOpen,_gb=window.gmBack;window.gmOpen=k=>{clr();X.g=null;_go(k)};window.gmBack=()=>{clr();X.g=null;_gb()};
+/* --- крестики-нолики --- */
+const WL=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],wn=b=>{for(const[a,c,d]of WL)if(b[a]&&b[a]==b[c]&&b[a]==b[d])return b[a];return b.includes('')?null:'D'};
+const mm=(b,p)=>{const w=wn(b);if(w)return w=='O'?1:w=='X'?-1:0;let r=p=='O'?-2:2;b.forEach((v,i)=>{if(v)return;b[i]=p;const s=mm(b,p=='O'?'X':'O');b[i]='';r=p=='O'?Math.max(r,s):Math.min(r,s)});return r};
+const bot=()=>{const b=X.b,E=b.map((v,i)=>v?-1:i).filter(i=>i>=0);if(Math.random()<.3)return rnd(E);const sc=E.map(i=>{b[i]='O';const s=mm(b,'X');b[i]='';return[i,s]}),m=Math.max(...sc.map(x=>x[1]));return rnd(sc.filter(x=>x[1]==m))[0]};
+window.tGo=i=>{if(X.b[i]||X.res)return;X.b[i]='X';let w=wn(X.b);if(!w){X.b[bot()]='O';w=wn(X.b)}if(w){X.res=w;if(w=='X'){X.s++;sv('b_ttt',bst('ttt')+1)}}render(true)};
+/* --- лови бравлера --- */
+const whT=()=>{if(!live('wh'))return;if(Date.now()>=X.end){clr();X.over=true;sbs('wh',X.s)}else{X.pos=Math.floor(Math.random()*9);X.e=rnd(['👾','🐻','🐦‍⬛','🌵'])}render(true)};
+window.wGo=i=>{if(X.over||i!=X.pos)return;X.s++;X.pos=-1;render(true)};
+/* --- правда или ложь --- */
+const mkTF=()=>{const T=DB.teams.filter(x=>+x.pps);if(T.length<2)return null;const[a,b]=shuf(T),k=Math.random()<.5;return k?{txt:`${a.name}: PPS ${R('выше, чем у','is higher than')} ${b.name}`,ans:+a.pps>+b.pps}:{txt:`${a.name} ${R('выиграла больше матчей, чем','has more wins than')} ${b.name}`,ans:+a.w>+b.w}};
+window.fGo=v=>{if(X.pick!=null)return;X.pick=v;const ok=v==X.q.ans;render(true);X.t=setTimeout(()=>{if(ok){X.s++;sbs('tf',X.s);X.pick=null;X.q=mkTF()}else{sbs('tf',X.s);X.over=true}render(true)},ok?600:1100)};
+/* --- быстрый счёт --- */
+const mq=()=>{const a=2+Math.floor(Math.random()*18),b=2+Math.floor(Math.random()*(Math.random()<.5?9:18)),o=rnd(['+','−','×']),ans=o=='+'?a+b:o=='−'?a-b:a*b,s=new Set([ans]);while(s.size<4)s.add(ans+rnd([-1,1])*(1+Math.floor(Math.random()*6)));return{t:`${a} ${o} ${b}`,ans,o:shuf([...s])}};
+const mT=()=>{if(!live('mt'))return;if(Date.now()>=X.end){clr();X.over=true;sbs('mt',X.s)}render(true)};
+window.mGo=v=>{if(X.over)return;if(v==X.q.ans)X.s++;X.q=mq();render(true)};
+/* --- колесо судьбы --- */
+const CH=[['Выиграй матч, ни разу не умерев','Win a match without dying'],['Играй только на ближней дистанции','Stay close-range only'],['Не используй гаджет весь матч','No gadgets this match'],['Только атакуй — никакого кемпинга','Attack only, no camping'],['Первым возьми кристалл','Grab the first gem'],['Сыграй 3 матча подряд без пауз','Play 3 matches in a row'],['Помоги новичку в команде','Help a newcomer on your team'],['Сыграй за бравлера, которого давно не брал','Play a brawler you haven’t used in a while']];
+window.wfSpin=()=>{const B=window.BRL||[['?','?']];sv('wf',{d:today(),b:Math.floor(Math.random()*B.length),c:Math.floor(Math.random()*CH.length)});render(true)};
+const init={ttt:()=>{X.b=Array(9).fill('');X.res=null},wh:()=>{X.end=Date.now()+20000;X.pos=-1;X.i=setInterval(whT,650);whT()},tf:()=>{X.q=mkTF()},mt:()=>{X.end=Date.now()+30000;X.q=mq();X.i=setInterval(mT,1000)},wf:()=>{}};
+window.xOpen=k=>{clr();Object.assign(X,{g:k,s:0,over:false,pick:null,q:null,res:null});init[k]();render(true);scrollTo({top:0})};
+const view=()=>{const g=X.g,q=X.q;
+if(g=='ttt'){const m={X:R('Ты победил! 🎉','You win! 🎉'),O:R('Бот победил 🤖','Bot wins 🤖'),D:R('Ничья','Draw')}[X.res];
+return back+`<div class="text-[12px] text-slate-400 mb-3">${R('Ты — ✖, бот — ◯. Побед всего','You are ✖, bot is ◯. Total wins')}: <b class="text-white">${bst('ttt')}</b></div><div class="grid grid-cols-3 gap-2 max-w-[280px] mx-auto">${X.b.map((v,i)=>`<button class="h-[84px] rounded-xl g text-4xl font-black ${v=='X'?'text-[#00F0FF]':'text-[#FF2E63]'}" onclick="tGo(${i})">${v=='X'?'✖':v=='O'?'◯':''}</button>`).join('')}</div>`+(X.res?`<div class="g p-4 text-center mt-3"><div class="font-head font-black text-lg">${m}</div><button class="btn mt-3" onclick="xOpen('ttt')">${R('Ещё партию','Again')}</button></div>`:'')}
+if(g=='wh'){const left=Math.max(0,Math.ceil((X.end-Date.now())/1000));return back+stat('wh',R('Поймано','Caught'))+`<div class="text-[12px] text-slate-400 -mt-2 mb-3">${R('Осталось','Left')}: ${X.over?0:left} ${R('сек','s')}</div><div class="grid grid-cols-3 gap-2 max-w-[300px] mx-auto">${Array.from({length:9},(_,i)=>`<button class="h-24 rounded-xl g text-4xl select-none" onpointerdown="wGo(${i})">${!X.over&&i==X.pos?X.e:''}</button>`).join('')}</div>`+(X.over?again('wh',R('Время вышло!','Time is up!')):'')}
+if(g=='tf'){if(!q&&!X.over)return back+`<p class="text-slate-400 text-sm">${R('Недостаточно данных для игры.','Not enough data.')}</p>`;
+const st=v=>X.pick==null?'':v==q.ans?'border-[#7CFF6B] bg-[#7CFF6B]/15':v==X.pick?'border-[#FF2E63] bg-[#FF2E63]/15':'opacity-50';
+return back+stat('tf')+`<div class="g p-4 text-center"><p class="text-[16px] font-semibold">«${esc(q.txt)}»</p></div><div class="grid grid-cols-2 gap-2 mt-2.5"><button class="g r p-3 font-black border ${st(true)}" onclick="fGo(true)">✔ ${R('Правда','True')}</button><button class="g r p-3 font-black border ${st(false)}" onclick="fGo(false)">✖ ${R('Ложь','False')}</button></div>`+(X.over?again('tf',R('Мимо!','Missed!')):'')}
+if(g=='mt'){const left=Math.max(0,Math.ceil((X.end-Date.now())/1000));return back+stat('mt',R('Решено','Solved'))+`<div class="text-[12px] text-slate-400 -mt-2 mb-3">${R('Осталось','Left')}: ${X.over?0:left} ${R('сек','s')}</div>`+(X.over?again('mt',R('Время вышло!','Time is up!')):`<div class="g p-5 text-center font-head font-black text-4xl">${q.t}</div><div class="grid grid-cols-2 gap-2 mt-2.5">${q.o.map(v=>`<button class="g r p-3 text-lg font-black" onpointerdown="mGo(${v})">${v}</button>`).join('')}</div>`)}
+if(g=='wf'){const d=ld('wf',{}),B=window.BRL||[],ok=d.d==today()&&B[d.b];
+return back+`<div class="g p-5 text-center"><div class="text-5xl">🎡</div><div class="font-head font-black text-lg mt-2">${R('Колесо судьбы','Wheel of fate')}</div>`+(ok?`<div class="text-[12px] text-slate-400 mt-3">${R('Твой бравлер на сегодня','Your brawler today')}</div><div class="font-head font-black text-2xl text-[#00F0FF]">${esc(ru()?B[d.b][1]:B[d.b][0])}</div><div class="text-[12px] text-slate-400 mt-3">${R('Челлендж','Challenge')}</div><div class="text-[15px] font-semibold">${esc(CH[d.c][ru()?0:1])}</div><div class="text-[11px] text-slate-500 mt-3">${R('Новое колесо — завтра','New spin tomorrow')}</div>`:`<p class="text-[13px] text-slate-400 mt-2">${R('Раз в день: что пикнуть и какой челлендж взять.','Once a day: what to pick and a challenge.')}</p><button class="btn mt-3" onclick="wfSpin()">${R('Крутить','Spin')}</button>`)+'</div>'}
+return''};
+const tile=(c,t,d,k,b)=>`<button class="g r p-3 text-left active:scale-[.98] transition" onclick="${k}"><span class="grid place-items-center w-10 h-10 rounded-xl ${c}">${ic(b,'!w-5 !h-5')}</span><div class="font-head font-black text-[15px] mt-2">${t}</div><div class="text-[11px] text-slate-400">${d}</div></button>`,
+H=[['ttt','swap',R('Крестики-нолики','Tic-tac-toe'),R('Против бота','Vs bot'),'bg-[#00F0FF]/10 text-[#00F0FF]'],['wh','target',R('Лови бравлера','Whack-a-brawler'),R('20 секунд, жми быстрее','20 seconds'),'bg-[#FF2E63]/10 text-[#FF2E63]'],['tf','cup',R('Правда или ложь','True or false'),R('По статистике команд','Team stats'),'bg-[#FFD700]/10 text-[#FFD700]'],['mt','star',R('Быстрый счёт','Quick math'),R('30 секунд','30 seconds'),'bg-[#7CFF6B]/10 text-[#7CFF6B]'],['wf','crown',R('Колесо судьбы','Wheel of fate'),R('Раз в день','Once a day'),'bg-white/10 text-white']];
+const _vg=V.games;V.games=()=>{if(X.g)return view();const h=_vg();if(h.includes('gmBack()'))return h;const i=h.lastIndexOf('</div>');return h.slice(0,i)+H.map(x=>tile(x[4],x[2],x[3]+(x[0]=='wf'?'':' · '+R('рекорд','best')+': '+(bst(x[0])||'—')),`xOpen('${x[0]}')`,x[1])).join('')+h.slice(i)};
+})();
+</script>
+<script>
+/* ===== v18: иконки бравлеров (brawlers/<slug>.png с запасным значком) и крутящееся колесо ===== */
+(()=>{
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem('tsk_w_'+k))??d}catch{return d}},sv=(k,v)=>{try{localStorage.setItem('tsk_w_'+k,JSON.stringify(v))}catch{}},ru=()=>S.lang=='ru',
+slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
+ini=n=>{const w=n.split(/[\s.\-]+/).filter(Boolean);return(w.length>1?w[0][0]+w[1][0]:n.slice(0,2)).toUpperCase()},
+hu=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt())%360;return h};
+/* значок: монограмма, поверх неё — png, если файл есть */
+window.bIcon=(b,s=40)=>`<span class="relative inline-grid place-items-center rounded-full overflow-hidden shrink-0 font-black text-white" style="width:${s}px;height:${s}px;font-size:${s*.38}px;background:hsl(${hu(b[0])},60%,38%)">${ini(b[0])}<img src="brawlers/${slug(b[0])}.png" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()"></span>`;
+const CH=[['Выиграй матч, ни разу не умерев','Win a match without dying'],['Играй только вблизи','Stay close-range only'],['Не используй гаджет весь матч','No gadgets this match'],['Только атакуй — никакого кемпинга','Attack only, no camping'],['Первым возьми кристалл','Grab the first gem'],['Сыграй 3 матча подряд без пауз','Play 3 matches in a row'],['Помоги новичку в команде','Help a newcomer'],['Сыграй за бравлера, которого давно не брал','Play a brawler you haven’t used lately']];
+const W={on:false,th:0,spin:false,res:ld('last',null),img:{}};
+const B=()=>window.BRL||[],pic=b=>{const k=slug(b[0]);if(!(k in W.img)){W.img[k]=null;const i=new Image();i.onload=()=>{W.img[k]=i;draw()};i.onerror=()=>{W.img[k]=false};i.src='brawlers/'+k+'.png'}return W.img[k]};
+function draw(){const c=document.getElementById('whl');if(!c)return;const L=B(),n=L.length,a=2*Math.PI/n,d=devicePixelRatio||1,g=c.getContext('2d');c.width=c.height=320*d;g.scale(d,d);g.translate(160,160);
+g.shadowColor='rgba(0,240,255,.45)';g.shadowBlur=18;g.beginPath();g.arc(0,0,152,0,7);g.fillStyle='#0b0f17';g.fill();g.shadowBlur=0;
+g.save();g.rotate(W.th);L.forEach((b,i)=>{g.beginPath();g.moveTo(0,0);g.arc(0,0,146,i*a,(i+1)*a);g.closePath();g.fillStyle=`hsl(${hu(b[0])},62%,${i%2?30:38}%)`;g.fill();g.strokeStyle='rgba(255,255,255,.22)';g.lineWidth=1.5;g.stroke();
+g.save();g.rotate((i+.5)*a);g.translate(104,0);g.rotate(Math.PI/2);const im=pic(b);g.beginPath();g.arc(0,0,21,0,7);g.save();g.clip();
+if(im)g.drawImage(im,-21,-21,42,42);else{g.fillStyle='rgba(0,0,0,.4)';g.fillRect(-21,-21,42,42);g.fillStyle='#fff';g.font='900 15px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(ini(b[0]),0,1)}g.restore();g.strokeStyle='#fff';g.lineWidth=2;g.stroke();g.restore()});g.restore();
+g.beginPath();g.arc(0,0,150,0,7);g.strokeStyle='#00F0FF';g.lineWidth=5;g.stroke();
+for(let i=0;i<24;i++){g.beginPath();g.arc(Math.cos(i*Math.PI/12)*150,Math.sin(i*Math.PI/12)*150,2.6,0,7);g.fillStyle=i%2?'#FF2E63':'#FFD700';g.fill()}
+const hb=g.createRadialGradient(0,-6,2,0,0,28);hb.addColorStop(0,'#00F0FF');hb.addColorStop(1,'#0a5560');g.beginPath();g.arc(0,0,27,0,7);g.fillStyle=hb;g.fill();g.strokeStyle='#fff';g.lineWidth=3;g.stroke();
+g.fillStyle='#fff';g.font='900 12px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('SPIN',0,1)}
+const ease=t=>1-Math.pow(1-t,4);
+window.whSpin=()=>{if(W.spin)return;const L=B(),n=L.length;if(!n)return;W.spin=true;W.res=null;render(true);const a=2*Math.PI/n,k=Math.floor(Math.random()*n),tg=-Math.PI/2-(k+.5)*a+(Math.random()-.5)*a*.7,th0=W.th,
+dl=((tg-th0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)+2*Math.PI*(6+Math.floor(Math.random()*3)),T=5200,t0=performance.now();let last=-1;
+const step=t=>{const p=Math.min(1,(t-t0)/T);W.th=th0+dl*ease(p);const idx=Math.floor((((-Math.PI/2-W.th)%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/a);if(idx!=last){last=idx;try{navigator.vibrate&&navigator.vibrate(6)}catch{}}draw();
+if(p<1&&document.getElementById('whl'))requestAnimationFrame(step);else{W.spin=false;W.res={b:k,c:Math.floor(Math.random()*CH.length)};sv('last',W.res);if(S.tab=='games'&&W.on)render(true)}};requestAnimationFrame(step)};
+const view=()=>{const L=B(),r=W.res,b=r&&L[r.b];
+return`<button class="btn k !py-1.5 !px-3 text-xs mb-3" onclick="gmBack()">← ${R('Все игры','All games')}</button><div class="g p-4 text-center"><div class="font-head font-black text-lg">${R('Колесо судьбы','Wheel of fate')}</div><div class="relative mx-auto mt-3" style="width:min(320px,100%);aspect-ratio:1"><canvas id="whl" style="width:100%;height:100%"></canvas><div class="absolute left-1/2 -translate-x-1/2 -top-1" style="width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:26px solid #FF2E63;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))"></div></div>
+<button class="btn mt-4 ${W.spin?'opacity-50':''}" onclick="whSpin()" ${W.spin?'disabled':''}>${W.spin?R('Крутится…','Spinning…'):R('Крутить колесо','Spin the wheel')}</button></div>`+(b&&!W.spin?`<div class="g p-4 text-center mt-3 zi"><div class="text-[11px] uppercase tracking-wider text-slate-500">${R('Выпало','You got')}</div><div class="flex justify-center mt-2">${bIcon(b,72)}</div><div class="font-head font-black text-2xl text-[#00F0FF] mt-2">${esc(ru()?b[1]:b[0])}</div><div class="text-[11px] uppercase tracking-wider text-slate-500 mt-3">${R('Челлендж','Challenge')}</div><div class="text-[15px] font-semibold">${esc(CH[r.c][ru()?0:1])}</div></div>`:'')};
+const _xo=window.xOpen,_gb=window.gmBack,_go=window.gmOpen;
+window.xOpen=k=>{if(k=='wf'){W.on=true;render(true);scrollTo({top:0});return}W.on=false;_xo(k)};
+window.gmBack=()=>{W.on=false;_gb()};window.gmOpen=k=>{W.on=false;_go(k)};
+const _vg=V.games;V.games=()=>{if(W.on){setTimeout(draw,0);return view()}return _vg()};
+})();
+</script>
+<script>ui()</script>
 </body></html>
