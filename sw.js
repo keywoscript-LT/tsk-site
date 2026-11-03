@@ -1,6 +1,9 @@
 /* TSK Esports — service worker (push-уведомления) */
 self.addEventListener('install',()=>self.skipWaiting());
-self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+/* чистим старые кэши, чтобы сайт всегда открывался в актуальной версии */
+self.addEventListener('activate',e=>e.waitUntil(
+  caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>self.clients.claim())
+));
 
 /* ===== PUSH: если у тебя уже есть свой sw.js — вставь в него только этот блок ===== */
 self.addEventListener('push',e=>{

@@ -279,12 +279,14 @@ addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b
 #bot .bn .bl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 #bot .bn.on{flex:2.6 1 0!important;font-size:11.5px!important;padding-left:6px!important;padding-right:6px!important}
 #bot .bn:not(.on) .bl{display:none}
-#toTop{bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;right:12px!important}
+#toTop{bottom:calc(var(--bot-h,84px) + 24px + env(safe-area-inset-bottom,0px))!important;right:12px!important}
 }
 @media(max-width:380px){
 #bot .bn.on{font-size:10.5px!important;gap:4px!important;padding-left:4px!important;padding-right:4px!important}
 #bot .bn .ic{width:19px;height:19px}
 }
+#bld{text-align:center;font-size:10px;color:#556277;padding:0 0 8px}
+@media(max-width:767px){#bld{margin-top:-84px;padding-bottom:84px;position:relative}}
 </style>
 </head><body>
 <header class="sticky top-0 z-40 bg-[rgba(7,9,14,.88)] backdrop-blur-lg border-b border-white/5">
@@ -296,7 +298,7 @@ addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b
 <button class="btn r !px-2.5" id="ad" onclick="adminBtn()"></button></div>
 </header>
 <main id="v" class="max-w-5xl mx-auto px-3 md:px-6 pt-3 pb-4"></main>
-<footer id="ft"></footer>
+<footer id="ft"></footer><div id="bld">build 2026-11-04 · v4</div>
 <nav id="bot" class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex bg-[rgba(10,13,19,.88)] backdrop-blur-lg border-t border-white/10" style="padding-bottom:env(safe-area-inset-bottom)"></nav>
 <div id="m"></div><div id="t" class="fixed top-14 left-1/2 -translate-x-1/2 z-[60]"></div>
 <script>
@@ -988,13 +990,24 @@ async function undemo(){const d=seed(),n=DK.reduce((a,k)=>a+DB[k].filter(x=>isDe
 if(sb){for(const k of DK){const{error}=await sb.from('records').delete().eq('kind',k).in('id',d[k].map(x=>x.id));if(error)return toast(error.message)}await load()}else{DK.forEach(k=>DB[k]=DB[k].filter(x=>!isDemo(d,k,x)));save()}toast('OK');render()}
 async function demo(){const d=seed();for(const k of['teams','players','matches','tourn','news']){const{error}=await sb.from('records').upsert(d[k].map(({id,...x})=>({kind:k,id,data:x})));if(error)return toast(error.message)}await load();toast('OK')}
 
+/* высота нижней панели -> CSS-переменная (для кнопки «наверх») */
+(function(){const n=document.getElementById('bot');if(!n)return;const f=()=>document.documentElement.style.setProperty('--bot-h',n.offsetHeight+'px');f();try{new ResizeObserver(f).observe(n)}catch{addEventListener('resize',f)}})();
 /* ===== push на телефон для админов ===== */
 const PUSH_PK='BMB_n3Wu19C_DsbhOtG8Iy6ZoqCSsFILVION7DBM61YOZcvMD_i5CobxE8pfGIs8c1zqiqdTBlydjpwTO-PLCg4',_u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())};
 const _swReady=()=>Promise.race([navigator.serviceWorker.ready,new Promise((_,j)=>setTimeout(()=>j(new Error('Service Worker не запущен (sw.js)')),8000))]);
 async function pushSync(){if(!sb||!S.me||!window.Notification||Notification.permission!='granted'||!('serviceWorker' in navigator)||!('PushManager' in window))return;const reg=await _swReady();let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:_u8(PUSH_PK)});const r=await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'});if(r.error)throw r.error}
-async function staffPushOn(){if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return toast(R('Пуши не поддерживаются в этом браузере. Открой сайт в Chrome (не во встроенном браузере Telegram/Instagram). На iPhone: добавь сайт на экран «Домой» и открой оттуда','Push not supported here. Open the site in Chrome (not an in-app browser like Telegram/Instagram). On iPhone: add the site to Home Screen and open it from there'),6000);if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в настройках браузера','Notifications blocked in browser settings'),4000);try{await pushSync();toast(R('Уведомления на телефон включены','Phone notifications enabled'))}catch(e){toast(R('Не удалось включить: ','Failed: ')+((e&&e.message)||e),6000)}window._ps=1;notifyApps()}
-function pushAskHide(){try{localStorage.setItem('tsk_pushask','1')}catch{}notifyApps()}
-function pushAsk(){if(!window.Notification||Notification.permission!='default'){return''}try{if(localStorage.getItem('tsk_pushask'))return''}catch{}return`<div class="g p-3" style="pointer-events:auto;border:1px solid #00F0FF"><div class="flex items-center gap-2"><div class="flex-1 text-[13px]"><b>${R('Уведомления о заявках','Application alerts')}</b><div class="text-[11px] text-slate-400">${R('Получай пуш на телефон, когда приходит новая заявка','Get a push on your phone for each new application')}</div></div><button class="btn" onclick="staffPushOn()">${R('Включить','Enable')}</button><button class="btn k !p-1.5" onclick="pushAskHide()" aria-label="x">✕</button></div></div>`}
+async function staffPushOn(){if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return notifyApps();if(await Notification.requestPermission()!='granted')return notifyApps();_pe='';try{await pushSync();toast(R('Уведомления на телефон включены','Phone notifications enabled'))}catch(e){_pe=(e&&e.message)||String(e);toast(R('Не удалось включить: ','Failed: ')+_pe,6000)}window._ps=1;notifyApps()}
+let _pe='';
+function pushAskHide(){try{sessionStorage.setItem('tsk_pushask','1')}catch{}notifyApps()}
+function pushAsk(){try{if(sessionStorage.getItem('tsk_pushask'))return''}catch{}
+const hide=`<button class="btn k !p-1.5" onclick="pushAskHide()" aria-label="x">✕</button>`,
+card=(t1,t2,btn)=>`<div class="g p-3" style="pointer-events:auto;border:1px solid #00F0FF;margin-top:6px"><div class="flex items-center gap-2"><div class="min-w-0 flex-1 text-[13px]"><b>${t1}</b><div class="text-[11px] text-slate-400 break-words">${t2}</div></div>${btn||''}${hide}</div></div>`;
+if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return card(R('Пуши на телефон недоступны','Phone push unavailable'),R('Открой сайт в Chrome (не во встроенном браузере Telegram). На iPhone: «Поделиться» → «На экран Домой», затем открой оттуда','Open in Chrome (not an in-app browser). On iPhone: Share → Add to Home Screen, then open from there'),'');
+const p=Notification.permission;
+if(p=='default')return card(R('Включить уведомления о заявках','Enable application alerts'),R('Пуш на телефон о каждой новой заявке','A push on your phone for each new application'),`<button class="btn" onclick="staffPushOn()">${R('Включить','Enable')}</button>`);
+if(p=='denied')return card(R('Уведомления заблокированы','Notifications blocked'),R('Нажми на замок рядом с адресом сайта → Уведомления → Разрешить, затем обнови страницу','Tap the lock next to the address → Notifications → Allow, then reload'),'');
+if(_pe)return card(R('Пуши не подключены','Push not connected'),esc(_pe),`<button class="btn" onclick="staffPushOn()">${R('Повторить','Retry')}</button>`);
+return''}
 
 /* ===== уведомления о заявках для админов / овнера ===== */
 function isStaff(){return !!(S.user&&['owner','admin'].includes(S.user.role))}
@@ -1009,15 +1022,15 @@ function notifyApps(){
  if(!box){box=document.createElement('div');box.id='appNote';box.style.cssText='position:fixed;z-index:9999;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 8px);width:min(94vw,440px);pointer-events:none';document.body.appendChild(box)}
  const base=document.title.replace(/^\(\d+\) /,'');
  if(!isStaff()){box.innerHTML='';document.title=base;_ntInit=0;_known.clear();return}
- if(!window._ps&&window.Notification&&Notification.permission=='granted'){window._ps=1;pushSync().catch(()=>{})}
+ if(!window._ps&&window.Notification&&Notification.permission=='granted'){window._ps=1;pushSync().then(()=>{_pe=''}).catch(e=>{_pe=(e&&e.message)||String(e);notifyApps()})}
  const P=(DB.apps||[]).filter(a=>a.status=='pending');
  document.title=(P.length?'('+P.length+') ':'')+base;
  const seen=new Set(_seen()),fresh=P.filter(a=>!seen.has(a.id)),nw=fresh.filter(a=>!_known.has(a.id));
  if(nw.length){_beep();try{if(window.Notification&&Notification.permission=='granted'){const tt='TSK · '+R('Новая заявка','New application'),oo={body:appLabel(nw[0])+(P.length>1?' (+'+(P.length-1)+')':''),tag:'tsk-app-'+nw[0].id,icon:'icon-192.png',badge:'icon-192.png',data:{url:'/'}};if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(r=>r.showNotification(tt,oo)).catch(()=>{});else{const n=new Notification(tt,oo);n.onclick=()=>{window.focus();appNoteOpen(nw[0].id);n.close()}}}}catch{}}
  P.forEach(a=>_known.add(a.id));_ntInit=1;
  if(!fresh.length){box.innerHTML=pushAsk();return}
- const a=fresh[0],id=esc(a.id),more=fresh.length-1,perm=window.Notification&&Notification.permission=='default';
- box.innerHTML=`<div class="g p-3" style="pointer-events:auto;border:1px solid #FFD700;box-shadow:0 8px 30px rgba(0,0,0,.5)"><div class="flex items-start gap-2"><div class="min-w-0 flex-1"><b class="block text-sm" style="color:#FFD700">${R('Новая заявка','New application')}${more?' (+'+more+')':''}</b><div class="text-sm break-words">${esc(appLabel(a))}</div></div><button class="btn k !p-1.5" onclick="appNoteHide()" aria-label="x">✕</button></div><div class="flex gap-2 mt-2"><button class="btn flex-1" onclick="appOk('${id}')">${R('Одобрить','Approve')}</button><button class="btn r flex-1" onclick="appNo('${id}')">${R('Отклонить','Reject')}</button><button class="btn k" onclick="appNoteOpen('${id}')">${R('Открыть','Open')}</button></div>${perm?`<button class="text-[11px] underline mt-2" style="color:#00F0FF" onclick="staffPushOn()">${R('Включить пуш-уведомления на телефон','Enable phone push notifications')}</button>`:''}</div>`}
+ const a=fresh[0],id=esc(a.id),more=fresh.length-1;
+ box.innerHTML=`<div class="g p-3" style="pointer-events:auto;border:1px solid #FFD700;box-shadow:0 8px 30px rgba(0,0,0,.5)"><div class="flex items-start gap-2"><div class="min-w-0 flex-1"><b class="block text-sm" style="color:#FFD700">${R('Новая заявка','New application')}${more?' (+'+more+')':''}</b><div class="text-sm break-words">${esc(appLabel(a))}</div></div><button class="btn k !p-1.5" onclick="appNoteHide()" aria-label="x">✕</button></div><div class="flex gap-2 mt-2"><button class="btn flex-1" onclick="appOk('${id}')">${R('Одобрить','Approve')}</button><button class="btn r flex-1" onclick="appNo('${id}')">${R('Отклонить','Reject')}</button><button class="btn k" onclick="appNoteOpen('${id}')">${R('Открыть','Open')}</button></div></div>${pushAsk()}`}
 function appNoteHide(){_mark((DB.apps||[]).filter(a=>a.status=='pending').map(a=>a.id));notifyApps()}
 function appNoteOpen(id){_mark([id]);notifyApps();openApp(id)}
 
