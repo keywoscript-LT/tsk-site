@@ -1680,14 +1680,15 @@ const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return 
 slug=n=>String(n).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),ini=n=>{const w=String(n).split(/[\s.\-]+/).filter(Boolean);return(w.length>1?w[0][0]+w[1][0]:String(n).slice(0,2)).toUpperCase()};
 /* id бравлеров в Brawlify CDN (cdn.brawlify.com/brawlers/borderless/<id>.png) */
 const ID={shelly:0,colt:1,bull:2,brock:3,spike:5,barley:6,'el-primo':10,mortis:11,crow:12,poco:13,piper:15,pam:16,frank:20,leon:23,max:32,edgar:43},
-src=n=>{const k=slug(n);return k in ID?`https://cdn.brawlify.com/brawlers/borderless/${16000000+ID[k]}.png`:`brawlers/${k}.png`};
-window.bIcon=(b,s=40,c='rgba(255,255,255,.18)')=>`<span class="relative inline-grid place-items-center shrink-0 rounded-full overflow-hidden font-black text-slate-300" style="width:${s}px;height:${s}px;font-size:${s*.36}px;background:#0b0f16;box-shadow:inset 0 0 0 1.5px ${c}">${ini(b[0])}<img src="${src(b[0])}" alt="" loading="lazy" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()"></span>`;
+srcs=n=>{const k=slug(n),u=k in ID?`cdn.brawlify.com/brawlers/borderless/${16000000+ID[k]}.png`:null;return[u&&'https://'+u,u&&`https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=128&h=128&fit=cover`,`brawlers/${k}.png`].filter(Boolean)},src=n=>srcs(n)[0];
+window.bErr=im=>{const l=srcs(im.dataset.n),i=(+im.dataset.i||0)+1;if(i<l.length){im.dataset.i=i;im.src=l[i]}else im.remove()};
+window.bIcon=(b,s=40,c='rgba(255,255,255,.18)')=>`<span style="position:relative;display:inline-grid;place-items:center;flex-shrink:0;border-radius:50%;overflow:hidden;width:${s}px;height:${s}px;font-weight:900;font-size:${s*.36}px;color:#cbd5e1;background:#0b0f16;box-shadow:inset 0 0 0 1.5px ${c}">${ini(b[0])}<img src="${src(b[0])}" data-n="${esc(b[0])}" data-i="0" alt="" style="position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover" onerror="bErr(this)"></span>`;
 window.bIconN=(n,s)=>bIcon([n],s);
 const CH=[['Выиграй матч, ни разу не умерев','Win a match without dying'],['Играй только вблизи','Stay close-range only'],['Не используй гаджет весь матч','No gadgets this match'],['Только атакуй — никакого кемпинга','Attack only, no camping'],['Первым возьми кристалл','Grab the first gem'],['Сыграй 3 матча подряд без пауз','Play 3 matches in a row'],['Помоги новичку в команде','Help a newcomer'],['Сыграй за бравлера, которого давно не брал','Play a brawler you haven’t used lately']];
 /* ---------- колесо ---------- */
 const W={on:false,th:0,spin:false,kick:0,res:ld('tsk_w_last',null),img:{},logo:null};
 {const f=document.querySelector('link[rel=icon]');if(f){const i=new Image();i.onload=()=>{W.logo=i;draw()};i.src=f.href}}
-const B=()=>window.BRL||[],pic=b=>{const k=slug(b[0]);if(!(k in W.img)){W.img[k]=null;const i=new Image();i.onload=()=>{W.img[k]=i;draw()};i.onerror=()=>{W.img[k]=false};i.src=src(b[0])}return W.img[k]};
+const B=()=>window.BRL||[],pic=b=>{const k=slug(b[0]);if(!(k in W.img)){W.img[k]=null;const l=srcs(b[0]);let n=0;const i=new Image(),go=()=>{if(n<l.length)i.src=l[n++];else W.img[k]=false};i.onload=()=>{W.img[k]=i;draw()};i.onerror=go;go()}return W.img[k]};
 function draw(){const c=document.getElementById('whl');if(!c)return;const L=B(),n=L.length;if(!n)return;const a=2*Math.PI/n,d=devicePixelRatio||1,g=c.getContext('2d'),R=154,r0=42;c.width=c.height=360*d;g.scale(d,d);g.translate(180,188);
 const win=!W.spin&&W.res?W.res.b:-1,wedge=i=>{g.beginPath();g.arc(0,0,R,i*a,(i+1)*a);g.arc(0,0,r0,(i+1)*a,i*a,true);g.closePath()};
 g.save();g.rotate(W.th);
