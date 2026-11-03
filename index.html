@@ -1794,13 +1794,45 @@ for(const k of ['gmOpen','xOpen','lgNew','lgJoin','lgOpen']){const f=window[k];i
 
 @media(max-width:560px){.tn-vs{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);padding:10px 12px}.tn-nl{flex:1 0 100%;margin:0;clip-path:none;flex-direction:row;align-items:baseline;gap:10px;padding:8px 18px 8px 22px}}
 @media(max-width:480px){.bk{--bk-w:188px;--bk-g:30px}.tn-name{font-size:22px}.tn-kv div{padding:0 14px}.tn-vs>div>img,.tn-vs>div>.rounded-full{display:none}}
+
+/* кнопка открытия сетки */
+.tn-bkb{display:flex;align-items:stretch;width:100%;padding:0;background:var(--tn-s2);border:0;border-bottom:1px solid var(--tn-bd);border-radius:0;cursor:pointer;text-align:left;color:var(--tn-tx);transition:background .15s}
+.tn-bkb:hover{background:var(--tn-bd)}
+.tn-bkb:active{background:var(--tn-bd2)}
+.tn-bkb .ib{flex:none;display:grid;place-items:center;width:64px;margin-right:-6px;padding-right:8px;background:var(--tn-ac);color:var(--tn-onac);clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%)}
+.tn-bkb .ib .ic{width:22px;height:22px}
+.tn-bkb .tx{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:13px 12px 13px 18px}
+.tn-bkb .tx b{font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.tn-bkb .tx small{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--tn-mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tn-bkb .go{flex:none;display:flex;align-items:center;gap:8px;padding:0 18px;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--tn-ac)}
+.tn-bkb .go .ic{width:15px;height:15px}
+.tn-sec{margin:14px 0 12px}
+.tn-sec span{display:block;padding-bottom:6px;border-bottom:2px solid var(--tn-bd2);font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--tn-mu)}
+
+/* окно с сеткой */
+.tn-ov{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:var(--tn-bg);color:var(--tn-tx);animation:zi .2s ease both}
+.tn-ovh{flex:none;display:flex;align-items:center;gap:14px;padding:12px 14px 12px 18px;padding-top:calc(12px + env(safe-area-inset-top));border-top:3px solid var(--tn-st);border-bottom:1px solid var(--tn-bd);background:repeating-linear-gradient(135deg,rgba(127,127,127,.05) 0 2px,transparent 2px 9px),var(--tn-bg)}
+.tn-ovt{flex:1;min-width:0}
+.tn-ovn{margin:7px 0 0;font-size:20px;line-height:1.1;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tn-ovp{flex:none;text-align:right;font-family:Montserrat,Inter,sans-serif;font-size:18px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.tn-ovp small{display:block;margin-top:4px;font-family:Inter,sans-serif;font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--tn-mu)}
+.tn-ovx{flex:none;width:42px;height:42px;display:grid;place-items:center;background:var(--tn-s2);border:1px solid var(--tn-bd2);border-radius:2px;color:var(--tn-tx);cursor:pointer;box-shadow:0 3px 0 var(--tn-sh);transition:background .15s,color .15s}
+.tn-ovx:hover{background:var(--tn-rd);border-color:var(--tn-rd);color:#fff}
+.tn-ovx:active{transform:translateY(3px);box-shadow:none}
+.tn-ovx .ic{width:18px;height:18px}
+.tn-ovb{flex:1;min-height:0;overflow:auto;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+.tn-ov .tn-champ{margin:0 0 4px}
+.tn-ov .bk-scroll{margin:0;padding:22px 22px 12px;overflow-x:auto}
+.tn-ov .bk{--bk-w:232px;--bk-g:46px}
+.tn-ov .bk-s{min-height:104px}
+@media(max-width:480px){.tn-ov .bk{--bk-w:196px;--bk-g:32px}.tn-ov .bk-scroll{padding:18px 14px 12px}.tn-ovn{font-size:17px}.tn-bkb .go span{display:none}.tn-bkb .go{padding:0 14px}}
 </style>
 <script>
 (()=>{
 /* ---------- переводы новых строк ---------- */
 try{
- Object.assign(XL.uk,{'Следующий матч':'Наступний матч','Далее':'Далі','Матч за 3-е место':'Матч за 3-є місце','Полуфинал':'Півфінал','Четвертьфинал':'Чвертьфінал','1/8 финала':'1/8 фіналу','1/16 финала':'1/16 фіналу','Финал':'Фінал','Плей-офф':'Плей-оф'});
- Object.assign(XL.kk,{'Следующий матч':'Келесі матч','Далее':'Келесі','Матч за 3-е место':'3-орын үшін матч','Полуфинал':'Жартылай финал','Четвертьфинал':'Ширек финал','1/8 финала':'1/8 финал','1/16 финала':'1/16 финал','Финал':'Финал','Плей-офф':'Плей-офф'});
+ Object.assign(XL.uk,{'Следующий матч':'Наступний матч','Далее':'Далі','Матч за 3-е место':'Матч за 3-є місце','Полуфинал':'Півфінал','Четвертьфинал':'Чвертьфінал','1/8 финала':'1/8 фіналу','1/16 финала':'1/16 фіналу','Финал':'Фінал','Плей-офф':'Плей-оф','Сетка плей-офф':'Сітка плей-оф','Открыть':'Відкрити','Закрыть':'Закрити'});
+ Object.assign(XL.kk,{'Следующий матч':'Келесі матч','Далее':'Келесі','Матч за 3-е место':'3-орын үшін матч','Полуфинал':'Жартылай финал','Четвертьфинал':'Ширек финал','1/8 финала':'1/8 финал','1/16 финала':'1/16 финал','Финал':'Финал','Плей-офф':'Плей-офф','Сетка плей-офф':'Плей-офф торы','Открыть':'Ашу','Закрыть':'Жабу'});
 }catch(e){}
 
 /* ---------- помощники ---------- */
@@ -1850,31 +1882,45 @@ const groups=gr=>{
   return`<div class="tn-g"><div class="tn-gh"><span class="tn-gl">${badge(g)}</span><b>${esc(g.n)}</b><span class="k">PPS</span></div>${ts.map((n,k)=>{const tt=tnm(n),q=k<2,pps=tt&&tt.pps!==''&&tt.pps!=null&&isFinite(+tt.pps)?+(+tt.pps).toFixed(1):null;
    return`<div class="tn-gr ${q?'q':''}" ${oc(tt)}><span class="i">${k+1}</span>${lg(tt||{name:n},'h-6 w-6')}<span class="n">${esc(n)}</span>${q?'<span class="po">PO</span>':''}${pps!=null?`<span class="r">${pps}</span>`:''}</div>`}).join('')}</div>`}).join('')}</div><div class="tn-leg"><b>PO</b> — ${R('выходят в плей-офф','advance to playoffs')}</div>`};
 
-/* ---------- карточка турнира ---------- */
-const card=(x,i,solo)=>{
- const sk=tsK(x.status),po=x.po||[],gr=x.groups||[],id=String(x.id),{main}=split(po),
-  names=new Set([...gr.flatMap(g=>g.teams||[]),...po.flatMap(y=>[y.a,y.b])].filter(Boolean)),
-  played=po.filter(y=>sc(y.s)).length,
-  op=(S.tx||{})[id]!=null?(S.tx||{})[id]:(solo||sk!='fin'),
-  both=gr.length&&po.length,tab=both?((S.tt||{})[id]||(sk=='up'?'g':'p')):(po.length?'p':'g');
-
+/* ---------- данные турнира ---------- */
+const info=x=>{const sk=tsK(x.status),po=x.po||[],gr=x.groups||[],{main}=split(po),played=po.filter(y=>sc(y.s)).length;
  let cw=x.winner&&DB.teams.find(z=>z.id==x.winner)||null;
  if(!cw&&main.length){const lm=main[main.length-1];
   if(lm.m.length==1&&(main.length>1||kind(lm.r).k=='f')){const p=sc(lm.m[0].s);if(p&&p[0]!=p[1]){const nm=p[0]>p[1]?lm.m[0].a:lm.m[0].b;cw=tnm(nm)||{name:nm}}}}
  let nx=null;
  if(sk!='fin'&&!cw)for(const g of main){nx=g.m.find(y=>!sc(y.s));if(nx)break}
+ return{sk,po,gr,main,played,cw,nx}};
+const tagOf=sk=>sk=='live'?`<span class="tn-tag"><i class="tn-dot"></i>LIVE</span>`:sk=='fin'?`<span class="tn-tag">${R('Завершён','Finished')}</span>`:`<span class="tn-tag">${R('Скоро','Upcoming')}</span>`;
+const champOf=cw=>`<div class="tn-champ" ${oc(cw.id?cw:null)}>${lg(cw,'h-10 w-10')}<div><small>${R('Победитель','Champion')}</small><b>${esc(cw.name)}</b></div>${ic('cup')}</div>`;
 
- const tag=sk=='live'?`<span class="tn-tag"><i class="tn-dot"></i>LIVE</span>`:sk=='fin'?`<span class="tn-tag">${R('Завершён','Finished')}</span>`:`<span class="tn-tag">${R('Скоро','Upcoming')}</span>`,
+/* ---------- карточка турнира ---------- */
+const card=(x,i,solo)=>{
+ const{sk,po,gr,played,cw,nx}=info(x),id=String(x.id),
+  names=new Set([...gr.flatMap(g=>g.teams||[]),...po.flatMap(y=>[y.a,y.b])].filter(Boolean)),
+  op=(S.tx||{})[id]!=null?(S.tx||{})[id]:(solo||sk!='fin'),
   kv=[names.size?[names.size,R('команд','teams')]:null,gr.length?[gr.length,t('groups')]:null,po.length?[played+'/'+po.length,R('матчей','matches')]:null].filter(Boolean),
   stats=kv.length?`<div class="tn-kv">${kv.map(c=>`<div><b>${c[0]}</b><span>${c[1]}</span></div>`).join('')}</div>`:'',
   prog=po.length?`<div class="tn-pgh"><span>${t('po')}</span><b>${played}/${po.length}</b></div>`+(po.length<=24?`<div class="tn-pg">${po.map((y,k)=>`<i class="${k<played?'on':''}"></i>`).join('')}</div>`:`<div class="tn-pg bar"><i style="width:${Math.round(100*played/po.length)}%"></i></div>`):'',
-  champ=cw?`<div class="tn-champ" ${oc(cw.id?cw:null)}>${lg(cw,'h-10 w-10')}<div><small>${R('Победитель','Champion')}</small><b>${esc(cw.name)}</b></div>${ic('cup')}</div>`:'',
   nextT=nx?(()=>{const A=tnm(nx.a),B=tnm(nx.b),a=`<div ${oc(A)}><span>${esc(nx.a)}</span>${lg(A||{name:nx.a},'h-8 w-8')}</div>`,b=`<div ${oc(B)}>${lg(B||{name:nx.b},'h-8 w-8')}<span>${esc(nx.b)}</span></div>`;
    return`<div class="tn-next"><div class="tn-nl"><small>${R('Следующий матч','Next match')}</small><b>${esc(rlab(nx.r))}</b></div><div class="tn-vs">${a}<em>VS</em>${b}</div></div>`})():'',
-  tabs=both?`<div class="tn-tabs"><button class="${tab=='g'?'on':''}" onclick="(S.tt=S.tt||{})['${esc(id)}']='g';render()">${t('groups')}</button><button class="${tab=='p'?'on':''}" onclick="(S.tt=S.tt||{})['${esc(id)}']='p';render()">${t('po')}</button></div>`:'<div class="tn-pad"></div>',
-  body=gr.length||po.length?`<div class="tn-body">${tabs}${tab=='p'?bracket(id,po,nx):groups(gr)}</div>`:'',
+  bkBtn=po.length?`<button class="tn-bkb" onclick="tnOpen('${esc(id)}')"><span class="ib">${ic('tourn')}</span><span class="tx"><b>${R('Сетка плей-офф','Playoff bracket')}</b><small>${nx?esc(rlab(nx.r))+' · ':''}${played}/${po.length} ${R('матчей','matches')}</small></span><span class="go"><span>${R('Открыть','Open')}</span>${ic('ne')}</span></button>`:'',
+  body=gr.length?`<div class="tn-body"><div class="tn-sec"><span>${t('groups')}</span></div>${groups(gr)}</div>`:'',
   tog=body?`<button class="tn-tg" onclick="(S.tx=S.tx||{})['${esc(id)}']=${!op};render()">${op?R('Свернуть','Collapse')+ic('up'):R('Подробнее','Details')+ic('dn')}</button>`:'';
- return`<section class="tn tn-${sk} fd" style="animation-delay:${Math.min(i,6)*70}ms"><div class="tn-hero"><span class="tn-wm">${ic('cup')}</span>${tag}<h2 class="tn-name font-head">${esc(x.name)}</h2>${stats}${prog}</div>${champ}${nextT}${window.tpBox?tpBox(x,sk):''}${op?body:''}${tog}</section>`};
+ return`<section class="tn tn-${sk} fd" style="animation-delay:${Math.min(i,6)*70}ms"><div class="tn-hero"><span class="tn-wm">${ic('cup')}</span>${tagOf(sk)}<h2 class="tn-name font-head">${esc(x.name)}</h2>${stats}${prog}</div>${cw?champOf(cw):''}${nextT}${bkBtn}${window.tpBox?tpBox(x,sk):''}${op?body:''}${tog}</section>`};
+
+/* ---------- окно с сеткой ---------- */
+const paintOv=()=>{const ov=document.getElementById('tn-ov');if(!ov)return;
+ const x=DB.tourn.find(z=>String(z.id)==window.__tnOv);if(!x){tnClose();return}
+ const{sk,po,played,cw,nx}=info(x),old=ov.querySelector('.tn-ovb'),st=old?old.scrollTop:0;
+ ov.className='tn-page tn-ov tn-'+sk;
+ ov.innerHTML=`<div class="tn-ovh"><div class="tn-ovt">${tagOf(sk)}<h2 class="tn-ovn font-head">${esc(x.name)}</h2></div><div class="tn-ovp">${played}/${po.length}<small>${R('матчей','matches')}</small></div><button class="tn-ovx" aria-label="${R('Закрыть','Close')}" onclick="tnClose()">${ic('x')}</button></div><div class="tn-ovb">${cw?champOf(cw):''}${bracket(String(x.id),po,nx)}</div>`;
+ const nb=ov.querySelector('.tn-ovb');if(nb)nb.scrollTop=st};
+window.tnOpen=id=>{window.__tnOv=String(id);delete pos[String(id)];
+ let ov=document.getElementById('tn-ov');
+ if(!ov){ov=document.createElement('div');ov.id='tn-ov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');document.body.appendChild(ov);document.documentElement.style.overflow='hidden'}
+ paintOv();fixScroll();const c=ov.querySelector('.tn-ovx');if(c)c.focus()};
+window.tnClose=()=>{const ov=document.getElementById('tn-ov');if(ov)ov.remove();window.__tnOv=null;document.documentElement.style.overflow=''};
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&window.__tnOv)tnClose()});
 
 /* ---------- вкладка ---------- */
 V.tourn=q=>{
@@ -1898,7 +1944,9 @@ const fixScroll=()=>document.querySelectorAll('.bk-scroll').forEach(el=>{
  const c=el.querySelector('.bk-col[data-i="'+el.dataset.f+'"]');
  if(c&&el.scrollWidth>el.clientWidth)el.scrollLeft=Math.max(0,c.offsetLeft-22)});
 const _r=window.render;
-window.render=function(){const r=_r.apply(this,arguments);try{fixScroll()}catch(e){}return r};
+window.render=function(){const r=_r.apply(this,arguments);try{if(window.__tnOv)paintOv();fixScroll()}catch(e){}return r};
+const _o=window.openT;
+if(typeof _o=='function')window.openT=function(){tnClose();return _o.apply(this,arguments)};
 })();
 </script>
 
