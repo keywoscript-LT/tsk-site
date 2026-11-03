@@ -1446,4 +1446,55 @@ const o=document.createElement('div');o.id='ovl';document.body.appendChild(o);
 const up=()=>{const m=DB.matches.find(x=>String(x.id)==ov);o.style.display=m?'flex':'none';if(m)o.innerHTML=`<i>${tsK(m.st)=='live'?'● LIVE':''}</i><span>${esc(tm(m.a).name)}</span><b>${m.sa} : ${m.sb}</b><span>${esc(tm(m.b).name)}</span>`};setInterval(up,2000);up()}
 })();
 </script>
+<script>
+/* ===== v14: приватные лиги, MVP, общий счётчик мини-игры, карточка игрока PNG, уведомления ===== */
+(()=>{
+const K='tsk_y_',ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(K+k))??d}catch{return d}},sv=(k,v)=>{try{localStorage.setItem(K+k,JSON.stringify(v))}catch{}},ok=()=>sb&&S.me,
+bt=(c,f,l)=>`<button class="btn ${c} !py-1.5 !px-3 text-[11px]" onclick="${f}">${l}</button>`;
+/* --- приватные лиги (нужен SQL) --- */
+const LG={l:[],t:0};
+const lgLoad=async f=>{if(!ok()||(!f&&Date.now()-LG.t<30000))return;LG.t=Date.now();try{const r=await sb.rpc('my_leagues');if(r.error)return;const s=JSON.stringify(r.data);if(s!=LG.s){LG.s=s;LG.l=r.data||[];if(!$('#m').innerHTML&&S.tab=='matches')render(true)}}catch{}};
+window.lgNew=async()=>{const n=clean(prompt(R('Название лиги','League name'))||'');if(!n)return;const r=await sb.rpc('create_league',{p_name:n});if(r.error)return toast(r.error.message);prompt(R('Код лиги — отправь друзьям','League code — share it'),r.data);lgLoad(1)};
+window.lgJoin=async()=>{const c=clean(prompt(R('Код лиги','League code'))||'').toUpperCase();if(!c)return;const r=await sb.rpc('join_league',{p_code:c});if(r.error)return toast(r.error.message);toast(R('Ты в лиге','Joined'));lgLoad(1)};
+window.lgOpen=async c=>{const r=await sb.rpc('league_board',{p_code:c});if(r.error)return toast(r.error.message);const L=LG.l.find(x=>x.code==c)||{};
+modal(`<button class="absolute right-3 top-3 btn k !p-1.5 z-10" onclick="closeM()">${ic('x')}</button><h3 class="font-head font-black text-lg">${esc(L.name||'')}</h3><div class="text-[11px] text-slate-400 mb-2">${R('Код','Code')}: <b>${esc(c)}</b></div>`+((r.data||[]).map((x,i)=>`<div class="flex items-center gap-2.5 py-2 border-t border-white/10 text-[13px] ${S.me&&x.user_id==S.me.id?'text-[#00F0FF]':''}"><b class="w-6">${i+1}</b><span class="flex-1 truncate">${esc(x.nick||'—')}</span><b class="tabular-nums">${+x.points||0}</b></div>`).join('')||`<p class="text-sm text-slate-500">${R('Пока пусто','Empty')}</p>`))};
+const lgCard=()=>ok()?`<section class="g mb-3 p-3"><div class="flex items-center gap-2"><b class="font-head font-black text-[15px] flex-1">${R('Приватные лиги','Private leagues')}</b>${bt('k','lgJoin()',R('Код','Join'))}${bt('','lgNew()',R('Создать','Create'))}</div>${LG.l.map(x=>`<button class="g r w-full text-left px-3 py-2 mt-2 text-[13px]" onclick="lgOpen('${esc(x.code)}')"><b>${esc(x.name)}</b> <span class="text-slate-500">· ${esc(x.code)}</span></button>`).join('')}</section>`:'';
+/* --- MVP матча и игрок недели --- */
+const MV={c:{},me:{}};if(!sb){const d=ld('mv',{});MV.c=d.c||{};MV.me=d.me||{}}
+const mvLoad=async()=>{if(!sb)return;try{const[c,m]=await Promise.all([sb.rpc('mvp_counts'),S.me?sb.from('mvp_votes').select('match_id,player_id'):{data:[]}]);if(c.error)return;const C={},M={};(c.data||[]).forEach(r=>(C[r.match_id]=C[r.match_id]||{})[r.player_id]=+r.n);(m.data||[]).forEach(r=>M[r.match_id]=r.player_id);const s=JSON.stringify([C,M]);if(s!=MV.s){MV.s=s;MV.c=C;MV.me=M;if(!$('#m').innerHTML&&S.tab=='matches')render(true)}}catch{}};
+window.mvGo=async(mid,pid)=>{if(sb&&!S.me)return authModal();const o=MV.me[mid];if(o==pid)return;const c=MV.c[mid]=MV.c[mid]||{};if(o)c[o]=Math.max(0,(c[o]||0)-1);c[pid]=(c[pid]||0)+1;MV.me[mid]=pid;
+if(sb){const{error}=await sb.from('mvp_votes').upsert({match_id:mid,user_id:S.me.id,player_id:pid},{onConflict:'match_id,user_id'});if(error)toast(error.message);MV.s=''}else sv('mv',{c:MV.c,me:MV.me});render(true)};
+const mvCard=()=>{const f=DB.matches.filter(m=>tsK(m.st)=='fin').sort((a,b)=>new Date(b.when)-new Date(a.when))[0];if(!f)return'';
+const P=DB.players.filter(p=>p.team==f.a||p.team==f.b),c=MV.c[f.id]||{},me=MV.me[f.id],wk={};
+DB.matches.filter(m=>Date.now()-new Date(m.when)<7*864e5).forEach(m=>Object.entries(MV.c[m.id]||{}).forEach(([p,n])=>wk[p]=(wk[p]||0)+n));
+const top=Object.entries(wk).sort((a,b)=>b[1]-a[1])[0],tp=top&&DB.players.find(p=>p.id==top[0]);
+return`<section class="g mb-3 p-3"><div class="font-head font-black text-[15px]">${R('MVP матча','Match MVP')}: <span class="text-slate-400 text-[12px] font-semibold">${esc(tm(f.a).name)} ${f.sa}:${f.sb} ${esc(tm(f.b).name)}</span></div>
+<div class="hs mt-2">${P.map(p=>`<button class="shrink-0 px-3 py-1.5 rounded-full text-xs font-bold border active:scale-95 ${me==p.id?'border-[#FFD700] bg-[#FFD700]/15 text-[#FFD700]':'border-white/15 text-slate-300'}" onclick="mvGo('${esc(f.id)}','${esc(p.id)}')">${esc(p.nick)} <b>${c[p.id]||0}</b></button>`).join('')||`<span class="text-xs text-slate-500">—</span>`}</div>
+${tp?`<div class="text-[12px] text-[#FFD700] mt-2 cursor-pointer" onclick="openP('${esc(tp.id)}')">★ ${R('Игрок недели','Player of the week')}: <b>${esc(tp.nick)}</b> (${top[1]})</div>`:''}</section>`};
+const _vm=V.matches;V.matches=q=>{lgLoad();mvLoad();return _vm(q).replace('</h1>',m=>m+lgCard()+mvCard())};
+if(sb){setInterval(()=>{lgLoad();mvLoad()},20000);mvLoad()}
+/* --- общий счётчик мини-игры --- */
+const DG={n:null},dgStat=async()=>{if(!sb)return;try{const r=await sb.rpc('daily_stats');if(!r.error&&+r.data!==DG.n){DG.n=+r.data;if(!$('#m').innerHTML&&S.tab=='news')render(true)}}catch{}};
+const _dg=window.dgGo;window.dgGo=()=>{_dg();const s=JSON.parse(localStorage.getItem('tsk_x_dg')||'{}');if(ok()&&s.d&&s.ok!=null&&!ld('dgs_'+s.d,0)){sv('dgs_'+s.d,1);sb.rpc('daily_submit',{p_ok:!!s.ok}).then(()=>dgStat())}};
+dgStat();setInterval(dgStat,30000);
+/* --- уведомления --- */
+const VAPID='',u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())},NF=()=>'Notification' in window;
+window.pushOn=async()=>{if(!NF())return toast(R('Браузер не поддерживает','Not supported'));if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в браузере','Blocked'));
+try{if(VAPID&&ok()){const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'})}}catch{}
+toast(R('Уведомления включены','Enabled'));render(true)};
+const pushCard=()=>NF()&&Notification.permission=='default'?`<section class="g mb-3 p-3 flex items-center gap-3"><div class="flex-1 text-[13px]"><b>${R('Напоминания о матчах','Match reminders')}</b><div class="text-[11px] text-slate-400">${R('За 15 минут до матча твоей команды или прогноза','15 min before your team or predicted match')}</div></div>${bt('','pushOn()',R('Включить','Enable'))}</section>`:'';
+const _vn=V.news;V.news=q=>pushCard()+(DG.n==null?_vn(q):_vn(q).replace('</section>',`<div class="text-[11px] text-slate-500 mt-2">${R('Сегодня угадали','Solved today')}: <b>${DG.n}</b></div></section>`));
+setInterval(async()=>{if(!NF()||Notification.permission!='granted')return;const f=favs(),n=ld('pn',{});for(const m of DB.matches){const d=new Date(m.when)-Date.now();if(tsK(m.st)!='up'||d<=0||d>9e5||n[m.id]||!(f.includes(m.a)||f.includes(m.b)||PRED.me[m.id]))continue;n[m.id]=1;sv('pn',n);
+try{const r=await navigator.serviceWorker.ready;r.showNotification('TSK Esports',{body:tm(m.a).name+' vs '+tm(m.b).name+' — '+R('через 15 минут','in 15 min'),icon:'icon-192.png'})}catch{}}},3e4);
+/* --- карточка игрока PNG --- */
+window.dlP=id=>{const p=DB.players.find(x=>x.id==id);if(!p)return;const c=document.createElement('canvas');c.width=720;c.height=860;const g=c.getContext('2d'),rk=[...DB.players].sort((a,b)=>b.pps-a.pps).findIndex(x=>x.id==id)+1;
+g.fillStyle='#07090E';g.fillRect(0,0,720,860);const gr=g.createLinearGradient(0,0,720,0);gr.addColorStop(0,'#00F0FF');gr.addColorStop(1,'#FF2E63');g.fillStyle=gr;g.fillRect(0,0,720,8);
+g.fillStyle='hsl('+hue(p.nick)+',70%,35%)';g.beginPath();g.arc(135,145,75,0,7);g.fill();g.fillStyle='#fff';g.font='900 56px sans-serif';g.textAlign='center';g.fillText(p.nick.slice(0,2).toUpperCase(),135,165);g.textAlign='left';
+g.font='900 52px sans-serif';g.fillText(p.nick.slice(0,16),250,150);g.fillStyle='#00F0FF';g.font='700 26px sans-serif';g.fillText(tm(p.team).name+' · '+(p.country||''),250,195);
+[['#',rk],['PPS',p.pps],['K/D',p.kd],['WR',p.wr+'%']].forEach(([a,b],i)=>{const y=340+i*110;g.fillStyle='#8c97ab';g.font='28px sans-serif';g.fillText(a,60,y);g.fillStyle='#fff';g.font='800 34px sans-serif';g.fillText(String(b),300,y)});
+g.fillStyle='#6f7a8f';g.font='22px sans-serif';g.fillText('TSK Esports',60,820);
+c.toBlob(b=>{const f=new File([b],p.nick+'.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=p.nick+'.png';a.click()}})};
+const _op=window.openP;window.openP=function(id){_op.apply(this,arguments);const b=document.querySelector('#m .su');if(b&&!b.querySelector('.pshare')){const d=document.createElement('button');d.className='btn k w-full mt-3 pshare';d.innerHTML=ic('share')+' '+R('Поделиться карточкой','Share card');d.onclick=()=>dlP(id);b.appendChild(d)}};
+})();
+</script>
 </body></html>
