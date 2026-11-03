@@ -298,7 +298,7 @@ addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b
 <button class="btn r !px-2.5" id="ad" onclick="adminBtn()"></button></div>
 </header>
 <main id="v" class="max-w-5xl mx-auto px-3 md:px-6 pt-3 pb-4"></main>
-<footer id="ft"></footer><div id="bld">build 2026-11-04 · v4</div>
+<footer id="ft"></footer><div id="bld">build 2026-11-04 · v5 icons</div>
 <nav id="bot" class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex bg-[rgba(10,13,19,.88)] backdrop-blur-lg border-t border-white/10" style="padding-bottom:env(safe-area-inset-bottom)"></nav>
 <div id="m"></div><div id="t" class="fixed top-14 left-1/2 -translate-x-1/2 z-[60]"></div>
 <script>
@@ -1483,7 +1483,7 @@ window.dgGo=()=>{const s=dgS(),b=dgPick(),v=NZ(($('#dg-i')||{}).value);if(!v)ret
 s.d=ds(0);s.ok=ok;s.streak=ok?(s.last==ds(1)?s.streak+1:1):0;if(ok)s.last=ds(0);s.best=Math.max(s.best,s.streak);sv('dg',s);window.hap&&hap([30]);render(true)};
 const dgCard=()=>{const s=dgS(),b=dgPick(),done=s.d==ds(0),l=n=>S.lang=='ru'?n[1]:n[0];
 return`<section class="g mb-3 p-3"><div class="flex items-center gap-3">${card('target','bg-[#00F0FF]/10 text-[#00F0FF]',`<div class="flex-1 min-w-0"><div class="font-head font-black text-[15px]">${R('Бравлер дня','Brawler of the day')}</div><div class="text-[11px] text-slate-400">${R('Одна попытка в день','One try per day')} · ${R('серия','streak')}: <b class="text-white">${s.last==ds(0)||s.last==ds(1)?s.streak:0}</b> · ${R('рекорд','best')}: ${s.best}</div></div>`)}</div>
-<p class="text-[13px] text-slate-200 mt-2.5">«${esc(S.lang=='ru'?b[2]:b[3])}»</p>
+${done||!window.bIconN?'':`<div class="flex justify-center mt-3">${bIconN(b[0],76,0,1)}</div>`}<p class="text-[13px] text-slate-200 mt-2.5">«${esc(S.lang=='ru'?b[2]:b[3])}»</p>
 ${done?`<div class="mt-2 text-sm font-bold ${s.ok?'text-[#7CFF6B]':'text-[#FF2E63]'}"><span class="inline-flex align-middle mr-1.5">${window.bIconN?bIconN(b[0],24):''}</span>${s.ok?R('Верно! ','Correct! '):R('Не угадал. Это ','Missed. It was ')}${esc(l(b))}<span class="text-slate-500 font-normal"> · ${R('приходи завтра','come back tomorrow')}</span></div>`
 :`<div class="flex gap-2 mt-2"><input id="dg-i" class="inp !mt-0" list="dg-l" autocomplete="off" placeholder="${R('Имя бравлера','Brawler name')} (${b[S.lang=='ru'?1:0].length} ${R('букв','letters')})" onkeydown="if(event.key=='Enter')dgGo()"><datalist id="dg-l">${BR.map(x=>`<option value="${esc(l(x))}">`).join('')}</datalist><button class="btn shrink-0" onclick="dgGo()">OK</button></div>`}</section>`};
 
@@ -1597,7 +1597,7 @@ const H=[['hl','rank',R('Выше или ниже','Higher or lower'),R('Чей 
 window.gmOpen=k=>{clearTimeout(G.t);Object.assign(G,{g:k,s:0,pick:null,over:false,q:null,rt:null,mm:null});
 if(k=='hl')G.q=nxHL();if(k=='tq')G.q=mkTQ();if(k=='bq')G.q=mkBQ();
 if(k=='rt')G.rt={st:'idle'};
-if(k=='mm'){const e=['🔥','💀','⚡','🎯','👑','🛡️'];G.mm={c:shuf([...e,...e]),o:[],d:[],m:0,lock:false}}
+if(k=='mm'){const e=(window.BRL&&window.bIconN)?shuf(window.BRL).slice(0,6).map(b=>bIconN(b[0],46)):['🔥','💀','⚡','🎯','👑','🛡️'];G.mm={c:shuf([...e,...e]),o:[],d:[],m:0,lock:false}}
 render(true);scrollTo({top:0})};
 window.gmBack=()=>{clearTimeout(G.t);G.g=null;render(true)};
 window.hlGo=up=>{const{a,b}=G.q;if(G.pick!==null)return;G.pick=up;const ok=up?b[1]>=a[1]:b[1]<=a[1];G.ok=ok;render(true);G.t=setTimeout(()=>{if(ok){G.s++;sb_('hl',G.s);G.pick=null;G.q=nxHL()}else{sb_('hl',G.s);G.over=true}render(true)},900)};
@@ -1643,7 +1643,7 @@ const mm=(b,p)=>{const w=wn(b);if(w)return w=='O'?1:w=='X'?-1:0;let r=p=='O'?-2:
 const bot=()=>{const b=X.b,E=b.map((v,i)=>v?-1:i).filter(i=>i>=0);if(Math.random()<.3)return rnd(E);const sc=E.map(i=>{b[i]='O';const s=mm(b,'X');b[i]='';return[i,s]}),m=Math.max(...sc.map(x=>x[1]));return rnd(sc.filter(x=>x[1]==m))[0]};
 window.tGo=i=>{if(X.b[i]||X.res)return;X.b[i]='X';let w=wn(X.b);if(!w){X.b[bot()]='O';w=wn(X.b)}if(w){X.res=w;if(w=='X'){X.s++;sv('b_ttt',bst('ttt')+1)}}render(true)};
 /* --- лови бравлера --- */
-const whT=()=>{if(!live('wh'))return;if(Date.now()>=X.end){clr();X.over=true;sbs('wh',X.s)}else{X.pos=Math.floor(Math.random()*9);X.e=rnd(['👾','🐻','🐦‍⬛','🌵'])}render(true)};
+const whT=()=>{if(!live('wh'))return;if(Date.now()>=X.end){clr();X.over=true;sbs('wh',X.s)}else{X.pos=Math.floor(Math.random()*9);X.e=window.bIconN&&(window.BRL||[]).length?bIconN(rnd(window.BRL)[0],58):'👾'}render(true)};
 window.wGo=i=>{if(X.over||i!=X.pos)return;X.s++;X.pos=-1;render(true)};
 /* --- правда или ложь --- */
 const mkTF=()=>{const T=DB.teams.filter(x=>+x.pps);if(T.length<2)return null;const[a,b]=shuf(T),k=Math.random()<.5;return k?{txt:`${a.name}: PPS ${R('выше, чем у','is higher than')} ${b.name}`,ans:+a.pps>+b.pps}:{txt:`${a.name} ${R('выиграла больше матчей, чем','has more wins than')} ${b.name}`,ans:+a.w>+b.w}};
@@ -1682,8 +1682,8 @@ slug=n=>String(n).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
 const ID={shelly:0,colt:1,bull:2,brock:3,spike:5,barley:6,'el-primo':10,mortis:11,crow:12,poco:13,piper:15,pam:16,frank:20,leon:23,max:32,edgar:43},
 srcs=n=>{const k=slug(n),u=k in ID?`cdn.brawlify.com/brawlers/borderless/${16000000+ID[k]}.png`:null;return[u&&'https://'+u,u&&`https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=128&h=128&fit=cover`,`brawlers/${k}.png`].filter(Boolean)},src=n=>srcs(n)[0];
 window.bErr=im=>{const l=srcs(im.dataset.n),i=(+im.dataset.i||0)+1;if(i<l.length){im.dataset.i=i;im.src=l[i]}else im.remove()};
-window.bIcon=(b,s=40,c='rgba(255,255,255,.18)')=>`<span style="position:relative;display:inline-grid;place-items:center;flex-shrink:0;border-radius:50%;overflow:hidden;width:${s}px;height:${s}px;font-weight:900;font-size:${s*.36}px;color:#cbd5e1;background:#0b0f16;box-shadow:inset 0 0 0 1.5px ${c}">${ini(b[0])}<img src="${src(b[0])}" data-n="${esc(b[0])}" data-i="0" alt="" style="position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover" onerror="bErr(this)"></span>`;
-window.bIconN=(n,s)=>bIcon([n],s);
+window.bIcon=(b,s=40,c='rgba(255,255,255,.18)',sil)=>`<span style="position:relative;display:inline-grid;place-items:center;flex-shrink:0;border-radius:50%;overflow:hidden;width:${s}px;height:${s}px;font-weight:900;font-size:${s*.36}px;color:${sil?'transparent':'#cbd5e1'};background:#0b0f16;box-shadow:inset 0 0 0 1.5px ${c}">${ini(b[0])}<img src="${src(b[0])}" data-n="${esc(b[0])}" data-i="0" alt="" style="position:absolute;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover${sil?';filter:brightness(0)':''}" onerror="bErr(this)"></span>`;
+window.bIconN=(n,s,sil)=>bIcon([n],s,undefined,sil);
 const CH=[['Выиграй матч, ни разу не умерев','Win a match without dying'],['Играй только вблизи','Stay close-range only'],['Не используй гаджет весь матч','No gadgets this match'],['Только атакуй — никакого кемпинга','Attack only, no camping'],['Первым возьми кристалл','Grab the first gem'],['Сыграй 3 матча подряд без пауз','Play 3 matches in a row'],['Помоги новичку в команде','Help a newcomer'],['Сыграй за бравлера, которого давно не брал','Play a brawler you haven’t used lately']];
 /* ---------- колесо ---------- */
 const W={on:false,th:0,spin:false,kick:0,res:ld('tsk_w_last',null),img:{},logo:null};
@@ -1706,12 +1706,15 @@ window.whSpin=()=>{if(W.spin)return;const L=B(),n=L.length;if(!n)return;W.spin=t
 dl=((tg-th0)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)+2*Math.PI*(6+Math.floor(Math.random()*3)),T=5600,t0=performance.now();let last=-1;
 const step=t=>{const p=Math.min(1,(t-t0)/T);W.th=th0+dl*(1-Math.pow(1-p,4.2));const idx=Math.floor((((-Math.PI/2-W.th)%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/a);if(idx!=last){last=idx;W.kick=1;tick();try{navigator.vibrate&&navigator.vibrate(8)}catch{}}W.kick*=.86;draw();
 if(p<1&&document.getElementById('whl'))requestAnimationFrame(step);else{W.spin=false;W.kick=0;W.res={b:k,c:Math.floor(Math.random()*CH.length)};sv('tsk_w_last',W.res);if(S.tab=='games'&&W.on)render(true)}};requestAnimationFrame(step)};
+const DI={};srcs('Shelly').forEach((u,i)=>{const m=new Image();m.onload=()=>{DI[i]=1;dgn()};m.onerror=()=>{DI[i]=0;dgn()};m.src=u});
+function dgn(){if(S.tab=='games'&&!document.getElementById('m').innerHTML&&Object.keys(DI).length==3)render(true)}
+const dgS=()=>`<p class="text-[10px] text-slate-500 mt-3">${R('Иконки','Icons')}: CDN ${DI[0]===1?'✔':DI[0]===0?'✖':'…'} · ${R('прокси','proxy')} ${DI[1]===1?'✔':DI[1]===0?'✖':'…'} · ${R('файлы','files')} ${DI[2]===1?'✔':DI[2]===0?'✖':'…'}</p>`;
 const H1=(t,n)=>`<h1 class="font-head font-black text-2xl uppercase tracking-wide mt-1 mb-3">${t} <span class="text-[#FF2E63]">/</span> <span class="text-slate-500 text-base">${n}</span></h1>`,
 back=`<button class="btn k !py-1.5 !px-3 text-xs mb-3" onclick="gmBack()">← ${R('Все игры','All games')}</button>`;
 const wview=()=>{const L=B(),r=W.res,b=r&&L[r.b];
 return back+H1(R('Колесо судьбы','Wheel of fate'),L.length)+`<div class="g p-4 fd"><div class="relative mx-auto" style="width:min(340px,100%);aspect-ratio:1"><canvas id="whl" style="width:100%;height:100%"></canvas></div>
 <div class="text-center mt-2"><button class="btn ${W.spin?'k opacity-60':''}" onclick="whSpin()" ${W.spin?'disabled':''}>${W.spin?R('Крутится…','Spinning…'):b?R('Ещё раз','Again'):R('Крутить колесо','Spin the wheel')}</button></div></div>`
-+(b&&!W.spin?`<div class="g mt-3 overflow-hidden fd"><div class="mx-4 mt-4 mb-3 flex items-center gap-3 rounded-xl border border-[#FFD700]/40 bg-[#FFD700]/10 px-3 py-2.5">${bIcon(b,48,'rgba(255,215,0,.6)')}<div class="min-w-0 flex-1"><div class="text-[10px] uppercase tracking-[.2em] text-[#FFD700]">${R('Выпало','You got')}</div><b class="block truncate text-base">${esc(ru()?b[1]:b[0])}</b></div><span class="text-[#FFD700] shrink-0">${ic('cup','!w-7 !h-7')}</span></div><div class="border-t border-white/10 px-4 py-3"><div class="text-[10px] uppercase tracking-wider text-slate-500">${R('Челлендж','Challenge')}</div><div class="text-[14px] font-semibold mt-1">${esc(CH[r.c][ru()?0:1])}</div></div></div>`:'')+`<p class="text-[10px] text-slate-500 mt-3">${R('Иконки бравлеров — Brawlify. Brawl Stars © Supercell.','Brawler icons by Brawlify. Brawl Stars © Supercell.')}</p>`};
++(b&&!W.spin?`<div class="g mt-3 overflow-hidden fd"><div class="mx-4 mt-4 mb-3 flex items-center gap-3 rounded-xl border border-[#FFD700]/40 bg-[#FFD700]/10 px-3 py-2.5">${bIcon(b,48,'rgba(255,215,0,.6)')}<div class="min-w-0 flex-1"><div class="text-[10px] uppercase tracking-[.2em] text-[#FFD700]">${R('Выпало','You got')}</div><b class="block truncate text-base">${esc(ru()?b[1]:b[0])}</b></div><span class="text-[#FFD700] shrink-0">${ic('cup','!w-7 !h-7')}</span></div><div class="border-t border-white/10 px-4 py-3"><div class="text-[10px] uppercase tracking-wider text-slate-500">${R('Челлендж','Challenge')}</div><div class="text-[14px] font-semibold mt-1">${esc(CH[r.c][ru()?0:1])}</div></div></div>`:'')+`<p class="text-[10px] text-slate-500 mt-3">${R('Иконки бравлеров — Brawlify. Brawl Stars © Supercell.','Brawler icons by Brawlify. Brawl Stars © Supercell.')}</p>`+dgS()};
 /* ---------- хаб игр ---------- */
 const bv=(p,k)=>ld(p+'b_'+k,0),dg=ld('tsk_x_dg',{streak:0,best:0}),
 fm=(k,v)=>!v?'—':k=='rt'?v+' ms':k=='mm'?v+' '+R('ходов','moves'):v,
@@ -1732,7 +1735,7 @@ gcard=x=>{const[k,p,i,t,d,c,m,f]=x,col=CT[c][0],rec=k=='dg'?dg.best:k=='wf'?'—
 return`<div class="g r cursor-pointer fd overflow-hidden" onclick="${act}"><div class="flex items-center gap-3 p-4"><span class="grid place-items-center w-11 h-11 rounded-xl shrink-0" style="background:${col}1a;color:${col}">${ic(i,'!w-6 !h-6')}</span><div class="min-w-0 flex-1"><b class="block truncate text-[15px]">${t}</b><div class="text-[12px] text-slate-400 truncate">${d}</div></div><span class="shrink-0 text-[10px] font-bold tracking-widest px-2 py-1 rounded-md uppercase" style="color:${col};background:${col}1a">${CT[c][1]}</span></div><div class="flex border-t border-white/10">${cell(fm(k,rec),R('Рекорд','Best'),1)}${cell(m,R('Режим','Mode'))}</div></div>`},
 sb=(on,a,l,n)=>segBtn(on,a,l,n);
 const hub=()=>{const f=S.gf||'all',sh=GM.filter(x=>f=='all'||x[5]==f),n=c=>GM.filter(x=>x[5]==c).length;
-return H1(t('games'),GM.length)+`<div class="hs mb-3">${sb(f=='all',"S.gf='all';render()",R('Все','All'),GM.length)}${sb(f=='brain',"S.gf='brain';render()",CT.brain[1],n('brain'))}${sb(f=='reflex',"S.gf='reflex';render()",CT.reflex[1],n('reflex'))}${sb(f=='fun',"S.gf='fun';render()",CT.fun[1],n('fun'))}</div><div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2.5">${sh.map(gcard).join('')}</div>`};
+return H1(t('games'),GM.length)+`<div class="hs mb-3">${sb(f=='all',"S.gf='all';render()",R('Все','All'),GM.length)}${sb(f=='brain',"S.gf='brain';render()",CT.brain[1],n('brain'))}${sb(f=='reflex',"S.gf='reflex';render()",CT.reflex[1],n('reflex'))}${sb(f=='fun',"S.gf='fun';render()",CT.fun[1],n('fun'))}</div><div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2.5">${sh.map(gcard).join('')}</div>`+dgS()};
 const _xo=window.xOpen,_gb=window.gmBack,_go=window.gmOpen;
 window.xOpen=k=>{if(k=='wf'){W.on=true;render(true);scrollTo({top:0});return}W.on=false;_xo(k)};
 window.gmBack=()=>{W.on=false;_gb()};window.gmOpen=k=>{W.on=false;_go(k)};
