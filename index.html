@@ -971,6 +971,15 @@ const DK=['teams','players','matches','tourn','news'],isDemo=(d,k,x)=>d[k].some(
 async function undemo(){const d=seed(),n=DK.reduce((a,k)=>a+DB[k].filter(x=>isDemo(d,k,x)).length,0);if(!n)return toast('Демо-данных нет');if(!confirm('Удалить демо-данные ('+n+' шт.)? Твои собственные записи не тронутся.'))return;
 if(sb){for(const k of DK){const{error}=await sb.from('records').delete().eq('kind',k).in('id',d[k].map(x=>x.id));if(error)return toast(error.message)}await load()}else{DK.forEach(k=>DB[k]=DB[k].filter(x=>!isDemo(d,k,x)));save()}toast('OK');render()}
 async function demo(){const d=seed();for(const k of['teams','players','matches','tourn','news']){const{error}=await sb.from('records').upsert(d[k].map(({id,...x})=>({kind:k,id,data:x})));if(error)return toast(error.message)}await load();toast('OK')}
+
+/* ===== push на телефон для админов ===== */
+const PUSH_PK='BMB_n3Wu19C_DsbhOtG8Iy6ZoqCSsFILVION7DBM61YOZcvMD_i5CobxE8pfGIs8c1zqiqdTBlydjpwTO-PLCg4',_u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())};
+const _swReady=()=>Promise.race([navigator.serviceWorker.ready,new Promise((_,j)=>setTimeout(()=>j(new Error('Service Worker не запущен (sw.js)')),8000))]);
+async function pushSync(){if(!sb||!S.me||!window.Notification||Notification.permission!='granted'||!('serviceWorker' in navigator)||!('PushManager' in window))return;const reg=await _swReady();let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:_u8(PUSH_PK)});const r=await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'});if(r.error)throw r.error}
+async function staffPushOn(){if(!window.Notification||!('serviceWorker' in navigator)||!('PushManager' in window))return toast(R('Пуши не поддерживаются. На iPhone: добавь сайт на экран «Домой» и открой оттуда','Push not supported. On iPhone: add the site to Home Screen and open it from there'),6000);if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в настройках браузера','Notifications blocked in browser settings'),4000);try{await pushSync();toast(R('Уведомления на телефон включены','Phone notifications enabled'))}catch(e){toast(R('Не удалось включить: ','Failed: ')+((e&&e.message)||e),6000)}window._ps=1;notifyApps()}
+function pushAskHide(){try{localStorage.setItem('tsk_pushask','1')}catch{}notifyApps()}
+function pushAsk(){if(!window.Notification||Notification.permission!='default'){return''}try{if(localStorage.getItem('tsk_pushask'))return''}catch{}return`<div class="g p-3" style="pointer-events:auto;border:1px solid #00F0FF"><div class="flex items-center gap-2"><div class="flex-1 text-[13px]"><b>${R('Уведомления о заявках','Application alerts')}</b><div class="text-[11px] text-slate-400">${R('Получай пуш на телефон, когда приходит новая заявка','Get a push on your phone for each new application')}</div></div><button class="btn" onclick="staffPushOn()">${R('Включить','Enable')}</button><button class="btn k !p-1.5" onclick="pushAskHide()" aria-label="x">✕</button></div></div>`}
+
 /* ===== уведомления о заявках для админов / овнера ===== */
 function isStaff(){return !!(S.user&&['owner','admin'].includes(S.user.role))}
 const _sk=()=>'tsk_seen_apps_'+((S.user&&S.user.email)||'');
@@ -984,14 +993,15 @@ function notifyApps(){
  if(!box){box=document.createElement('div');box.id='appNote';box.style.cssText='position:fixed;z-index:9999;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 8px);width:min(94vw,440px);pointer-events:none';document.body.appendChild(box)}
  const base=document.title.replace(/^\(\d+\) /,'');
  if(!isStaff()){box.innerHTML='';document.title=base;_ntInit=0;_known.clear();return}
+ if(!window._ps&&window.Notification&&Notification.permission=='granted'){window._ps=1;pushSync().catch(()=>{})}
  const P=(DB.apps||[]).filter(a=>a.status=='pending');
  document.title=(P.length?'('+P.length+') ':'')+base;
  const seen=new Set(_seen()),fresh=P.filter(a=>!seen.has(a.id)),nw=fresh.filter(a=>!_known.has(a.id));
  if(nw.length){_beep();try{if(window.Notification&&Notification.permission=='granted'){const n=new Notification('TSK · '+R('Новая заявка','New application'),{body:appLabel(nw[0])+(P.length>1?' (+'+(P.length-1)+')':''),tag:'tsk-app-'+nw[0].id,icon:'icon-192.png'});n.onclick=()=>{window.focus();appNoteOpen(nw[0].id);n.close()}}}catch{}}
  P.forEach(a=>_known.add(a.id));_ntInit=1;
- if(!fresh.length){box.innerHTML='';return}
+ if(!fresh.length){box.innerHTML=pushAsk();return}
  const a=fresh[0],id=esc(a.id),more=fresh.length-1,perm=window.Notification&&Notification.permission=='default';
- box.innerHTML=`<div class="g p-3" style="pointer-events:auto;border:1px solid #FFD700;box-shadow:0 8px 30px rgba(0,0,0,.5)"><div class="flex items-start gap-2"><div class="min-w-0 flex-1"><b class="block text-sm" style="color:#FFD700">${R('Новая заявка','New application')}${more?' (+'+more+')':''}</b><div class="text-sm break-words">${esc(appLabel(a))}</div></div><button class="btn k !p-1.5" onclick="appNoteHide()" aria-label="x">✕</button></div><div class="flex gap-2 mt-2"><button class="btn flex-1" onclick="appOk('${id}')">${R('Одобрить','Approve')}</button><button class="btn r flex-1" onclick="appNo('${id}')">${R('Отклонить','Reject')}</button><button class="btn k" onclick="appNoteOpen('${id}')">${R('Открыть','Open')}</button></div>${perm?`<button class="text-[11px] underline mt-2" style="color:#00F0FF" onclick="Notification.requestPermission().then(notifyApps)">${R('Включить уведомления браузера','Enable browser notifications')}</button>`:''}</div>`}
+ box.innerHTML=`<div class="g p-3" style="pointer-events:auto;border:1px solid #FFD700;box-shadow:0 8px 30px rgba(0,0,0,.5)"><div class="flex items-start gap-2"><div class="min-w-0 flex-1"><b class="block text-sm" style="color:#FFD700">${R('Новая заявка','New application')}${more?' (+'+more+')':''}</b><div class="text-sm break-words">${esc(appLabel(a))}</div></div><button class="btn k !p-1.5" onclick="appNoteHide()" aria-label="x">✕</button></div><div class="flex gap-2 mt-2"><button class="btn flex-1" onclick="appOk('${id}')">${R('Одобрить','Approve')}</button><button class="btn r flex-1" onclick="appNo('${id}')">${R('Отклонить','Reject')}</button><button class="btn k" onclick="appNoteOpen('${id}')">${R('Открыть','Open')}</button></div>${perm?`<button class="text-[11px] underline mt-2" style="color:#00F0FF" onclick="staffPushOn()">${R('Включить пуш-уведомления на телефон','Enable phone push notifications')}</button>`:''}</div>`}
 function appNoteHide(){_mark((DB.apps||[]).filter(a=>a.status=='pending').map(a=>a.id));notifyApps()}
 function appNoteOpen(id){_mark([id]);notifyApps();openApp(id)}
 
@@ -1518,7 +1528,7 @@ const DG={n:null},dgStat=async()=>{if(!sb)return;try{const r=await sb.rpc('daily
 const _dg=window.dgGo;window.dgGo=()=>{_dg();const s=JSON.parse(localStorage.getItem('tsk_x_dg')||'{}');if(ok()&&s.d&&s.ok!=null&&!ld('dgs_'+s.d,0)){sv('dgs_'+s.d,1);sb.rpc('daily_submit',{p_ok:!!s.ok}).then(()=>dgStat())}};
 dgStat();setInterval(dgStat,30000);
 /* --- уведомления --- */
-const VAPID='',u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())},NF=()=>'Notification' in window;
+const VAPID='BMB_n3Wu19C_DsbhOtG8Iy6ZoqCSsFILVION7DBM61YOZcvMD_i5CobxE8pfGIs8c1zqiqdTBlydjpwTO-PLCg4',u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())},NF=()=>'Notification' in window;
 window.pushOn=async()=>{if(!NF())return toast(R('Браузер не поддерживает','Not supported'));if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в браузере','Blocked'));
 try{if(VAPID&&ok()){const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'})}}catch{}
 toast(R('Уведомления включены','Enabled'));render(true)};
