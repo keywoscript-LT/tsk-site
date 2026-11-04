@@ -2166,11 +2166,12 @@ window.LANGS=[["ru", "Русский"], ["en", "English"], ["uk", "Україн�
 function close(){var m=document.getElementById('lgm');if(m)m.remove();document.removeEventListener('click',out,true);document.removeEventListener('keydown',esc,true)}
 function out(e){var m=document.getElementById('lgm'),b=document.getElementById('lg');if(m&&!m.contains(e.target)&&!(b&&b.contains(e.target)))close()}
 function esc(e){if(e.key==='Escape')close()}
+  addEventListener('resize',close);
 window.langMenu=function(ev){
   if(document.getElementById('lgm')){close();return}
   var b=document.getElementById('lg'),r=b.getBoundingClientRect(),m=document.createElement('div');
   m.id='lgm';m.setAttribute('role','menu');
-  m.style.cssText='position:fixed;z-index:120;top:'+Math.round(r.bottom+6)+'px;right:'+Math.max(8,Math.round(innerWidth-r.right))+'px;width:min(300px,calc(100vw - 16px));max-height:min(70vh,520px);overflow:auto;padding:6px;border-radius:14px;background:#0b0f16;border:1px solid rgba(255,255,255,.18);box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;grid-template-columns:1fr 1fr;gap:4px';
+  m.style.cssText='position:fixed;z-index:120;visibility:hidden;top:0;left:0;width:min(300px,calc(100vw - 16px));max-height:min(70vh,520px);overflow:auto;overscroll-behavior:contain;padding:6px;border-radius:14px;background:#0b0f16;border:1px solid rgba(255,255,255,.18);box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;grid-template-columns:1fr 1fr;gap:4px';
   LANGS.forEach(function(x){
     var a=document.createElement('button');a.type='button';a.setAttribute('role','menuitem');
     var on=x[0]===S.lang;
@@ -2181,6 +2182,12 @@ window.langMenu=function(ev){
     a.onclick=function(){close();S.lang=x[0];ui()};
     m.appendChild(a)});
   document.body.appendChild(m);
+  (function(){var w=m.offsetWidth,h=m.offsetHeight,vw=document.documentElement.clientWidth,vh=innerHeight,g=6,
+    left=Math.min(Math.max(8,r.left),vw-w-8),
+    below=vh-r.bottom-g-8,above=r.top-g-8,top;
+    if(h<=below||below>=above){top=r.bottom+g;if(h>below)m.style.maxHeight=Math.max(120,below)+'px'}
+    else{if(h>above){m.style.maxHeight=Math.max(120,above)+'px';h=m.offsetHeight}top=r.top-g-h}
+    m.style.left=Math.round(left)+'px';m.style.top=Math.round(Math.max(8,top))+'px';m.style.visibility='visible'})();
   setTimeout(function(){document.addEventListener('click',out,true);document.addEventListener('keydown',esc,true)},0)}
 })();
 </script>
