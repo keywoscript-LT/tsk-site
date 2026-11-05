@@ -1227,7 +1227,7 @@ const Ul=a=>`<ul class="pg-ul text-[14px] leading-relaxed k-t3 mt-2 grid gap-1.5
 const TG='https://t.me/TSKesports';
 const tg=(l)=>`<a class="underline kc-cy" href="${TG}" target="_blank" rel="noopener">${l||'@TSKesports'}</a>`;
 const lnk=(k,l)=>`<a class="underline kc-cy" href="${TSK_ROOT}${k}/" onclick="go('${k}');return false">${l}</a>`;
-const page=(h1,body,upd)=>`<article class="pg pg-doc fd"><header class="pg-hero dk">${typeof L!='undefined'?`<img src="${L}" class="pg-wm" alt="">`:''}<span class="pg-tag">${upd?R('Документ','Document'):'TSK Esports'}</span><h1>${h1}</h1>${upd?`<p>${upd}</p>`:''}</header><div class="pg-body">${body}</div></article>`;
+const page=(h1,body,upd)=>`<article class="pg pg-doc fd"><div class="pg-hero dk">${typeof L!='undefined'?`<img src="${L}" class="pg-wm" alt="">`:''}<span class="pg-tag">${upd?R('Документ','Document'):'TSK Esports'}</span><h1>${h1}</h1>${upd?`<p>${upd}</p>`:''}</div><div class="pg-body">${body}</div></article>`;
 const UPD=()=>R('Редакция от 5 ноября 2026','Last updated: 5 November 2026');
 
 V.about=()=>{
@@ -2304,8 +2304,10 @@ div:has(>.tfb)::-webkit-scrollbar{display:none}
 .pg-new{margin-left:2px;padding:3px 12px 3px 8px;font:900 9px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;background:var(--rd);color:#fff;clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,0 100%)}
 .nx-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .nx-ago{font:700 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--pg-mu)}
-.nx-img{clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 32px) 100%,0 100%)}
-.nw-th{border-radius:0;clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.nx-img{position:relative}
+.nx-img:after{content:"";position:absolute;left:0;right:0;bottom:0;height:75%;background:linear-gradient(to top,var(--pg-bg) 4%,color-mix(in srgb,var(--pg-bg) 70%,transparent) 40%,transparent 100%);pointer-events:none}
+.nx-img+div{position:relative;z-index:1;margin-top:-56px}
+.nw-th{border-radius:0;clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:inset 0 -26px 20px -12px rgba(7,9,14,.85)}
 .gm-top{display:flex;align-items:center;gap:14px;padding:16px 16px 16px 22px}
 .gm-ic{flex:none;display:grid;place-items:center;width:46px;height:46px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
 .gm-t{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 15px/1.2 Montserrat,Inter,sans-serif;text-transform:uppercase;letter-spacing:.02em}
