@@ -2377,6 +2377,19 @@ if(typeof _o=='function')window.openT=function(){tnClose();return _o.apply(this,
 .mx-day:before{content:"";width:14px;height:3px;background:var(--tn-st)}
 .mx-day:first-child{margin-top:2px}
 .mx-body .g,.mx-body .g.r{background:var(--tn-sf);border:1px solid var(--tn-bd2);border-radius:2px;box-shadow:0 2px 0 var(--tn-sh);-webkit-backdrop-filter:none;backdrop-filter:none}
+/* верхние блоки страницы «Матчи» (лиги, MVP, прогнозы, серия) — в стиле турниров */
+.tn-page>section.g{position:relative;margin:12px 0 0!important;background:var(--tn-bg);border:1px solid var(--tn-bd);border-radius:2px!important;box-shadow:0 3px 0 var(--tn-sh);overflow:hidden;color:var(--tn-tx);-webkit-backdrop-filter:none;backdrop-filter:none}
+.tn-page>section.g:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--mx-c,var(--tn-ac));z-index:2}
+.tn-page>section.g.p-3{padding-left:18px}
+.tn-page>section.g[data-cz=lg]{--mx-c:var(--tn-ln)}
+.tn-page>section.g[data-cz=mvp]{--mx-c:var(--tn-gd)}
+.tn-page>section.g[data-cz=pred]{--mx-c:var(--tn-ac)}
+.tn-page>section.g[data-cz=streak]{--mx-c:var(--tn-rd)}
+.tn-page>section.g .text-\[15px\]{text-transform:uppercase;letter-spacing:.06em;font-size:14px}
+.tn-page>section.g .rounded-xl,.tn-page>section.g .rounded-full,.tn-page>section.g .cz-b{border-radius:2px!important}
+.tn-page>section.g .g.r{background:var(--tn-s2);border:1px solid var(--tn-bd2);border-radius:2px!important;box-shadow:none}
+.tn-page>section.g .btn{border-radius:2px!important}
+.tn-page>section.g .bd-10{border-color:var(--tn-bd)!important}
 </style>
 <style id="rk-css">
 .rk-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
