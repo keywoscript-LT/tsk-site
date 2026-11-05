@@ -532,7 +532,7 @@ const at=k=>S.tab==k||(k=='rank'&&S.tab=='team'),sortedT=()=>[...DB.teams].sort(
 const favs=()=>{try{return JSON.parse(localStorage.getItem('tsk_fav'))||[]}catch{return[]}};
 function tf(id){const f=favs(),i=f.indexOf(id);i<0?f.push(id):f.splice(i,1);try{localStorage.setItem('tsk_fav',JSON.stringify(f))}catch{}render()}
 function openT(id){S.tab='team';S.tid=id;ui();scrollTo({top:0,behavior:'smooth'})}
-function shT(id){const x=tm(id),u={title:'TSK Esports — '+x.name,text:x.name+' · '+x.pps+' PPS',url:location.origin+'/t/'+encodeURIComponent(id)};if(navigator.share)navigator.share(u).catch(()=>{});else navigator.clipboard?.writeText(u.url).then(()=>toast('Link copied'))}
+function shT(id){const x=tm(id),u={title:'TSK Esports — '+x.name,text:x.name+' · '+x.pps+' PPS',url:location.origin+TSK_ROOT+'#/team/'+encodeURIComponent(id)};if(navigator.share)navigator.share(u).catch(()=>{});else navigator.clipboard?.writeText(u.url).then(()=>toast('Link copied'))}
 function dlT(id){const x=tm(id),all=sortedT(),r=all.findIndex(z=>z.id==id)+1,w=Math.round(100*x.w/Math.max(1,x.w+x.l)),c=document.createElement('canvas');c.width=720;c.height=860;const g=c.getContext('2d');
 const fin=im=>{g.fillStyle='#07090E';g.fillRect(0,0,720,860);const gr=g.createLinearGradient(0,0,720,0);gr.addColorStop(0,'#00F0FF');gr.addColorStop(1,'#FF2E63');g.fillStyle=gr;g.fillRect(0,0,720,8);
 if(im)g.drawImage(im,60,70,150,150);else{g.fillStyle='hsl('+hue(x.name)+',70%,35%)';g.beginPath();g.arc(135,145,75,0,7);g.fill();g.fillStyle='#fff';g.font='900 56px sans-serif';g.textAlign='center';g.fillText(x.name.slice(0,2).toUpperCase(),135,165);g.textAlign='left'}
@@ -1292,7 +1292,7 @@ const parse=()=>{const p=rel().split('/');let k=p[0]||'',id=p.slice(1).join('/')
  return[k,id]};
 const KNOWN=k=>NK.has(k)||k=='team'||k=='player';
 const setH=h=>{cur=h;const m=h.match(/^#\/([\w-]+)(?:\/(.+))?$/);if(!m||!KNOWN(m[1]))return;
- const u=pathOf(m[1],m[2]?safeDec(m[2]):'');if(location.pathname!==u){try{history.pushState(null,'',u)}catch(e){}}};
+ const u=TSK_ROOT+'#/'+m[1]+(m[2]?'/'+m[2]:'');if(location.pathname+location.hash!==u){try{history.pushState(null,'',u)}catch(e){}}};
 
 /* ---- мета-теги и JSON-LD текущей страницы ---- */
 const strip=x=>String(x||'').replace(/\[[^\]]*\]/g,' ').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
@@ -2004,7 +2004,7 @@ H=[['ttt','swap',R('Крестики-нолики','Tic-tac-toe'),R('Проти�
 const _vg=V.games;V.games=()=>{if(X.g)return view();const h=_vg();if(h.includes('gmBack()'))return h;const i=h.lastIndexOf('</div>');return h.slice(0,i)+H.map(x=>tile(x[4],x[2],x[3]+(x[0]=='wf'?'':' · '+R('рекорд','best')+': '+(bst(x[0])||'—')),`xOpen('${x[0]}')`,x[1])).join('')+h.slice(i)};
 })();
 </script>
-<script src="brawlers-local.js"></script>
+<script>document.write('<script src="'+TSK_ROOT+'brawlers-local.js"><\/script>')</script>
 <script>
 /* ===== v18: хаб игр и колесо в стиле сайта; иконки бравлеров с CDN Brawlify ===== */
 (()=>{
