@@ -517,7 +517,7 @@ bdg=p=>{if(!p)return'';return bdg0(p)+extB(p)+lfgP(p)},
 bdg0=p=>{let tx='',c='';if(p.badgeText&&String(p.badgeText).trim()){tx=String(p.badgeText).trim().slice(0,24);c=/^#[0-9a-f]{6}$/i.test(p.badgeColor||'')?p.badgeColor:'#FFD700'}else if(BG[p.badge]){const b=BG[p.badge],tm_=p.nick===undefined,ru=S.lang=='ru';tx=ru?(tm_?b[2]:b[0]):S.lang=='en'?(tm_?b[3]:b[1]):(((BGX[S.lang]||{})[p.badge]||[])[tm_?1:0]||(tm_?b[3]:b[1]));c=b[4]}
 return tx?`<span class="inline-flex items-center shrink-0 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ring-1" style="color:${c};background:${c}22;--tw-ring-color:${c}66">${esc(tx)}</span>`:''},
 has=(q,...a)=>!q||a.join(' ').toLowerCase().includes(q);
-const hd=x=>`<h2 class="font-head font-extrabold text-[13px] uppercase tracking-[.14em] k-t3 mt-4 mb-2 flex items-center gap-2"><i class="w-1 h-3.5 rounded kb-rd shadow-[0_0_8px_#FF2E63]"></i>${x}</h2>`;
+const hd=x=>`<h2 class="pg-h">${x}</h2>`;
 const dt=d=>new Date(d).toLocaleDateString(S.lang,{day:'2-digit',month:'short'});
 const mrow=m=>{const a=tm(m.a),b=tm(m.b);return`<div class="g r p-2.5 flex items-center gap-2"><div class="flex-1 flex items-center gap-2 min-w-0 justify-end"><span class="truncate text-[13px] font-semibold">${esc(a.name)}</span>${extB(a,1)}${lg(a,'h-7 w-7')}</div><div class="w-[62px] text-center leading-tight"><b class="font-head text-base ${m.st=='live'?'k-hi':''}">${m.st=='up'?'VS':m.sa+':'+m.sb}</b><div class="text-[9px] uppercase tracking-wider ${m.st=='live'?'live font-bold':'k-t5'}">${m.st=='live'?'● LIVE':dt(m.when)}</div></div><div class="flex-1 flex items-center gap-2 min-w-0">${lg(b,'h-7 w-7')}<span class="truncate text-[13px] font-semibold">${esc(b.name)}</span>${extB(b,1)}</div></div>`};
 const dayLabel=iso=>{const d=new Date(iso),n=new Date(),df=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(n.getFullYear(),n.getMonth(),n.getDate()))/864e5);return df==0?R('Сегодня','Today'):df==1?R('Завтра','Tomorrow'):df==-1?R('Вчера','Yesterday'):dt(iso)},
@@ -1103,10 +1103,12 @@ function recForm(tid){const t_=DB.teams.find(x=>x.id==tid);if(!t_||!canInv(t_)||
 modal(`<form id="RCF" class="grid gap-3 relative"><button type="button" class="absolute right-0 -top-1 btn k !p-1.5" onclick="closeM()">${ic('x')}</button><h3 class="font-head font-extrabold text-lg kc-cy pr-10">${ic('mega')} ${R('Набор игроков','Recruiting')}</h3><p class="text-[12px] k-t4">${R('Команда появится на странице поиска с меткой «Набор открыт».','Your team will appear on the search page with a “Recruiting” mark.')}</p><label class="flex items-center gap-2 text-sm"><input type="checkbox" name="on" ${t_.recruiting?'checked':''}> ${R('Набор открыт','Recruitment is open')}</label><label ${LB}>${R('Кого ищете (до 80 символов)','Who you are looking for (up to 80 chars)')}<input class="inp" name="note" maxlength="80" value="${esc(t_.recruitNote||'')}" placeholder="${R('Нужен снайпер, играем по вечерам','Need a sniper, we play evenings')}"></label><button class="btn">${R('Сохранить','Save')}</button></form>`);
 $('#RCF').onsubmit=async e=>{e.preventDefault();const d=new FormData(e.target),on=!!d.get('on'),note=String(d.get('note')||'').trim().slice(0,80);
 try{if(sb){const{error}=await sb.rpc('set_recruiting',{p_team:tid,p_on:on,p_note:note});if(error)throw error;await load()}else{t_.recruiting=on;t_.recruitNote=note;save()}closeM();toast(on?R('Набор открыт','Recruitment is open'):R('Набор закрыт','Recruitment closed'));render()}catch(er){toast((er&&er.message)||'Error')}}}
-V.lfg=()=>{const mt=DB.teams.find(canInv),PL=DB.players.filter(p=>p.lfg).sort((a,b)=>b.pps-a.pps),TM=DB.teams.filter(x=>x.recruiting).sort((a,b)=>b.pps-a.pps);
-return`<button class="btn k mb-2" onclick="go('players')">${ic('back')}${t('players')}</button><h1 class="font-head font-black text-2xl uppercase tracking-wide mb-1">${ic('search')} ${R('Поиск команды и игроков','Find a team or players')}</h1><p class="text-[13px] k-t4 mb-1">${R('Игроки без команды и команды с открытым набором. Метку включают сами игроки и капитаны в «Мой профиль».','Players without a team and teams with open recruitment. Players and captains switch the mark on in “My profile”.')}</p>
-${hd(R('Ищут команду','Looking for a team')+' ('+PL.length+')')}<div class="grid gap-2">${PL.map(p=>`<div class="g p-2.5"><div class="flex items-center gap-2.5"><div class="dk h-12 w-12 rounded-xl overflow-hidden shrink-0 cursor-pointer" style="background:linear-gradient(160deg,hsl(${hue(p.nick)} 75% 32%),#0a0d13)" onclick="openP('${p.id}')">${av(p)}</div><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><b class="truncate">${esc(p.nick)}</b>${bdg0(p)}</div><div class="flex items-center gap-1.5 text-[11px] k-t4">${fl(p.country)}<span>${t('age')} ${esc(p.age)}</span><span class="kc-cy font-head font-bold">${p.pps} PPS</span></div></div></div>${p.lfgNote?`<p class="text-[12px] k-t3 mt-1.5 italic break-words">“${esc(p.lfgNote)}”</p>`:''}<div class="grid ${mt&&p.uid&&S.me&&p.uid!=S.me.id?'grid-cols-2':'grid-cols-1'} gap-2 mt-2"><button class="btn k" onclick="openP('${p.id}')">${R('Профиль','Profile')}</button>${mt&&p.uid&&S.me&&p.uid!=S.me.id?`<button class="btn" onclick="inviteForm('${mt.id}','${esc(p.nick).replace(/'/g,"&#39;")}')">${ic('plus')} ${R('Пригласить','Invite')}</button>`:''}</div></div>`).join('')||`<p class="k-t5 text-sm">${R('Пока никто не ищет команду.','Nobody is looking for a team yet.')}</p>`}</div>
-${hd(R('Ищут игроков','Recruiting')+' ('+TM.length+')')}<div class="grid gap-2">${TM.map(x=>`<div class="g r p-2.5 cursor-pointer" onclick="openT('${x.id}')"><div class="flex items-center gap-2.5">${lg(x,'h-12 w-12')}<div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><b class="truncate">${esc(x.name)}</b>${bdg0(x)}</div><div class="flex items-center gap-1.5 text-[11px] k-t4">${fl(x.country)}<span class="kc-cy font-head font-bold">${x.pps} PPS</span><span>${DB.players.filter(p=>p.team==x.id).length} ${R('игр.','pl.')}</span></div></div></div>${x.recruitNote?`<p class="text-[12px] k-t3 mt-1.5 italic break-words">“${esc(x.recruitNote)}”</p>`:''}</div>`).join('')||`<p class="k-t5 text-sm">${R('Ни одна команда не ведёт набор.','No team is recruiting right now.')}</p>`}</div>`};
+V.lfg=()=>{const mt=DB.teams.find(canInv),PL=DB.players.filter(p=>p.lfg).sort((a,b)=>b.pps-a.pps),TM=DB.teams.filter(x=>x.recruiting).sort((a,b)=>b.pps-a.pps),tab=S.lt=='t'?'t':'p',
+st=(v,l,c)=>`<div class="hx-s" style="--c:${c}"><b>${v}</b><span>${l}</span></div>`,
+pc=p=>{const inv=mt&&p.uid&&S.me&&p.uid!=S.me.id;return`<div class="pg-card fd" style="--c:var(--cy)"><div class="lf-b"><div class="flex items-center gap-3"><div class="dk lf-av cursor-pointer" style="background:linear-gradient(160deg,hsl(${hue(p.nick)} 75% 32%),#0a0d13)" onclick="openP('${p.id}')">${av(p)}</div><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><b class="truncate font-head font-extrabold">${esc(p.nick)}</b>${bdg0(p)}</div><div class="lf-m">${fl(p.country)}<span>${t('age')} ${esc(p.age)}</span></div></div><div class="lf-pps"><b>${p.pps}</b><span>PPS</span></div></div>${p.lfgNote?`<p class="lf-q">“${esc(p.lfgNote)}”</p>`:''}<div class="grid ${inv?'grid-cols-2':'grid-cols-1'} gap-2 mt-3"><button class="btn k" onclick="openP('${p.id}')">${R('Профиль','Profile')}</button>${inv?`<button class="btn" onclick="inviteForm('${mt.id}','${esc(p.nick).replace(/'/g,"&#39;")}')">${ic('plus')} ${R('Пригласить','Invite')}</button>`:''}</div></div></div>`},
+tc=x=>`<div class="pg-card hov fd" style="--c:var(--gd)" onclick="openT('${x.id}')"><div class="lf-b"><div class="flex items-center gap-3">${lg(x,'h-12 w-12')}<div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><b class="truncate font-head font-extrabold">${esc(x.name)}</b>${bdg0(x)}</div><div class="lf-m">${fl(x.country)}<span>${DB.players.filter(p=>p.team==x.id).length} ${R('игр.','pl.')}</span></div></div><div class="lf-pps"><b>${x.pps}</b><span>PPS</span></div></div>${x.recruitNote?`<p class="lf-q">“${esc(x.recruitNote)}”</p>`:''}</div></div>`,
+list=tab=='p'?(PL.map(pc).join('')||`<p class="k-t5 text-sm">${R('Пока никто не ищет команду.','Nobody is looking for a team yet.')}</p>`):(TM.map(tc).join('')||`<p class="k-t5 text-sm">${R('Ни одна команда не ведёт набор.','No team is recruiting right now.')}</p>`);
+return`<div class="pg"><button class="btn k mb-3" onclick="go('players')">${ic('back')}${t('players')}</button><div class="pg-hero dk fd"><span class="pg-tag">${R('Набор','Recruiting')}</span><h1>${R('Поиск команды и игроков','Find a team or players')}</h1><p>${R('Игроки без команды и команды с открытым набором. Метку включают сами игроки и капитаны в «Мой профиль».','Players without a team and teams with open recruitment. Players and captains switch the mark on in “My profile”.')}</p><div class="hx-sts">${st(PL.length,R('ищут команду','looking'),'var(--cy)')}${st(TM.length,R('ищут игроков','recruiting'),'var(--gd)')}</div></div><div class="hs mt-3">${segBtn(tab=='p',"S.lt='p';render()",R('Ищут команду','Looking for a team'),PL.length)}${segBtn(tab=='t',"S.lt='t';render()",R('Ищут игроков','Recruiting'),TM.length)}</div><div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-3.5 mt-3.5">${list}</div></div>`};
 let _ip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();_ip=e;if(typeof ui=='function')ui()});addEventListener('appinstalled',()=>{_ip=null;ui()});
 const isStd=()=>(matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone,isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent),
 pwaLink=()=>isStd()?'':(_ip||isIOS())?`<a href="#" class="hv-k-hi transition" onclick="pwaInstall();return false">${ic('phone')} ${R('Установить приложение','Install app')}</a>`:'';
@@ -1219,23 +1221,23 @@ if(sb){sb.auth.onAuthStateChange(ev=>{setTimeout(async()=>{try{const had=!!S.me,
 /* ===== страницы: о нас / конфиденциальность / условия + меню «Ещё» ===== */
 (function(){
 const X=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const H=x=>`<h2 class="font-head font-black text-lg md:text-xl mt-6 mb-2">${x}</h2>`;
+const H=x=>`<h2 class="pg-h2">${x}</h2>`;
 const Pp=x=>`<p class="text-[14px] leading-relaxed k-t3 mt-2">${x}</p>`;
-const Ul=a=>`<ul class="text-[14px] leading-relaxed k-t3 mt-2 grid gap-1.5 list-disc pl-5">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+const Ul=a=>`<ul class="pg-ul text-[14px] leading-relaxed k-t3 mt-2 grid gap-1.5">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
 const TG='https://t.me/TSKesports';
 const tg=(l)=>`<a class="underline kc-cy" href="${TG}" target="_blank" rel="noopener">${l||'@TSKesports'}</a>`;
 const lnk=(k,l)=>`<a class="underline kc-cy" href="${TSK_ROOT}${k}/" onclick="go('${k}');return false">${l}</a>`;
-const page=(h1,body,upd)=>`<article class="g p-4 md:p-6 fd"><h1 class="font-head font-black text-2xl md:text-4xl leading-tight">${h1}</h1>${upd?`<p class="text-[12px] k-t5 mt-1">${upd}</p>`:''}${body}</article>`;
+const page=(h1,body,upd)=>`<article class="pg pg-doc fd"><header class="pg-hero dk">${typeof L!='undefined'?`<img src="${L}" class="pg-wm" alt="">`:''}<span class="pg-tag">${upd?R('Документ','Document'):'TSK Esports'}</span><h1>${h1}</h1>${upd?`<p>${upd}</p>`:''}</header><div class="pg-body">${body}</div></article>`;
 const UPD=()=>R('Редакция от 5 ноября 2026','Last updated: 5 November 2026');
 
 V.about=()=>{
  const T=DB.teams.length,Pl=DB.players.length,M=DB.matches.filter(m=>m.st=='fin').length,
   C=new Set(DB.teams.map(x=>x.country).filter(Boolean)).size,
-  st=(v,l)=>`<div class="g p-3 text-center"><div class="font-head font-black text-2xl kc-cy">${v}</div><div class="text-[11px] k-t4 uppercase tracking-wider mt-0.5">${l}</div></div>`,
+  st=(v,l)=>`<div class="pg-st"><b>${v}</b><span>${l}</span></div>`,
   won=[...DB.tourn].filter(x=>x.winner).slice(-5).reverse().map(x=>{const w=DB.teams.find(z=>z.id==x.winner);return w?`<li><b>${X(x.name||x.title||'')}</b> — ${X(w.name)}</li>`:''}).join('');
  return page(R('О TSK Esports','About TSK Esports'),
   Pp(R('TSK Esports — международная организация по Brawl Stars. На этом сайте мы ведём рейтинг команд по системе PPS, публикуем расписание и результаты матчей, проводим турниры и помогаем игрокам найти команду.','TSK Esports is an international Brawl Stars organization. On this site we keep a PPS team ranking, publish match schedules and results, run tournaments and help players find a team.'))+
-  `<div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">${st(T,R('Команд','Teams'))}${st(Pl,R('Игроков','Players'))}${st(M,R('Матчей сыграно','Matches played'))}${st(C,R('Стран','Countries'))}</div>`+
+  `<div class="pg-sts grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">${st(T,R('Команд','Teams'))}${st(Pl,R('Игроков','Players'))}${st(M,R('Матчей сыграно','Matches played'))}${st(C,R('Стран','Countries'))}</div>`+
   H(R('Что есть на сайте','What you will find here'))+
   Ul([lnk('rank',R('Рейтинг команд','Team ranking'))+' — '+R('очки PPS, победы, поражения и форма','PPS points, wins, losses and form'),
       lnk('matches',R('Матчи','Matches'))+' — '+R('расписание, live и результаты, прогнозы','schedule, live, results and predictions'),
@@ -1447,7 +1449,7 @@ V.news=q=>{
  ci=c=>CAT[c]||['news','hsl('+hue(c||'x')+' 85% 62%)'],
  ago=iso=>{const s=(Date.now()-new Date(iso))/1e3,m=s/60,h=m/60,d=h/24;return s<0?dt(iso):m<60?Math.max(1,Math.floor(m))+R(' мин назад',' min ago'):h<24?Math.floor(h)+R(' ч назад',' h ago'):d<7?Math.floor(d)+R(' дн. назад',' d ago'):dt(iso)},
  isNew=n=>Date.now()-new Date(n.when)<48*36e5&&Date.now()>=new Date(n.when),
- NEW=n=>isNew(n)?'<b class="ml-1 px-1.5 py-px rounded kb-cy k-on text-[9px] tracking-wider">NEW</b>':'',
+ NEW=n=>isNew(n)?'<b class="pg-new">NEW</b>':'',
  all=[...DB.news].filter(n=>n.status!='draft').sort((a,b)=>new Date(b.when)-new Date(a.when)),cats=[...new Set(all.map(n=>n.cat).filter(Boolean))],
  cur=cats.includes(S.nc)?S.nc:'',list=all.filter(n=>(!cur||n.cat==cur)&&has(q,n.title,n.body)),
  top=[...DB.teams].sort((a,b)=>(b.pps||0)-(a.pps||0)).slice(0,3),mx=Math.max(1,top[0]?.pps||1),
@@ -1456,11 +1458,11 @@ V.news=q=>{
  hero=`<div class="hx fd"><div class="hx-in dk"><div class="hx-row"><img src="${L}" class="hx-mark" alt="TSK Esports"><div class="hx-c"><div class="hx-tags"><span class="hx-tag">Brawl Stars</span><span class="hx-tag hx-tag2">International</span>${lv.length?`<span class="hx-live"><i class="rip"></i>${lv.length} LIVE</span>`:''}</div><h1 class="hx-sr">TSK Esports</h1><p class="hx-p">${R('Рейтинг команд, матчи, турниры и переходы игроков — всё о Brawl Stars в одном месте.','Team rankings, matches, tournaments and player transfers — all Brawl Stars in one place.')}</p><div class="hx-sts">${st(DB.teams.length,R('команд','teams'),'var(--cy)')}${st(DB.players.length,R('игроков','players'),'var(--gd)')}${st(DB.matches.length,R('матчей','matches'),'var(--pu)')}</div><div class="hx-cta"><button class="hx-b hx-b1" onclick="go('matches')">${t('matches')}</button><button class="hx-b hx-b2" onclick="go('rank')">${t('rank')}</button></div></div></div></div></div><!--he-->`,
  live=lv.length||nx?`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2 mb-1">${lv.map(m=>`<div class="min-w-0">${liveCard(m)}</div>`).join('')}${nx?`<div class="min-w-0">${hd(R('Ближайший матч','Next match'))}${upCard(nx)}</div>`:''}</div>`:'',
  chips=cats.length>1?`<div class="hs mb-2.5">${segBtn(!cur,"S.nc='';render()",t('all'),all.length)}${cats.map((c,i)=>segBtn(cur==c,`S.nc=_nc[${i}];render()`,ic(ci(c)[0])+' '+esc(c),all.filter(n=>n.cat==c).length)).join('')}</div>`:'',
- head=(n,c,e,big)=>`<div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold" style="color:${c}"><span class="text-sm">${ic(e)}</span>${esc(n.cat)}<span class="k-t5 font-medium normal-case tracking-normal">· ${ago(n.when)}</span>${NEW(n)}</div>`;
- let feat='';if(list[0]){const f=list[0],[e,c]=ci(f.cat),im=pic(f);feat=`<article class="g r relative overflow-hidden fd">${im?`<div class="nw-fi" style="background-image:url('${im}')"></div>`:''}<i class="absolute inset-y-0 left-0 w-[3px]" style="background:${c}"></i><div class="p-3.5 md:p-4">${head(f,c,e)}<h2 class="font-head font-black nw-ft mt-1.5 break-words">${esc(f.title)}</h2>${nex(f,'text-sm md:text-base k-t3')}</div></article>`}
- const cards=list.slice(1).map((n,i)=>{const[e,c]=ci(n.cat),im=pic(n);return`<article class="g r p-3 relative overflow-hidden fd" style="animation-delay:${Math.min(i,8)*40}ms"><i class="absolute inset-y-0 left-0 w-[3px]" style="background:${c}"></i><div class="flex gap-3">${im?`<div class="nw-th" style="background-image:url('${im}')"></div>`:''}<div class="min-w-0 flex-1">${head(n,c,e)}<h3 class="font-bold text-[15px] leading-snug mt-1 break-words">${esc(n.title)}</h3>${nex(n,'text-[13px] k-t4')}</div></div></article>`}).join(''),
- med=['#FFD700','#C0C8D6','#CD7F32'],side=top.length?`<div class="g p-3">${top.map((x,i)=>`<div class="flex items-center gap-2 py-1.5 cursor-pointer active:scale-[.98] transition" onclick="openT('${esc(x.id)}')"><span class="w-6 grid place-items-center" style="color:${med[i]}">${ic('medal','fl !w-5 !h-5')}</span>${lg(x,'h-8 w-8')}<div class="flex-1 min-w-0"><div class="flex justify-between text-[13px]"><b class="truncate">${esc(x.name)}</b><span class="font-head kc-cy">${x.pps||0}</span></div><div class="h-1 rounded-full bw-10 mt-1 overflow-hidden"><i class="block h-full rounded-full" style="width:${Math.round(100*(x.pps||0)/mx)}%;background:linear-gradient(90deg,var(--cy),var(--gd))"></i></div></div></div>`).join('')}<button class="btn k w-full mt-2" onclick="go('rank')">${t('rank')}</button></div>`:'';
- return hero+live+`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-3 gap-3"><div class="md:col-span-2 min-w-0">${hd(t('news')+' <span class="k-t5 normal-case tracking-normal font-bold">'+list.length+'</span>')}${chips}${feat||`<div class="g p-6 text-center fd"><div class="text-4xl kc-cy-60 grid place-items-center">${ic('news')}</div><p class="k-t4 text-sm mt-2">${t('none')}</p></div>`}<div class="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2 gap-1.5 mt-1.5">${cards}</div></div><div class="min-w-0">${hd(R('Топ рейтинга','Top teams'))}${side}</div></div>`};
+ head=(n,c,e,big)=>`<div class="nx-meta"><span class="pg-tag" style="--c:${c}">${ic(e)}${esc(n.cat)}</span><span class="nx-ago">${ago(n.when)}</span>${NEW(n)}</div>`;
+ let feat='';if(list[0]){const f=list[0],[e,c]=ci(f.cat),im=pic(f);feat=`<article class="pg-card fd" style="--c:${c}">${im?`<div class="nw-fi nx-img" style="background-image:url('${im}')"></div>`:''}<div class="p-3.5 md:p-4 pl-5 md:pl-6">${head(f,c,e)}<h2 class="font-head font-black nw-ft mt-1.5 break-words">${esc(f.title)}</h2>${nex(f,'text-sm md:text-base k-t3')}</div></article>`}
+ const cards=list.slice(1).map((n,i)=>{const[e,c]=ci(n.cat),im=pic(n);return`<article class="pg-card fd" style="--c:${c};animation-delay:${Math.min(i,8)*40}ms"><div class="flex gap-3 p-3 pl-5">${im?`<div class="nw-th" style="background-image:url('${im}')"></div>`:''}<div class="min-w-0 flex-1">${head(n,c,e)}<h3 class="font-bold text-[15px] leading-snug mt-1 break-words">${esc(n.title)}</h3>${nex(n,'text-[13px] k-t4')}</div></div></article>`}).join(''),
+ med=['#FFD700','#C0C8D6','#CD7F32'],side=top.length?`<div class="pg-card" style="--c:var(--gd)"><div class="p-3 pl-5">${top.map((x,i)=>`<div class="flex items-center gap-2 py-1.5 cursor-pointer active:scale-[.98] transition" onclick="openT('${esc(x.id)}')"><span class="w-6 grid place-items-center" style="color:${med[i]}">${ic('medal','fl !w-5 !h-5')}</span>${lg(x,'h-8 w-8')}<div class="flex-1 min-w-0"><div class="flex justify-between text-[13px]"><b class="truncate">${esc(x.name)}</b><span class="font-head kc-cy">${x.pps||0}</span></div><div class="h-1 rounded-full bw-10 mt-1 overflow-hidden"><i class="block h-full rounded-full" style="width:${Math.round(100*(x.pps||0)/mx)}%;background:linear-gradient(90deg,var(--cy),var(--gd))"></i></div></div></div>`).join('')}<button class="btn k w-full mt-2" onclick="go('rank')">${t('rank')}</button></div></div>`:'';
+ return hero+live+`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-3 gap-3"><div class="md:col-span-2 min-w-0">${hd(t('news')+' <span class="k-t5 normal-case tracking-normal font-bold">'+list.length+'</span>')}${chips}${feat||`<div class="pg-card p-6 text-center fd"><div class="text-4xl kc-cy-60 grid place-items-center">${ic('news')}</div><p class="k-t4 text-sm mt-2">${t('none')}</p></div>`}<div class="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-2 gap-3 mt-3">${cards}</div></div><div class="min-w-0">${hd(R('Топ рейтинга','Top teams'))}${side}</div></div>`};
 </script><script>
 /* ===== v5: обновлённый рейтинг + кнопка «наверх» ===== */
 (()=>{
@@ -2104,10 +2106,10 @@ GM=[['hl','tsk_g_','rank',R('Выше или ниже','Higher or lower'),R('Ч�
 CT={brain:['#00F0FF',R('Викторины','Quizzes')],reflex:['#FF2E63',R('Реакция','Reflex')],fun:['#FFD700',R('Удача','Luck')]};
 const cell=(v,l,first)=>`<div class="flex-1 min-w-0 px-4 py-2.5 ${first?'':'border-l bd-10'}"><div class="font-head font-black text-lg leading-none truncate">${v}</div><div class="text-[10px] uppercase tracking-wider k-t5 mt-1">${l}</div></div>`,
 gcard=x=>{const[k,p,i,t,d,c,m,f]=x,col=CT[c][0],rec=k=='dg'?dg.best:k=='wf'?'—':bv(p,k),act=`${f}('${k}')`;
-return`<div class="g r cursor-pointer fd overflow-hidden" onclick="${act}"><div class="flex items-center gap-3 p-4"><span class="grid place-items-center w-11 h-11 rounded-xl shrink-0" style="background:${col}1a;color:${col}">${ic(i,'!w-6 !h-6')}</span><div class="min-w-0 flex-1"><b class="block truncate text-[15px]">${t}</b><div class="text-[12px] k-t4 truncate">${d}</div></div><span class="shrink-0 text-[10px] font-bold tracking-widest px-2 py-1 rounded-md uppercase" style="color:${col};background:${col}1a">${CT[c][1]}</span></div><div class="flex border-t bd-10">${cell(fm(k,rec),R('Рекорд','Best'),1)}${cell(m,R('Режим','Mode'))}</div></div>`},
+return`<div class="pg-card hov gm fd" style="--c:${col}" onclick="${act}"><div class="gm-top"><span class="gm-ic">${ic(i,'!w-6 !h-6')}</span><div class="min-w-0 flex-1"><b class="gm-t">${t}</b><div class="gm-d">${d}</div></div><span class="pg-tag" style="--c:${col};--onc:${c=='reflex'?'#fff':'#07090E'}">${CT[c][1]}</span></div><div class="gm-ft">${cell(fm(k,rec),R('Рекорд','Best'),1)}${cell(m,R('Режим','Mode'))}</div></div>`},
 sb=(on,a,l,n)=>segBtn(on,a,l,n);
 const hub=()=>{const f=S.gf||'all',sh=GM.filter(x=>f=='all'||x[5]==f),n=c=>GM.filter(x=>x[5]==c).length;
-return H1(t('games'),GM.length)+`<div class="hs mb-3">${sb(f=='all',"S.gf='all';render()",R('Все','All'),GM.length)}${sb(f=='brain',"S.gf='brain';render()",CT.brain[1],n('brain'))}${sb(f=='reflex',"S.gf='reflex';render()",CT.reflex[1],n('reflex'))}${sb(f=='fun',"S.gf='fun';render()",CT.fun[1],n('fun'))}</div><div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2.5">${sh.map(gcard).join('')}</div>`+dgS()};
+return H1(t('games'),GM.length)+`<div class="hs mb-3">${sb(f=='all',"S.gf='all';render()",R('Все','All'),GM.length)}${sb(f=='brain',"S.gf='brain';render()",CT.brain[1],n('brain'))}${sb(f=='reflex',"S.gf='reflex';render()",CT.reflex[1],n('reflex'))}${sb(f=='fun',"S.gf='fun';render()",CT.fun[1],n('fun'))}</div><div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-3.5">${sh.map(gcard).join('')}</div>`+dgS()};
 const _xo=window.xOpen,_gb=window.gmBack,_go=window.gmOpen,DGV={on:false};
 window.dgOpen=()=>{DGV.on=true;W.on=false;render(true);scrollTo({top:0})};
 window.xOpen=k=>{DGV.on=false;if(k=='wf'){W.on=true;render(true);scrollTo({top:0});return}W.on=false;_xo(k)};
@@ -2284,6 +2286,58 @@ div:has(>.tfb)::-webkit-scrollbar{display:none}
 .tfb em{font-style:normal;font-size:10px;font-weight:900;min-width:18px;padding:1px 5px;text-align:center;background:var(--tn-bd,rgba(127,127,127,.28));color:var(--tn-tx,inherit);clip-path:polygon(0 0,100% 0,calc(100% - 4px) 100%,0 100%)}
 .tfb.on em{background:var(--tn-ac,var(--cy));color:var(--tn-onac,#07090E)}
 .tfb .tn-dot{background:var(--rd)}
+/* ===== единый «угловой» стиль страниц: новости, игры, поиск команды, о нас, документы ===== */
+:root{--pg-bg:#0b0f16;--pg-s2:#111826;--pg-bd:#1c2330;--pg-bd2:#2a3446;--pg-tx:#eef2f9;--pg-mu:#7f8ba0;--pg-sh:#03050a;--pg-ac:#00F0FF;--pg-onac:#07090E}
+.light{--pg-bg:#fff;--pg-s2:#eaeef6;--pg-bd:#d5dbe7;--pg-bd2:#c3cbdb;--pg-tx:#0f172a;--pg-mu:#64748b;--pg-sh:#e3e8f2;--pg-ac:#0284c7;--pg-onac:#fff}
+.pg-h{display:flex;align-items:center;gap:10px;margin:18px 0 10px;font:900 12px/1 Montserrat,Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--pg-tx)}
+.pg-h:before{content:"";flex:none;width:6px;height:16px;background:var(--rd);transform:skewX(-20deg)}
+.pg-h:after{content:"";flex:1;height:1px;background:var(--pg-bd)}
+.pg-card{position:relative;overflow:hidden;background:var(--pg-bg);border:1px solid var(--pg-bd);border-radius:2px;box-shadow:0 3px 0 var(--pg-sh);color:var(--pg-tx);transition:transform .12s,box-shadow .12s}
+.pg-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,var(--pg-ac));z-index:2}
+.pg-card.hov{cursor:pointer}
+.pg-card.hov:hover{transform:translateY(-2px);box-shadow:0 5px 0 var(--pg-sh)}
+.pg-card.hov:active{transform:translateY(2px);box-shadow:0 1px 0 var(--pg-sh)}
+.pg .btn,.pg-card .btn{border-radius:0;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);padding-left:1.2rem;padding-right:1.2rem;letter-spacing:.12em;box-shadow:none}
+.pg .btn:hover,.pg-card .btn:hover{box-shadow:none;filter:brightness(1.12)}
+.pg-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 16px 4px 10px;font:900 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;background:var(--c,var(--cy));color:var(--onc,#07090E);clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.pg-tag .ic{width:12px;height:12px}
+.pg-new{margin-left:2px;padding:3px 12px 3px 8px;font:900 9px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;background:var(--rd);color:#fff;clip-path:polygon(0 0,100% 0,calc(100% - 6px) 100%,0 100%)}
+.nx-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.nx-ago{font:700 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--pg-mu)}
+.nx-img{clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 32px) 100%,0 100%)}
+.nw-th{border-radius:0;clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.gm-top{display:flex;align-items:center;gap:14px;padding:16px 16px 16px 22px}
+.gm-ic{flex:none;display:grid;place-items:center;width:46px;height:46px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.gm-t{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 15px/1.2 Montserrat,Inter,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.gm-d{margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--pg-mu)}
+.gm-ft{display:flex;margin-left:4px;border-top:1px solid var(--pg-bd);background:var(--pg-s2)}
+.gm-ft>div+div{border-left-color:var(--pg-bd)}
+.lf-b{padding:14px 16px 14px 22px}
+.lf-av{flex:none;width:52px;height:52px;overflow:hidden;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))}
+.lf-m{display:flex;align-items:center;gap:8px;margin-top:3px;font-size:11px;color:var(--pg-mu)}
+.lf-pps{flex:none;text-align:right}
+.lf-pps b{display:block;font:900 22px/1 Montserrat,Inter,sans-serif;color:var(--pg-ac);font-variant-numeric:tabular-nums}
+.lf-pps span{font:700 9px/1 Montserrat,Inter,sans-serif;letter-spacing:.16em;color:var(--pg-mu)}
+.lf-q{margin-top:10px;padding-left:10px;border-left:3px solid var(--pg-bd2);font-size:12px;font-style:italic;color:var(--pg-mu);overflow-wrap:anywhere}
+.pg-hero{position:relative;overflow:hidden;padding:18px 20px 20px 26px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 2px,transparent 2px 9px),#0b0f16;border:1px solid #1c2330;border-radius:2px;box-shadow:0 3px 0 #03050a;color:#eef2f9}
+.pg-hero:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cy)}
+.pg-hero h1{position:relative;margin:12px 0 0;font:900 26px/1.05 Montserrat,Inter,sans-serif;text-transform:uppercase;letter-spacing:-.01em;word-break:break-word}
+.pg-hero p{position:relative;margin:10px 0 0;max-width:560px;font-size:13px;line-height:1.45;color:#98a4b8}
+.pg-hero .hx-sts{position:relative}
+.pg-wm{position:absolute;right:-12px;top:-20px;height:170%;opacity:.06;pointer-events:none}
+.pg-doc .pg-body{counter-reset:pgs;padding:2px 2px 0}
+.pg-h2{display:flex;align-items:center;gap:10px;margin:30px 0 4px;font:900 15px/1.2 Montserrat,Inter,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--pg-tx)}
+.pg-h2:before{counter-increment:pgs;content:counter(pgs,decimal-leading-zero);flex:none;padding:4px 14px 4px 9px;font-size:11px;letter-spacing:.1em;background:var(--pg-ac);color:var(--pg-onac);clip-path:polygon(0 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.pg-ul{list-style:none;padding-left:0}
+.pg-ul li{position:relative;padding-left:20px}
+.pg-ul li:before{content:"";position:absolute;left:2px;top:.62em;width:9px;height:3px;background:var(--pg-ac);transform:skewX(-24deg)}
+.pg-st{transform:skewX(-10deg);padding:12px 18px 12px 14px;background:var(--pg-s2);border-left:3px solid var(--c,var(--pg-ac))}
+.pg-st>*{display:block;transform:skewX(10deg)}
+.pg-st b{font:900 26px/1 Montserrat,Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--pg-tx)}
+.pg-st span{margin-top:6px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pg-mu)}
+.pg-sts>.pg-st:nth-child(1){--c:var(--cy)}.pg-sts>.pg-st:nth-child(2){--c:var(--gd)}.pg-sts>.pg-st:nth-child(3){--c:var(--pu)}.pg-sts>.pg-st:nth-child(4){--c:#7CFF6B}
+@media(min-width:768px){.pg-hero{padding:26px 32px 28px 36px}.pg-hero h1{font-size:38px}}
+@media(prefers-reduced-motion:reduce){.pg-card,.pg-card.hov:hover{transition:none;transform:none}}
 </style>
 <script>
 (()=>{
