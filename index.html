@@ -530,7 +530,7 @@ admin:()=>{if(!S.user)return'';const cm=S.user.role=='creator',secs=cm?['news']:
 return`${admHead(secs,k)}${sb&&S.user.role=='owner'?`<button class="btn k w-full mb-2" onclick="demo()">Load demo data</button>`:''}${hasDemo()&&!cm?`<button class="btn r w-full mb-2" onclick="undemo()">${ic('trash')} Удалить демо-данные</button>`:''}<div class="flex gap-2 mb-2"><input class="inp !mt-0 flex-1" placeholder="${R('Поиск','Search')}… (${DB[k].length})" value="${esc(S.aq||'')}" oninput="S.aq=this.value;admQ('${k}')"><button class="btn shrink-0" onclick="ed('${k}')">${ic('plus')} ${t('add')}</button></div>${k=='teams'&&canExt()?`<button class="btn k w-full mb-2" onclick="extTeamForm()">${ic('plus')} ${R('Команда не с сайта + состав','Off-site team + roster')}</button>`:''}${admFilter(k)}<div id="admL" class="grid gap-1.5">${admList(k)}</div>`}};
 const at=k=>S.tab==k||(k=='rank'&&S.tab=='team'),sortedT=()=>[...DB.teams].sort((a,b)=>b.pps-a.pps);
 const favs=()=>{try{return JSON.parse(localStorage.getItem('tsk_fav'))||[]}catch{return[]}};
-function tf(id){const f=favs(),i=f.indexOf(id);i<0?f.push(id):f.splice(i,1);try{localStorage.setItem('tsk_fav',JSON.stringify(f))}catch{}render()}
+function tf(id){const f=favs(),i=f.indexOf(id);i<0?f.push(id):f.splice(i,1);try{localStorage.setItem('tsk_fav',JSON.stringify(f))}catch{}try{window.pushTeams&&window.pushTeams();if(i<0&&S.me&&window.Notification&&Notification.permission=='default'&&window.pushOn)window.pushOn()}catch{}render()}
 function openT(id){S.tab='team';S.tid=id;ui();scrollTo({top:0,behavior:'smooth'})}
 function shT(id){const x=tm(id),u={title:'TSK Esports — '+x.name,text:x.name+' · '+x.pps+' PPS',url:location.origin+TSK_ROOT+'#/team/'+encodeURIComponent(id)};if(navigator.share)navigator.share(u).catch(()=>{});else navigator.clipboard?.writeText(u.url).then(()=>toast('Link copied'))}
 function dlT(id){const x=tm(id),all=sortedT(),r=all.findIndex(z=>z.id==id)+1,w=Math.round(100*x.w/Math.max(1,x.w+x.l)),c=document.createElement('canvas');c.width=720;c.height=860;const g=c.getContext('2d');
@@ -1483,12 +1483,16 @@ const grp=(l,fn)=>{const g=[];l.forEach(m=>{const d=dayLabel(m.when),a=g[g.lengt
 const empty=(e,m,act)=>`<div class="g p-6 text-center fd"><div class="text-4xl kc-cy-60 grid place-items-center">${ic(e,e=='cup'?'!w-20 !h-20':'')}</div><p class="k-t4 text-sm mt-2">${m}</p>${act||''}</div>`;
 V.matches=q=>{const f=S.mt||'all',fv=favs(),all=DB.matches.filter(m=>has(q,tm(m.a).name,tm(m.b).name)&&(!S.mf||fv.includes(m.a)||fv.includes(m.b))),
  by=k=>all.filter(m=>m.st==k).sort((a,b)=>k=='fin'?new Date(b.when)-new Date(a.when):new Date(a.when)-new Date(b.when)),Lv=by('live'),U=by('up'),F=by('fin'),sh=k=>f=='all'||f==k,
- G='grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-1.5';
- const body=(sh('live')&&Lv.length?`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2.5">${Lv.map(m=>`<div class="min-w-0">${liveCard(m)}</div>`).join('')}</div>`:'')
- +(sh('up')&&U.length?hd(t('up'))+`<div class="${G}">${grp(U,upCard)}</div>`:'')
- +(sh('fin')&&F.length?hd(t('fin'))+`<div class="${G}">${grp(F,finCard)}</div>`:'');
- const em=f=='live'?empty('bolt',R('Сейчас нет матчей в эфире','No live matches right now')):f=='up'?empty('cal',R('Скоро матчей нет','Nothing scheduled yet')):f=='fin'?empty('rank',R('Результатов пока нет','No results yet')):empty('matches',S.mf?R('У избранных команд нет матчей','No matches for your favorites'):t('none'));
- return`<h1 class="font-head font-black text-2xl uppercase tracking-wide mt-1 mb-2">${t('matches')} <span class="kc-rd">/</span> <span class="k-t5 text-base">${all.length}</span></h1><div class="hs mb-3">${segBtn(f=='all',"S.mt='all';render()",R('Все','All'),all.length)}${segBtn(f=='live',"S.mt='live';render()",'LIVE',Lv.length,Lv.length)}${segBtn(f=='up',"S.mt='up';render()",R('Скоро','Soon'),U.length)}${segBtn(f=='fin',"S.mt='fin';render()",R('Итоги','Results'),F.length)}${fv.length?segBtn(!!S.mf,"S.mf=!S.mf;render()",ic('star')+' '+R('Избранные','Favorites')):''}</div>${body||em}`};
+ fb=(on,js,lab,n,dot)=>`<button class="${on?'on':''}" onclick="${js}">${dot?'<i class="tn-dot"></i>':''}${lab}${n==null?'':'<em>'+n+'</em>'}</button>`,
+ day=(l,fn)=>{let last='',o='';l.forEach(m=>{const d=dayLabel(m.when);if(d!=last){o+=`<div class="mx-day">${d}</div>`;last=d}o+=fn(m)});return o},
+ blk=(cls,ico,tag,n,inner,dot)=>`<section class="tn ${cls} fd"><div class="tn-hero mx-hero"><span class="tn-wm">${ic(ico)}</span><span class="tn-tag">${dot?'<i class="tn-dot"></i>':''}${tag}</span><div class="tn-kv"><div><b>${n}</b><span>${R('матчей','matches')}</span></div></div></div><div class="mx-body"><div class="mx-grid">${inner}</div></div></section>`;
+ const body=(sh('live')&&Lv.length?blk('tn-live','bolt','LIVE',Lv.length,Lv.map(m=>`<div class="min-w-0 mx-live">${liveCard(m)}</div>`).join(''),1):'')
+ +(sh('up')&&U.length?blk('tn-up','cal',t('up'),U.length,day(U,upCard)):'')
+ +(sh('fin')&&F.length?blk('tn-fin','rank',t('fin'),F.length,day(F,finCard)):'');
+ const em=f=='live'?['bolt',R('Сейчас нет матчей в эфире','No live matches right now')]:f=='up'?['cal',R('Скоро матчей нет','Nothing scheduled yet')]:f=='fin'?['rank',R('Результатов пока нет','No results yet')]:['matches',S.mf?R('У избранных команд нет матчей','No matches for your favorites'):t('none')];
+ return`<div class="tn-page"><h1 class="font-head font-black text-2xl uppercase tracking-wide mt-1">${t('matches')} <span class="kc-rd">/</span> <span class="k-t5 text-base">${all.length}</span></h1>`
+ +`<div class="tn-flt">${fb(f=='all',"S.mt='all';render()",R('Все','All'),all.length)}${fb(f=='live',"S.mt='live';render()",'LIVE',Lv.length,Lv.length)}${fb(f=='up',"S.mt='up';render()",R('Скоро','Soon'),U.length)}${fb(f=='fin',"S.mt='fin';render()",R('Итоги','Results'),F.length)}${fv.length?fb(!!S.mf,"S.mf=!S.mf;render()",ic('star')+' '+R('Избранные','Favorites')):''}</div>`
+ +(body||`<div class="tn-none">${ic(em[0])}${em[1]}</div>`)+`</div>`};
 V.tourn=q=>{const f=S.tf||'all',l=DB.tourn.filter(x=>has(q,x.name)),ord={live:0,up:1,fin:2},n=k=>l.filter(x=>tsK(x.status)==k).length,
  sh=l.filter(x=>f=='all'||tsK(x.status)==f).sort((a,b)=>ord[tsK(a.status)]-ord[tsK(b.status)]);
  return`<h1 class="font-head font-black text-2xl uppercase tracking-wide mt-1">${t('tourn')} <span class="kc-rd">/</span> <span class="k-t5 text-base">${l.length}</span></h1>`
@@ -1892,8 +1896,11 @@ dgStat();setInterval(dgStat,30000);
 /* --- уведомления --- */
 const VAPID='BMB_n3Wu19C_DsbhOtG8Iy6ZoqCSsFILVION7DBM61YOZcvMD_i5CobxE8pfGIs8c1zqiqdTBlydjpwTO-PLCg4',u8=b=>{b=(b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(b),c=>c.charCodeAt())},NF=()=>'Notification' in window;
 window.pushOn=async()=>{if(!NF())return toast(R('Браузер не поддерживает','Not supported'));if(await Notification.requestPermission()!='granted')return toast(R('Уведомления запрещены в браузере','Blocked'));
-try{if(VAPID&&ok()){const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON()},{onConflict:'endpoint'})}}catch{}
+try{if(VAPID&&ok()){const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});await sb.from('push_subscriptions').upsert({user_id:S.me.id,endpoint:sub.endpoint,sub:sub.toJSON(),teams:favs()},{onConflict:'endpoint'})}}catch{}
 toast(R('Уведомления включены','Enabled'));render(true)};
+/* синхронизация избранных команд с сервером: пуш придёт, даже если сайт закрыт */
+window.pushTeams=async()=>{try{if(!NF()||Notification.permission!='granted'||!ok()||!('serviceWorker' in navigator))return;const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(!sub)return;await sb.from('push_subscriptions').update({teams:favs()}).eq('endpoint',sub.endpoint)}catch{}};
+setTimeout(()=>{window.pushTeams()},4000);
 const pushCard=()=>NF()&&Notification.permission=='default'?`<section class="g mb-3 p-3 flex items-center gap-3"><div class="flex-1 text-[13px]"><b>${R('Напоминания о матчах','Match reminders')}</b><div class="text-[11px] k-t4">${R('За 15 минут до матча твоей команды или прогноза','15 min before your team or predicted match')}</div></div>${bt('','pushOn()',R('Включить','Enable'))}</section>`:'';
 const _vn=V.news;V.news=q=>_vn(q).replace('<!--he-->',()=>pushCard());window.dgSolved=()=>DG.n==null?'':`<div class="text-[11px] k-t5 mt-2 text-center">${R('Сегодня угадали','Solved today')}: <b>${DG.n}</b></div>`;
 setInterval(async()=>{if(!NF()||Notification.permission!='granted')return;const f=favs(),n=ld('pn',{});for(const m of DB.matches){const d=new Date(m.when)-Date.now();if(tsK(m.st)!='up'||d<=0||d>9e5||n[m.id]||!(f.includes(m.a)||f.includes(m.b)||PRED.me[m.id]))continue;n[m.id]=1;sv('pn',n);
@@ -2359,6 +2366,18 @@ if(typeof _o=='function')window.openT=function(){tnClose();return _o.apply(this,
 })();
 </script>
 
+<style id="mx-css">
+.mx-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 10px 22px}
+.mx-hero .tn-kv{margin:0}
+.mx-hero .tn-kv b{font-size:20px}
+.mx-body{padding:6px 10px 12px}
+.mx-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:768px){.mx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mx-day{grid-column:1/-1}}
+.mx-day{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--tn-mu)}
+.mx-day:before{content:"";width:14px;height:3px;background:var(--tn-st)}
+.mx-day:first-child{margin-top:2px}
+.mx-body .g,.mx-body .g.r{background:var(--tn-sf);border:1px solid var(--tn-bd2);border-radius:2px;box-shadow:0 2px 0 var(--tn-sh);-webkit-backdrop-filter:none;backdrop-filter:none}
+</style>
 <style id="rk-css">
 .rk-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .rk-act .btn{flex:1 1 220px;justify-content:center}
