@@ -532,7 +532,7 @@ return`<div class="lv dk fd" data-mid="${esc(m.id)}"><div class="lv-in"><div cla
 const upCard=m=>`<div class="g r p-3 fd"><div class="flex items-center gap-2">${mSide(m.a,1,'flex-1')}<div class="w-[88px] text-center leading-tight shrink-0"><div class="text-[9px] uppercase tracking-wider k-t5">${dayLabel(m.when)} · ${hm(m.when)}<span class="block normal-case tracking-normal opacity-70">${tzs(m.when)}</span></div><b class="font-head text-[15px] kc-cy tabular-nums" data-cd="${esc(m.when)}">…</b><button class="flex items-center gap-0.5 mx-auto mt-0.5 text-[10px] k-t4 hv-k-hi" aria-label="В календарь / Add to calendar" onclick="event.stopPropagation();icsM('${m.id}')">${ic('cal')}+</button></div>${mSide(m.b,0,'flex-1')}</div>${predBox(m)}</div>`;
 const finCard=m=>{const w=m.sa>m.sb?1:m.sb>m.sa?2:0;return`<div class="g r p-2.5 fd"><div class="flex items-center gap-2"><div class="flex-1 ${w==2?'opacity-50':''}">${mSide(m.a,1)}</div><div class="w-[66px] text-center font-head font-black text-lg tabular-nums shrink-0"><span class="${w==1?'kc-cy':'k-t4'}">${m.sa}</span><span class="k-hi-25 mx-1">:</span><span class="${w==2?'kc-cy':'k-t4'}">${m.sb}</span></div><div class="flex-1 ${w==1?'opacity-50':''}">${mSide(m.b,0)}</div></div>${window.predRes?predRes(m):''}</div>`};
 const dgrp=(l,fn)=>{let last='',o='';l.forEach(m=>{const d=dayLabel(m.when);if(d!=last){o+=`<div class="text-[11px] uppercase tracking-[.14em] k-t5 mt-2 -mb-0.5 md:col-span-2">${d}</div>`;last=d}o+=fn(m)});return o};
-const segBtn=(on,act,l,n,dot)=>`<button class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition active:scale-95 ${on?'kb-cy-15 ko-cy-50 kc-cy':'bd-10 k-t4'}" onclick="${act}">${dot?'<i class="rip"></i>':''}${l}${n==null?'':`<span class="opacity-60">${n}</span>`}</button>`;
+const segBtn=(on,act,l,n,dot)=>`<button type="button" class="tfb${on?' on':''}" onclick="${act}">${dot?'<i class="tn-dot"></i>':''}${l}${n==null?'':`<em>${n}</em>`}</button>`;
 const bMatch=y=>{const sc=String(y.s||'').match(/(\d+)\D+(\d+)/),A=sc?+sc[1]:'',B=sc?+sc[2]:'',wa=sc&&A>B,wb=sc&&B>A,row=(n,v,win,lose)=>{const tt=tnm(n);return`<div class="flex items-center gap-2 px-2 py-1.5 ${win?'kb-cy-10':''} ${lose?'opacity-45':''} ${tt?'cursor-pointer':''}" ${tt?`onclick="openT('${tt.id}')"`:''}>${lg(tt||{name:n},'h-5 w-5')}<span class="flex-1 truncate text-[13px] ${win?'font-bold':''}">${esc(n)}</span>${extB(tt,1)}<b class="font-head text-sm ${win?'kc-cy':'k-t4'}">${v}</b></div>`};
 return`<div class="br-m"><div class="rounded-xl border ${sc?'bd-10':'border-dashed bd-15'} kb-s2 overflow-hidden">${row(y.a,A,wa,wb)}<div class="h-px bw-10"></div>${row(y.b,B,wb,wa)}${sc?'':'<div class="text-center text-[9px] tracking-widest k-t5 py-0.5">VS</div>'}</div></div>`};
 const tCard=(x,i)=>{const sk=tsK(x.status),po=x.po||[],gr=x.groups||[],nT=new Set(gr.flatMap(g=>g.teams||[])).size,played=po.filter(y=>/\d\D+\d/.test(y.s||'')).length,pct=po.length?Math.round(100*played/po.length):0,hasW=x.winner&&DB.teams.some(z=>z.id==x.winner),rounds=[...new Set(po.map(r=>r.r))],both=gr.length&&po.length,tab=both?((S.tt||{})[x.id]||(sk=='up'?'g':'p')):(po.length?'p':'g'),op=(S.tx||{})[x.id]!=null?(S.tx||{})[x.id]:sk!='fin',
@@ -2274,6 +2274,16 @@ for(const k of ['gmOpen','xOpen','lgNew','lgJoin','lgOpen']){const f=window[k];i
 .tn-ov .bk{--bk-w:232px;--bk-g:46px}
 .tn-ov .bk-s{min-height:104px}
 @media(max-width:480px){.tn-ov .bk{--bk-w:196px;--bk-g:32px}.tn-ov .bk-scroll{padding:18px 14px 12px}.tn-ovn{font-size:17px}.tn-bkb .go span{display:none}.tn-bkb .go{padding:0 14px}}
+/* ===== единые вкладки-фильтры (как в «Матчах» и «Турнирах»): подчёркивание + наклонный счётчик ===== */
+div:has(>.tfb){display:flex;gap:0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--tn-bd,rgba(127,127,127,.28))}
+div:has(>.tfb)::-webkit-scrollbar{display:none}
+.tfb{flex:none;display:flex;align-items:center;gap:7px;padding:9px 16px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;font:800 12px/1 inherit;font-family:inherit;letter-spacing:.1em;text-transform:uppercase;color:var(--tn-mu,#7f8ba0);cursor:pointer;transition:color .15s}
+.tfb:hover{color:var(--tn-tx,currentColor)}
+.tfb.on{color:var(--tn-ac,var(--cy));border-bottom-color:var(--tn-ac,var(--cy))}
+.tfb .ic{width:14px;height:14px}
+.tfb em{font-style:normal;font-size:10px;font-weight:900;min-width:18px;padding:1px 5px;text-align:center;background:var(--tn-bd,rgba(127,127,127,.28));color:var(--tn-tx,inherit);clip-path:polygon(0 0,100% 0,calc(100% - 4px) 100%,0 100%)}
+.tfb.on em{background:var(--tn-ac,var(--cy));color:var(--tn-onac,#07090E)}
+.tfb .tn-dot{background:var(--rd)}
 </style>
 <script>
 (()=>{
