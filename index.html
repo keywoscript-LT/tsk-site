@@ -387,6 +387,38 @@ addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b
 .nw-fi{height:176px;background-size:cover;background-position:center}
 .nw-ft{font-size:1.25rem;line-height:1.2}
 @media(min-width:768px){.nw-fi{height:224px}.nw-ft{font-size:1.5rem}}
+/* ===== LIVE-карточка матча (в стиле шапки: срезанные углы, наклонные плашки, без свечения) ===== */
+.lv{--cut:18px;position:relative;padding:1.5px;background:linear-gradient(135deg,var(--rd),rgba(255,255,255,.08) 45%,rgba(0,240,255,.45));clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)))}
+.lv-in{position:relative;overflow:hidden;padding:14px 16px 14px 20px;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)));background:repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px),linear-gradient(160deg,#0e131d,#07090e)}
+.lv-in:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rd)}
+.lv-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lv-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:b 1.2s infinite}
+.lv-when{font:700 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8d99ae;text-align:right}
+.lv-main{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;margin-top:16px}
+.lv-t{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;text-align:center;cursor:pointer}
+.lv-t b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 13px/1.1 Montserrat,Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#cbd5e1}
+.lv-t.w b{color:#fff}
+.lv-t:after{content:"";order:3;width:34px;height:3px;background:rgba(255,255,255,.12);transform:skewX(-24deg)}
+.lv-t.w:after{background:var(--cy)}
+.lv-sc{display:flex;align-items:center;gap:12px;padding:8px 20px;transform:skewX(-10deg);background:rgba(255,255,255,.06);border-top:2px solid var(--rd)}
+.lv-sc>*{transform:skewX(10deg)}
+.lv-sc span{font:900 40px/1 Montserrat,Inter,sans-serif;font-variant-numeric:tabular-nums;color:#fff}
+.lv-sc span.kc-cy{color:var(--cy)}
+.lv-sep{display:block;width:3px;height:26px;background:rgba(255,255,255,.22)}
+.lv-rx{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.lv-rg{display:flex;gap:8px;flex-wrap:wrap}
+.lv-r{display:inline-flex;align-items:center;gap:7px;padding:6px 14px 6px 11px;border:0;border-left:3px solid transparent;background:rgba(255,255,255,.06);color:#fff;cursor:pointer;transform:skewX(-10deg);transition:transform .1s,background .15s}
+.lv-r>*{transform:skewX(10deg)}
+.lv-r span{font-size:15px;line-height:1}
+.lv-r b{font:900 12px/1 Montserrat,Inter,sans-serif;font-variant-numeric:tabular-nums;color:#cbd5e1}
+.lv-r:hover{background:rgba(255,255,255,.1)}
+.lv-r:active{transform:skewX(-10deg) scale(.94)}
+.lv-r.on{border-left-color:var(--cy);background:rgba(0,240,255,.14)}
+.lv-r.on b{color:var(--cy)}
+.lv-obs{flex:none;padding:7px 14px;border:0;background:rgba(255,255,255,.12);color:#cbd5e1;cursor:pointer;font:800 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.16em;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.lv-obs:hover{background:rgba(255,255,255,.2);color:#fff}
+@media(max-width:420px){.lv-sc{padding:8px 14px;gap:9px}.lv-sc span{font-size:32px}.lv-t b{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.lv-dot{animation:none}}
 </style>
 </head><body>
 <a href="#v" class="skip" onclick="var m=document.getElementById('v');m.tabIndex=-1;m.focus();return false">Перейти к содержимому</a>
@@ -495,8 +527,8 @@ tnm=n=>DB.teams.find(z=>z.name==n);
 function cdTick(){document.querySelectorAll('[data-cd]').forEach(e=>{const d=new Date(e.dataset.cd)-Date.now();if(d<=0){e.textContent=R('скоро','soon');return}const s=Math.floor(d/1e3),p=n=>String(n).padStart(2,'0'),dd=Math.floor(s/86400);e.textContent=(dd?dd+R('д ','d '):'')+p(Math.floor(s%86400/3600))+':'+p(Math.floor(s%3600/60))+':'+p(s%60)})}
 setInterval(()=>{document.hidden||cdTick()},1000);
 const mSide=(id,r,cls='')=>{const x=tm(id);return`<div class="flex items-center gap-2 min-w-0 cursor-pointer ${r?'justify-end':''} ${cls}" onclick="openT('${id}')">${(()=>{const nm=x.ext?`<span class="min-w-0 flex flex-col ${r?'items-end':'items-start'}"><span class="truncate max-w-full text-[13px] font-semibold">${esc(x.name)}</span>${extB(x,1)}</span>`:`<span class="truncate text-[13px] font-semibold">${esc(x.name)}</span>`;return r?nm+lg(x,'h-8 w-8'):lg(x,'h-8 w-8')+nm})()}</div>`};
-const liveCard=m=>{const a=tm(m.a),b=tm(m.b),w=m.sa>m.sb?1:m.sb>m.sa?2:0,col=(id,x,on)=>`<div class="text-center cursor-pointer" onclick="openT('${id}')">${lg(x,'h-14 w-14 mx-auto')}<b class="block mt-1.5 text-sm truncate ${on?'k-hi':'k-t3'}">${esc(x.name)}</b>${extB(x,1)}</div>`;
-return`<div class="dk relative overflow-hidden rounded-2xl border ko-rd-40 p-4 fd" style="background:radial-gradient(120% 120% at 50% 0,rgba(255,46,99,.28),transparent 60%),linear-gradient(180deg,#140b13,#0a0d13);box-shadow:0 0 40px -12px #FF2E63aa"><div class="flex items-center justify-between"><span class="flex items-center gap-1.5 text-[11px] font-black tracking-widest kc-rd"><i class="rip"></i>LIVE</span><span class="text-[11px] k-t4">${dayLabel(m.when)} · ${hm(m.when)} ${tzs(m.when)}</span></div><div class="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2">${col(m.a,a,w==1)}<div class="font-head font-black text-4xl tabular-nums"><span class="${w==1?'kc-cy':''}">${m.sa}</span><span class="k-hi-30 mx-1.5">:</span><span class="${w==2?'kc-cy':''}">${m.sb}</span></div>${col(m.b,b,w==2)}</div></div>`};
+const liveCard=m=>{const a=tm(m.a),b=tm(m.b),w=m.sa>m.sb?1:m.sb>m.sa?2:0,col=(id,x,on)=>`<div class="lv-t${on?' w':''}" onclick="openT('${id}')">${lg(x,'h-14 w-14')}<b>${esc(x.name)}</b>${extB(x,1)}</div>`;
+return`<div class="lv dk fd" data-mid="${esc(m.id)}"><div class="lv-in"><div class="lv-top"><span class="hx-live"><i class="lv-dot"></i>LIVE</span><span class="lv-when">${dayLabel(m.when)} · ${hm(m.when)} ${tzs(m.when)}</span></div><div class="lv-main">${col(m.a,a,w==1)}<div class="lv-sc"><span class="${w==1?'kc-cy':''}">${m.sa}</span><i class="lv-sep"></i><span class="${w==2?'kc-cy':''}">${m.sb}</span></div>${col(m.b,b,w==2)}</div><div class="lv-rx"></div></div></div>`};
 const upCard=m=>`<div class="g r p-3 fd"><div class="flex items-center gap-2">${mSide(m.a,1,'flex-1')}<div class="w-[88px] text-center leading-tight shrink-0"><div class="text-[9px] uppercase tracking-wider k-t5">${dayLabel(m.when)} · ${hm(m.when)}<span class="block normal-case tracking-normal opacity-70">${tzs(m.when)}</span></div><b class="font-head text-[15px] kc-cy tabular-nums" data-cd="${esc(m.when)}">…</b><button class="flex items-center gap-0.5 mx-auto mt-0.5 text-[10px] k-t4 hv-k-hi" aria-label="В календарь / Add to calendar" onclick="event.stopPropagation();icsM('${m.id}')">${ic('cal')}+</button></div>${mSide(m.b,0,'flex-1')}</div>${predBox(m)}</div>`;
 const finCard=m=>{const w=m.sa>m.sb?1:m.sb>m.sa?2:0;return`<div class="g r p-2.5 fd"><div class="flex items-center gap-2"><div class="flex-1 ${w==2?'opacity-50':''}">${mSide(m.a,1)}</div><div class="w-[66px] text-center font-head font-black text-lg tabular-nums shrink-0"><span class="${w==1?'kc-cy':'k-t4'}">${m.sa}</span><span class="k-hi-25 mx-1">:</span><span class="${w==2?'kc-cy':'k-t4'}">${m.sb}</span></div><div class="flex-1 ${w==1?'opacity-50':''}">${mSide(m.b,0)}</div></div>${window.predRes?predRes(m):''}</div>`};
 const dgrp=(l,fn)=>{let last='',o='';l.forEach(m=>{const d=dayLabel(m.when);if(d!=last){o+=`<div class="text-[11px] uppercase tracking-[.14em] k-t5 mt-2 -mb-0.5 md:col-span-2">${d}</div>`;last=d}o+=fn(m)});return o};
@@ -1836,10 +1868,10 @@ if(sb)sb.from('match_reactions').upsert({match_id:id,user_id:S.me.id,emoji:e},{o
 window.ovCopy=id=>{try{navigator.clipboard.writeText(ovU(id));toast(R('Ссылка для OBS скопирована','OBS link copied'))}catch{toast(ovU(id),6000)}};
 const rxLoad=async()=>{if(!sb)return;try{const r=await sb.rpc('reaction_counts');if(r.error)return;const c={};(r.data||[]).forEach(x=>{(c[x.match_id]=c[x.match_id]||{})[x.emoji]=+x.n});if(JSON.stringify(c)!=JSON.stringify(RC.c)){RC.c=c;if(!$('#m').innerHTML)render(true)}}catch{}};
 setInterval(rxLoad,15000);rxLoad();
-function after(){document.querySelectorAll('#v .rip').forEach(r=>{const cd=r.closest('.rounded-2xl');if(!cd||cd.querySelector('.rx'))return;
-const ids=[...cd.querySelectorAll('[onclick^="openT("]')].map(e=>(e.getAttribute('onclick').match(/'(.*?)'/)||[])[1]),m=DB.matches.find(x=>tsK(x.st)=='live'&&x.a==ids[0]&&x.b==ids[1]);if(!m)return;
-const c=RC.c[m.id]||{},me=RC.me[m.id],d=document.createElement('div');d.className='rx mt-3 flex items-center gap-1.5 justify-center';
-d.innerHTML=RX.map(e=>`<button class="px-3 py-1 rounded-full text-sm border transition active:scale-90 ${me==e?'ko-cy kb-cy-15':'bd-15 bw-05'}" onclick="event.stopPropagation();rxGo('${esc(m.id)}','${e}')">${e} <b class="text-[12px] tabular-nums">${c[e]||0}</b></button>`).join('')+`<button class="px-2 py-1 rounded-full text-[10px] border bd-15 k-t4" title="OBS" onclick="event.stopPropagation();ovCopy('${esc(m.id)}')">OBS</button>`;cd.appendChild(d)})}
+function after(){document.querySelectorAll('#v .lv[data-mid]').forEach(cd=>{const box=cd.querySelector('.lv-rx');if(!box||box.dataset.k)return;
+const m=DB.matches.find(x=>String(x.id)==cd.dataset.mid&&tsK(x.st)=='live');if(!m)return;box.dataset.k=1;
+const c=RC.c[m.id]||{},me=RC.me[m.id];
+box.innerHTML=`<div class="lv-rg">${RX.map(e=>`<button type="button" class="lv-r${me==e?' on':''}" onclick="event.stopPropagation();rxGo('${esc(m.id)}','${e}')"><span>${e}</span><b>${c[e]||0}</b></button>`).join('')}</div><button type="button" class="lv-obs" title="${R('Ссылка для OBS-оверлея','OBS overlay link')}" onclick="event.stopPropagation();ovCopy('${esc(m.id)}')"><span>OBS</span></button>`})}
 new MutationObserver(after).observe($('#v'),{childList:true});after();
 
 /* ---------- 5. сравнение команд ---------- */
