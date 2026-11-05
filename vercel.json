@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/((?!.*\\.(?:js|css|map|json|txt|xml|png|jpe?g|webp|gif|svg|ico|woff2?|ttf|webmanifest)$).*)", "destination": "/index.html" }
+    { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
