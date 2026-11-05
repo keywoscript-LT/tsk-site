@@ -360,32 +360,28 @@ addEventListener('resize',function(){var b=document.getElementById('bot'),a=b&&b
 #offl{position:fixed;left:50%;top:60px;transform:translate(-50%,-140%);z-index:95;padding:8px 16px;border-radius:999px;background:var(--rd);color:#fff;font-weight:700;font-size:13px;transition:transform .25s;box-shadow:0 8px 24px rgba(0,0,0,.35)}
 #offl.on{transform:translate(-50%,0)}
 
-/* ===== шапка «TSK ESPORTS» (киберспортивный стиль) ===== */
-.hx{--cut:26px;margin-bottom:12px;padding:1.5px;background:linear-gradient(135deg,var(--cy) 0%,rgba(0,240,255,.15) 38%,rgba(255,215,0,.15) 62%,var(--gd) 100%);clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)))}
-.hx-in{position:relative;overflow:hidden;padding:20px 18px 22px;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)));background:radial-gradient(60% 90% at 0% 100%,rgba(0,240,255,.2),transparent 62%),radial-gradient(50% 80% at 100% 0%,rgba(255,215,0,.13),transparent 60%),repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 14px),linear-gradient(160deg,#0e131d,#07090e)}
-.hx-in:after{content:"";position:absolute;top:0;bottom:0;left:-40%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.08),transparent);transform:skewX(-20deg);animation:hxs 7s ease-in-out infinite;pointer-events:none}
-@keyframes hxs{0%,55%{left:-40%}100%{left:135%}}
-.hx-c{position:relative;z-index:1}
-.hx-logo{position:absolute;right:-8px;top:50%;transform:translateY(-50%);height:clamp(130px,46vw,300px);opacity:.18;filter:drop-shadow(0 0 22px rgba(0,240,255,.4));pointer-events:none}
+/* ===== шапка «TSK ESPORTS» (киберспортивный стиль, без подсветки) ===== */
+.hx{--cut:26px;margin-bottom:12px;padding:1.5px;background:linear-gradient(135deg,rgba(0,240,255,.7),rgba(255,255,255,.08) 45%,rgba(255,215,0,.5));clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)))}
+.hx-in{position:relative;overflow:hidden;padding:20px 18px 22px;clip-path:polygon(0 0,calc(100% - var(--cut)) 0,100% var(--cut),100% 100%,var(--cut) 100%,0 calc(100% - var(--cut)));background:repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px),linear-gradient(160deg,#0e131d,#07090e)}
+.hx-row{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.hx-mark{height:clamp(92px,26vw,140px);width:auto;flex:none;filter:none}
+.hx-c{position:relative;min-width:0}
+.hx-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hx-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .hx-tag{display:inline-block;padding:5px 14px;font:800 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;background:var(--cy);color:#07090E;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
 .hx-tag2{background:rgba(255,255,255,.12);color:#e2e8f0}
 .hx-live{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;font:900 10px/1 Montserrat,Inter,sans-serif;letter-spacing:.16em;color:#fff;background:var(--rd);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
-.hx-t{margin:12px 0 0;font:900 clamp(54px,16vw,104px)/.85 Montserrat,Inter,sans-serif;font-style:italic;text-transform:uppercase;letter-spacing:-.02em;color:#fff}
-.hx-w1{display:block;text-shadow:3px 3px 0 rgba(0,240,255,.35)}
-.hx-w2{display:block;margin-top:.1em;font-size:.46em;letter-spacing:.2em;color:var(--cy);text-shadow:0 0 26px rgba(0,240,255,.55)}
-.hx-p{margin:14px 0 0;max-width:420px;font-size:13px;line-height:1.45;color:#b6c0d0}
+.hx-p{margin:12px 0 0;max-width:440px;font-size:13px;line-height:1.45;color:#b6c0d0}
 .hx-sts{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 .hx-s{transform:skewX(-10deg);min-width:86px;padding:8px 16px 8px 12px;background:rgba(255,255,255,.06);border-left:3px solid var(--c)}
 .hx-s>*{display:block;transform:skewX(10deg)}
 .hx-s b{font:900 22px/1 Montserrat,Inter,sans-serif;color:#fff;font-variant-numeric:tabular-nums}
 .hx-s span{margin-top:4px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8d99ae}
 .hx-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.hx-b{display:inline-flex;align-items:center;justify-content:center;padding:12px 26px;border:0;cursor:pointer;font:800 12px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:filter .15s,transform .1s}
-.hx-b:active{transform:scale(.96)}.hx-b:hover{filter:brightness(1.12)}
+.hx-b{display:inline-flex;align-items:center;justify-content:center;padding:12px 26px;border:0;cursor:pointer;font:800 12px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:transform .1s}
+.hx-b:active{transform:scale(.96)}
 .hx-b1{background:var(--cy);color:#07090E}.hx-b2{background:rgba(255,255,255,.12);color:#fff}
-@media(min-width:768px){.hx{--cut:34px}.hx-in{padding:34px 40px 36px}.hx-logo{right:40px;height:300px;opacity:.95}.hx-p{font-size:14px}.hx-s b{font-size:26px}}
-@media(prefers-reduced-motion:reduce){.hx-in:after{animation:none;display:none}}
+@media(min-width:768px){.hx{--cut:34px}.hx-in{padding:32px 40px 34px}.hx-row{flex-direction:row;align-items:center;gap:40px}.hx-mark{height:220px}.hx-p{font-size:14px}.hx-s b{font-size:26px}}
 /* карточки новостей */
 .nw-th{width:64px;height:64px;flex:none;border-radius:8px;background-size:cover;background-position:center}
 .nw-fi{height:176px;background-size:cover;background-position:center}
@@ -1425,7 +1421,7 @@ V.news=q=>{
  top=[...DB.teams].sort((a,b)=>(b.pps||0)-(a.pps||0)).slice(0,3),mx=Math.max(1,top[0]?.pps||1),
  pic=n=>/^(https?:|data:image\/)/.test(n.img||'')?esc(n.img):'';window._nc=cats;
  const st=(v,l,c)=>`<div class="hx-s" style="--c:${c}"><b>${v}</b><span>${l}</span></div>`,
- hero=`<div class="hx fd"><div class="hx-in dk"><img src="${L}" class="hx-logo" alt=""><div class="hx-c"><div class="hx-tags"><span class="hx-tag">Brawl Stars</span><span class="hx-tag hx-tag2">International</span>${lv.length?`<span class="hx-live"><i class="rip"></i>${lv.length} LIVE</span>`:''}</div><h1 class="hx-t"><span class="hx-w1">TSK</span><span class="hx-w2">ESPORTS</span></h1><p class="hx-p">${R('Рейтинг команд, матчи, турниры и переходы игроков — всё о Brawl Stars в одном месте.','Team rankings, matches, tournaments and player transfers — all Brawl Stars in one place.')}</p><div class="hx-sts">${st(DB.teams.length,R('команд','teams'),'var(--cy)')}${st(DB.players.length,R('игроков','players'),'var(--gd)')}${st(DB.matches.length,R('матчей','matches'),'var(--pu)')}</div><div class="hx-cta"><button class="hx-b hx-b1" onclick="go('matches')">${t('matches')}</button><button class="hx-b hx-b2" onclick="go('rank')">${t('rank')}</button></div></div></div></div><!--he-->`,
+ hero=`<div class="hx fd"><div class="hx-in dk"><div class="hx-row"><img src="${L}" class="hx-mark" alt="TSK Esports"><div class="hx-c"><div class="hx-tags"><span class="hx-tag">Brawl Stars</span><span class="hx-tag hx-tag2">International</span>${lv.length?`<span class="hx-live"><i class="rip"></i>${lv.length} LIVE</span>`:''}</div><h1 class="hx-sr">TSK Esports</h1><p class="hx-p">${R('Рейтинг команд, матчи, турниры и переходы игроков — всё о Brawl Stars в одном месте.','Team rankings, matches, tournaments and player transfers — all Brawl Stars in one place.')}</p><div class="hx-sts">${st(DB.teams.length,R('команд','teams'),'var(--cy)')}${st(DB.players.length,R('игроков','players'),'var(--gd)')}${st(DB.matches.length,R('матчей','matches'),'var(--pu)')}</div><div class="hx-cta"><button class="hx-b hx-b1" onclick="go('matches')">${t('matches')}</button><button class="hx-b hx-b2" onclick="go('rank')">${t('rank')}</button></div></div></div></div></div><!--he-->`,
  live=lv.length||nx?`<div class="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-2 mb-1">${lv.map(m=>`<div class="min-w-0">${liveCard(m)}</div>`).join('')}${nx?`<div class="min-w-0">${hd(R('Ближайший матч','Next match'))}${upCard(nx)}</div>`:''}</div>`:'',
  chips=cats.length>1?`<div class="hs mb-2.5">${segBtn(!cur,"S.nc='';render()",t('all'),all.length)}${cats.map((c,i)=>segBtn(cur==c,`S.nc=_nc[${i}];render()`,ic(ci(c)[0])+' '+esc(c),all.filter(n=>n.cat==c).length)).join('')}</div>`:'',
  head=(n,c,e,big)=>`<div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold" style="color:${c}"><span class="text-sm">${ic(e)}</span>${esc(n.cat)}<span class="k-t5 font-medium normal-case tracking-normal">· ${ago(n.when)}</span>${NEW(n)}</div>`;
