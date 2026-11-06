@@ -2084,7 +2084,7 @@ window.dlT=id=>{const x=tm(id);if(!x)return;const all=sortedT(),r=all.findIndex(
   chips:pls.map(p=>p.nick)})};
 })();
 
-const _op=window.openP;window.openP=function(id){_op.apply(this,arguments);const b=document.querySelector('#m .su');if(b)b.classList.add('pcard','tn-page');if(b&&!b.querySelector('.pshare')){const d=document.createElement('button');d.className='btn k w-full mt-3 pshare';d.innerHTML=ic('share')+' '+R('Поделиться карточкой','Share card');d.onclick=()=>dlP(id);b.appendChild(d)}};
+const _op=window.openP;window.openP=function(id){_op.apply(this,arguments);const b=document.querySelector('#m .su');if(b){b.classList.add('pcard','tn-page');const _pp=DB.players.find(z=>z.id==id);if(_pp&&typeof _pp.color=='string'&&/^#[0-9a-f]{6}$/i.test(_pp.color))b.style.setProperty('--pc',_pp.color);else b.style.removeProperty('--pc')}if(b&&!b.querySelector('.pshare')){const d=document.createElement('button');d.className='btn k w-full mt-3 pshare';d.innerHTML=ic('share')+' '+R('Поделиться карточкой','Share card');d.onclick=()=>dlP(id);b.appendChild(d)}};
 })();
 </script>
 <script>
@@ -2675,12 +2675,16 @@ if(typeof _o=='function')window.openT=function(){tnClose();return _o.apply(this,
 .rk-none .ic{display:block;width:48px;height:48px;margin:0 auto 10px;color:var(--tn-ac);opacity:.5}
 @media(max-width:520px){.rk-pod{padding:18px 8px 2px 18px;gap:6px}.rk-list{padding-left:18px;padding-right:8px}.rk-pp{font-size:18px}}
 /* ===== профиль игрока и страница команды: стиль Рейтинга, углы скруглены ===== */
-.su.pcard{border-left:4px solid var(--tn-ac)!important;box-shadow:0 3px 0 var(--tn-sh)}
+.su.pcard{border-left:4px solid var(--pc,var(--tn-ac))!important;box-shadow:0 3px 0 var(--tn-sh)}
 .pcard .g,.tcard .g,.pcard .rounded-xl.border{background:var(--tn-sf)!important;border:1px solid var(--tn-bd2)!important;box-shadow:0 2px 0 var(--tn-sh)!important}
 .pcard .g:hover,.tcard .g:hover{background:var(--tn-s2)!important}
 .pcard .dk.relative.overflow-hidden.rounded-2xl,.tcard section.dk{position:relative;border:1px solid var(--tn-bd)!important;box-shadow:0 3px 0 var(--tn-sh)}
-.pcard .dk.relative.overflow-hidden.rounded-2xl:before,.tcard section.dk:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--tn-ac);z-index:2}
-.pcard .ring-2{box-shadow:0 3px 0 var(--tn-sh)!important;border:2px solid var(--tn-ac)}
+.pcard .dk.relative.overflow-hidden.rounded-2xl:before,.tcard section.dk:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pc,var(--tn-ac));z-index:2}
+.pcard .ring-2{box-shadow:0 3px 0 var(--tn-sh)!important;border:2px solid var(--pc,var(--tn-ac))}
+.pcard[style*="--pc"] .kc-cy{color:var(--pc)!important}
+.pcard[style*="--pc"] .kb-cy{background:var(--pc)!important}
+.pcard[style*="--pc"] .ko-cy{border-color:var(--pc)!important}
+.pcard[style*="--pc"] .dk.relative.overflow-hidden.rounded-2xl{border-color:var(--pc)!important}
 </style>
 <script>
 /* ===== Вкладка «Рейтинг» в стиле «Турниров» ===== */
