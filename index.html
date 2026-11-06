@@ -2871,7 +2871,7 @@ const _m=V.matches;V.matches=q=>wrap(_m(q));
 /* ---- редактор ---- */
 .bx-ov{z-index:900!important}
 body.bx-open #m>div{z-index:1100}body.bx-open #t{z-index:1200}
-.bx-ovb{padding:14px 14px calc(90px + env(safe-area-inset-bottom));max-width:760px;width:100%;margin:0 auto}
+.bx-ovb{padding:14px 14px calc(130px + env(safe-area-inset-bottom));max-width:760px;width:100%;margin:0 auto}
 .bx-sec{margin-top:14px;padding:14px;background:var(--tn-sf);border:1px solid var(--tn-bd);border-radius:2px}
 .bx-sec:first-child{margin-top:0}
 .bx-sec h3{margin:0 0 10px;font:900 12px/1 Montserrat,Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tn-mu)}
@@ -2904,10 +2904,45 @@ body.bx-open #m>div{z-index:1100}body.bx-open #t{z-index:1200}
 .bx-sl{display:grid;gap:4px;margin-top:8px;max-height:230px;overflow:auto}
 .bx-sr{display:flex;align-items:center;gap:8px;padding:5px 6px;border:1px solid var(--tn-bd);background:var(--tn-bg);border-radius:2px;font-size:13px;font-weight:700}
 .bx-sr span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bx-bar{position:fixed;left:0;right:0;bottom:0;z-index:2;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--tn-bg);border-top:1px solid var(--tn-bd);display:flex;gap:8px;justify-content:center}
+.bx-bar{position:fixed;left:0;right:0;bottom:0;z-index:2;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--tn-bg);border-top:1px solid var(--tn-bd);display:flex;flex-direction:column;align-items:center;gap:8px}
 .bx-bar .btn{flex:1;max-width:360px}
 .bx-ck{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:10px;cursor:pointer}
 .bx-ck input{width:18px;height:18px}
+
+/* ---- редактор: шаги, секции, превью ---- */
+.bx-steps{display:flex;align-items:center;gap:6px;padding:12px 14px;margin-bottom:14px;background:var(--tn-sf);border:1px solid var(--tn-bd);border-radius:2px}
+.bx-st{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--tn-mu);white-space:nowrap}
+.bx-st b{width:22px;height:22px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--tn-bd2);font:900 11px Montserrat,Inter,sans-serif;flex:none}
+.bx-st.ok{color:var(--tn-tx)}.bx-st.ok b{background:var(--tn-ac);border-color:var(--tn-ac);color:var(--tn-onac)}
+.bx-st b .ic{width:12px;height:12px}
+.bx-steps em{flex:1;height:1px;background:var(--tn-bd2);min-width:8px}
+.bx-sh{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.bx-sh h3{margin:0 0 4px!important}
+.bx-sh p{margin:0;font-size:12px;line-height:1.4;color:var(--tn-mu)}
+.bx-nm{flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:2px;background:var(--tn-s2);border:1px solid var(--tn-bd2);font:900 13px Montserrat,Inter,sans-serif}
+.bx-nm.ok{background:var(--tn-ac);color:var(--tn-onac);border-color:var(--tn-ac)}
+.bx-nm .ic{width:14px;height:14px}
+.bx-c{float:right;opacity:.7;font-size:10px}
+.bx-req{color:var(--tn-rd);margin-left:2px}
+.bx-quick{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12px;color:var(--tn-mu)}
+.bx-quick .btn{padding:.35rem .8rem;font-size:12px}
+.bx-tools .btn.on{box-shadow:inset 0 0 0 2px var(--tn-ac)}
+.bx-tr.dup{border-color:var(--tn-rd)}
+.bx-kv{font-size:12px;color:var(--tn-mu);margin-bottom:10px;line-height:1.5}.bx-kv b{color:var(--tn-tx)}
+.bx-pv{display:grid;gap:6px;max-height:320px;overflow:auto}
+.bx-pm{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:7px 10px;background:var(--tn-bg);border:1px solid var(--tn-bd);border-radius:2px;font-size:12px;font-weight:700}
+.bx-pm span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bx-pm span:last-child{text-align:right}
+.bx-pm i{font-style:normal;font-size:10px;color:var(--tn-mu);font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.bx-pm em{font-style:normal;color:var(--tn-mu);font-size:10px;margin-right:6px}
+.bx-pm.bye{opacity:.6}
+.bx-opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin-top:12px;border:1px solid var(--tn-bd2);background:var(--tn-bg);border-radius:2px;cursor:pointer}
+.bx-opt input{width:18px;height:18px;margin-top:1px;flex:none}
+.bx-opt b{display:block;font-size:13px}.bx-opt small{display:block;margin-top:2px;font-size:11px;line-height:1.4;color:var(--tn-mu)}
+.bx-bst{font-size:12px;color:var(--tn-mu);text-align:center;width:100%;max-width:728px}.bx-bst.ok{color:var(--tn-ac)}
+.bx-bb{display:flex;gap:8px;width:100%;justify-content:center}
+.bx-bar .btn:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:480px){.bx-st span{font-size:11px}.bx-steps{gap:4px;padding:10px}}
 /* ---- счёт ---- */
 .bx-sm{display:grid;gap:8px;margin-top:10px}
 .bx-sx{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--tn-bd2);background:var(--tn-bg);border-radius:10px}
@@ -3068,30 +3103,57 @@ let BE=null;const MAXT=64,EL=()=>document.getElementById('bx-ed'),
 sig=d=>JSON.stringify([(d.teams||[]).map(t=>[t.id,t.name,t.logo||''])]);
 function edOpen(c){const d=c?JSON.parse(JSON.stringify(dOf(c))):{};
  BE={id:c?c.id:null,orig:c||null,name:c?c.name:'',game:c?c.game||'':'Brawl Stars',descr:c?c.descr||'':'',choice:curChoice(c),teams:(d.teams||[]).map(t=>({id:t.id||uid(),name:t.name||'',logo:t.logo||''})),third:!!d.third,res:d.res||{},dirty:false,site:false,bulk:false,busy:false};
- let o=EL();if(!o){o=document.createElement('div');o.id='bx-ed';o.className='tn-page tn-ov bx-ov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);document.body.classList.add('bx-open');document.documentElement.style.overflow='hidden';o.addEventListener('input',()=>{BE.dirty=true})}
+ let o=EL();if(!o){o=document.createElement('div');o.id='bx-ed';o.className='tn-page tn-ov bx-ov';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');document.body.appendChild(o);document.body.classList.add('bx-open');document.documentElement.style.overflow='hidden';o.addEventListener('input',()=>{BE.dirty=true;window.bxLive&&bxLive()})}
  edPaint();if(!c)setTimeout(()=>{const i=document.getElementById('bx-name');i&&i.focus()},80)}
 function edClose(force){if(!force&&BE&&BE.dirty&&!confirm(R('Закрыть без сохранения? Изменения пропадут.','Close without saving? Changes will be lost.')))return;const o=EL();if(o)o.remove();document.body.classList.remove('bx-open');document.documentElement.style.overflow='';BE=null}
 window.bxEdClose=()=>edClose();
 const draftCalc=()=>calc({teams:BE.teams.filter(t=>t.name.trim()),third:BE.third,res:BE.res}),
-trH=(t,i)=>`<div class="bx-tr"><span class="bx-sd">${i+1}</span><label class="bx-av ${t.up?'ld':''}" title="${esc(R('Загрузить логотип','Upload logo'))}">${lg({name:t.name||'?',logo:t.logo,id:t.id},'h-9 w-9')}<input type="file" accept="image/*" onchange="bxLogo(${i},this)"></label><input class="inp" data-ti="${i}" maxlength="30" value="${esc(t.name)}" placeholder="${esc(R('Название команды','Team name'))}" oninput="BE_.teams[${i}].name=this.value" onkeydown="if(event.key=='Enter'){event.preventDefault();document.getElementById('bx-add').focus()}"><div class="bx-ac">${t.logo?`<button class="bx-ib u2" title="${esc(R('Убрать логотип','Remove logo'))}" onclick="bxTm(${i},'nologo')">${ic('minus')}</button>`:''}<button class="bx-ib" ${i?'':'disabled'} onclick="bxTm(${i},'up')">${ic('up')}</button><button class="bx-ib" ${i<BE.teams.length-1?'':'disabled'} onclick="bxTm(${i},'dn')">${ic('dn')}</button><button class="bx-ib d" onclick="bxTm(${i},'del')">${ic('trash')}</button></div></div>`,
+trH=(t,i)=>`<div class="bx-tr${DUP[clean(t.name).toLowerCase()]>1?' dup':''}"><span class="bx-sd">${i+1}</span><label class="bx-av ${t.up?'ld':''}" title="${esc(R('Загрузить логотип','Upload logo'))}">${lg({name:t.name||'?',logo:t.logo,id:t.id},'h-9 w-9')}<input type="file" accept="image/*" onchange="bxLogo(${i},this)"></label><input class="inp" data-ti="${i}" maxlength="30" value="${esc(t.name)}" placeholder="${esc(R('Название команды','Team name'))}" oninput="BE_.teams[${i}].name=this.value" onkeydown="if(event.key=='Enter'){event.preventDefault();document.getElementById('bx-add').focus()}"><div class="bx-ac">${t.logo?`<button class="bx-ib u2" title="${esc(R('Убрать логотип','Remove logo'))}" onclick="bxTm(${i},'nologo')">${ic('minus')}</button>`:''}<button class="bx-ib" ${i?'':'disabled'} onclick="bxTm(${i},'up')">${ic('up')}</button><button class="bx-ib" ${i<BE.teams.length-1?'':'disabled'} onclick="bxTm(${i},'dn')">${ic('dn')}</button><button class="bx-ib d" onclick="bxTm(${i},'del')">${ic('trash')}</button></div></div>`,
 siteList=q=>{q=String(q||'').toLowerCase();const have=new Set(BE.teams.map(t=>t.site).filter(Boolean)),L=(DB.teams||[]).filter(x=>!q||String(x.name).toLowerCase().includes(q)).sort((a,b)=>(b.pps||0)-(a.pps||0)).slice(0,40);
  return L.map(x=>`<div class="bx-sr">${lg(x,'h-7 w-7')}<span>${esc(x.name)}</span><button class="bx-ib" ${have.has(x.id)||BE.teams.length>=MAXT?'disabled':''} onclick="bxSite('${esc(x.id)}')">${ic('plus')}</button></div>`).join('')||`<div class="bx-sum">${t('none')}</div>`};
-function edPaint(){const o=EL();if(!o||!BE)return;const old=o.querySelector('.tn-ovb'),st=old?old.scrollTop:0,ct=draftCalc(),n=BE.teams.length,orig=BE.orig,
- appr=!!(orig&&orig.visibility=='public'&&orig.pub_req=='approved');
- o.innerHTML=`<div class="tn-ovh"><div class="tn-ovt"><span class="tn-tag">${BE.id?R('Редактирование','Editing'):R('Новая сетка','New bracket')}</span><h2 class="tn-ovn font-head">${esc(BE.name||R('Без названия','Untitled'))}</h2></div><button class="tn-ovx" aria-label="${R('Закрыть','Close')}" onclick="bxEdClose()">${ic('x')}</button></div>
+let DUP={};
+const dupSet=()=>{const m={};BE.teams.forEach(t=>{const k=clean(t.name).toLowerCase();if(k)m[k]=(m[k]||0)+1});return m},
+stat=()=>{const nm=clean(BE.name).length>=2,n=BE.teams.filter(t=>clean(t.name)).length,miss=[];if(!nm)miss.push(R('название','a name'));if(n<2)miss.push(n==1?R('ещё 1 команду','1 more team'):R('минимум 2 команды','at least 2 teams'));return{nm,n,ok:!miss.length,miss}},
+statTxt=s=>{if(!s.ok)return R('Не хватает: ','Missing: ')+s.miss.join(', ');const ct=draftCalc();return'✓ '+R('Всё готово','All set')+(ct?` · ${ct.n} ${R('команд','teams')}, ${ct.total} ${R('матчей','matches')}`:'')},
+stepsHtml=s=>[[R('Название','Name'),s.nm],[R('Команды','Teams'),s.n>=2],[R('Готово','Ready'),s.ok]].map((x,i)=>`<div class="bx-st ${x[1]?'ok':''}"><b>${x[1]?ic('check'):i+1}</b><span>${x[0]}</span></div>`).join('<em></em>'),
+pvHtml=()=>{const ct=draftCalc();if(!ct)return`<div class="bx-sum" style="margin:0">${R('Добавь минимум 2 команды — здесь появится сетка.','Add at least 2 teams — the bracket preview will appear here.')}</div>`;
+ const L=BE.teams.filter(t=>t.name.trim()),sd=x=>x?L.findIndex(z=>z.id==x.id)+1:0,nm=x=>x?`<em>№${sd(x)}</em>${esc(x.name)}`:'—';
+ return`<div class="bx-kv"><b>${ct.n}</b> ${R('команд','teams')} → <b>${ct.R0}</b> ${R('раунд(ов)','round(s)')}, <b>${ct.total}</b> ${R('матчей','matches')}${ct.byes?`, <b>${ct.byes}</b> ${R('автопроход(ов)','bye(s)')}`:''}<br>${R('Первый раунд','First round')}: <b>${esc(rn(0,ct.R0))}</b></div><div class="bx-pv">${ct.rounds[0].map(m=>m.bye?`<div class="bx-pm bye"><span>${nm(m.w)}</span><i>${R('автопроход','bye')}</i><span></span></div>`:`<div class="bx-pm"><span>${nm(m.a)}</span><i>vs</i><span>${nm(m.b)}</span></div>`).join('')}</div>`};
+window.bxLive=()=>{if(!BE)return;const o=EL();if(!o)return;const s=stat(),q=x=>o.querySelector(x),g=q('#bx-stat'),bt=q('#bx-go'),p=q('#bx-pv'),h=q('#bx-ttl'),st=q('#bx-steps'),nc=q('#bx-nc'),dc=q('#bx-dc');
+ if(g){g.className='bx-bst'+(s.ok?' ok':'');g.textContent=statTxt(s)}
+ if(bt)bt.disabled=!s.ok||BE.busy;
+ if(p)p.innerHTML=pvHtml();
+ if(h)h.textContent=BE.name||R('Без названия','Untitled');
+ if(st)st.innerHTML=stepsHtml(s);
+ if(nc)nc.textContent=String(BE.name||'').length+'/60';
+ if(dc)dc.textContent=String(BE.descr||'').length+'/300'};
+window.bxQuick=k=>{for(let i=1;i<=k;i++)addTeam(R('Команда ','Team ')+i);edPaint()};
+window.bxClear=()=>{if(!BE.teams.length)return;if(!confirm(R('Удалить все команды из списка?','Remove all teams from the list?')))return;BE.teams=[];BE.res={};BE.dirty=true;edPaint()};
+const secH=(num,title,hint,done)=>`<div class="bx-sh"><span class="bx-nm ${done?'ok':''}">${done?ic('check'):num}</span><div><h3>${title}</h3><p>${hint}</p></div></div>`;
+function edPaint(){const o=EL();if(!o||!BE)return;const old=o.querySelector('.tn-ovb'),st=old?old.scrollTop:0,n=BE.teams.length,orig=BE.orig,s=stat(),
+ appr=!!(orig&&orig.visibility=='public'&&orig.pub_req=='approved');DUP=dupSet();const hasDup=Object.values(DUP).some(v=>v>1);
+ o.innerHTML=`<div class="tn-ovh"><div class="tn-ovt"><span class="tn-tag">${BE.id?R('Редактирование','Editing'):R('Новая сетка','New bracket')}</span><h2 class="tn-ovn font-head" id="bx-ttl">${esc(BE.name||R('Без названия','Untitled'))}</h2></div><button class="tn-ovx" aria-label="${R('Закрыть','Close')}" onclick="bxEdClose()">${ic('x')}</button></div>
  <div class="tn-ovb"><div class="bx-ovb">
- <div class="bx-sec"><h3>${R('Основное','Basics')}</h3><label class="f">${R('Название турнира','Tournament name')}<input id="bx-name" class="inp" maxlength="60" value="${esc(BE.name)}" placeholder="${esc(R('Например: Весенний кубок TSK','e.g. Spring Cup'))}" oninput="BE_.name=this.value"></label><label class="f">${R('Описание (необязательно)','Description (optional)')}<textarea class="inp" rows="2" maxlength="300" oninput="BE_.descr=this.value" placeholder="${esc(R('Даты, призы, правила, ссылка на чат…','Dates, prizes, rules, chat link…'))}">${esc(BE.descr)}</textarea></label></div>
- <div class="bx-sec"><h3>${R('Доступ','Access')}</h3>${visBox(BE.choice,'bxEdVis')}${BE.choice=='public'&&!appr?`<div class="bx-note w">${R('Публичной сетка станет после одобрения администрации. До этого она доступна по ссылке-приглашению.','The bracket goes public after staff approval. Until then it is available by invite link.')}</div>`:''}${appr?`<div class="bx-note">${R('Сетка опубликована. Если изменить название, описание или состав команд — она уйдёт на повторную проверку (счёт можно менять свободно).','The bracket is published. Changing the name, description or teams sends it for re-review (scores can be changed freely).')}</div>`:''}${orig&&orig.pub_req=='rejected'?`<div class="bx-note e">${R('Прошлая заявка отклонена','Previous request declined')}${orig.pub_note?': '+esc(orig.pub_note):''}</div>`:''}</div>
- <div class="bx-sec"><h3>${R('Команды','Teams')} · ${n}/${MAXT}</h3>
-  <div class="bx-addrow"><input id="bx-add" class="inp" maxlength="30" placeholder="${esc(R('Название команды и Enter — добавить','Team name, Enter to add'))}" onkeydown="if(event.key=='Enter'){event.preventDefault();bxAdd(this.value)}"><button class="btn" onclick="bxAdd(document.getElementById('bx-add').value)">${ic('plus')}</button></div>
-  <div class="bx-tools"><button class="btn k" onclick="BE_.bulk=!BE_.bulk;bxRe()">${R('Вставить списком','Paste a list')}</button><button class="btn k" onclick="BE_.site=!BE_.site;bxRe()">${R('Команды с сайта','Site teams')}</button><button class="btn k" onclick="bxShuffle()" ${n<3?'disabled':''}>${ic('swap')} ${R('Жеребьёвка','Shuffle')}</button></div>
+ <div class="bx-steps" id="bx-steps">${stepsHtml(s)}</div>
+ <div class="bx-sec">${secH(1,R('Основное','Basics'),R('Как назвать турнир и что о нём рассказать.','Name your tournament and describe it.'),s.nm)}
+  <label class="f">${R('Название турнира','Tournament name')}<span class="bx-req">*</span><span class="bx-c" id="bx-nc">${String(BE.name||'').length}/60</span><input id="bx-name" class="inp" maxlength="60" value="${esc(BE.name)}" placeholder="${esc(R('Например: Весенний кубок TSK','e.g. Spring Cup'))}" oninput="BE_.name=this.value"></label>
+  <label class="f">${R('Описание (необязательно)','Description (optional)')}<span class="bx-c" id="bx-dc">${String(BE.descr||'').length}/300</span><textarea class="inp" rows="2" maxlength="300" oninput="BE_.descr=this.value" placeholder="${esc(R('Даты, призы, правила, ссылка на чат…','Dates, prizes, rules, chat link…'))}">${esc(BE.descr)}</textarea></label></div>
+ <div class="bx-sec">${secH(2,`${R('Команды','Teams')} · <span id="bx-cnt">${n}</span>/${MAXT}`,R('Впиши названия по одному, вставь списком или выбери команды сайта.','Type names one by one, paste a list or pick site teams.'),s.n>=2)}
+  <div class="bx-addrow"><input id="bx-add" class="inp" maxlength="30" placeholder="${esc(R('Название команды и Enter — добавить','Team name, Enter to add'))}" onkeydown="if(event.key=='Enter'){event.preventDefault();bxAdd(this.value)}"><button class="btn" aria-label="${R('Добавить','Add')}" onclick="bxAdd(document.getElementById('bx-add').value)">${ic('plus')}</button></div>
+  ${n?'':`<div class="bx-quick"><span>${R('Быстрый старт','Quick start')}:</span>${[4,8,16,32].map(k=>`<button class="btn k" onclick="bxQuick(${k})">${k}</button>`).join('')}<span>${R('команд — потом переименуешь','teams — rename them later')}</span></div>`}
+  <div class="bx-tools"><button class="btn k ${BE.bulk?'on':''}" onclick="BE_.bulk=!BE_.bulk;bxRe()">${R('Вставить списком','Paste a list')}</button><button class="btn k ${BE.site?'on':''}" onclick="BE_.site=!BE_.site;bxRe()">${R('Команды с сайта','Site teams')}</button><button class="btn k" onclick="bxShuffle()" ${n<3?'disabled':''}>${ic('swap')} ${R('Перемешать','Shuffle')}</button>${n?`<button class="btn k" onclick="bxClear()">${ic('trash')} ${R('Очистить','Clear')}</button>`:''}</div>
   ${BE.bulk?`<div style="margin-top:10px"><textarea id="bx-bulk" class="inp" rows="5" placeholder="${esc(R('По одной команде на строку (или через запятую)','One team per line (or comma separated)'))}"></textarea><button class="btn" style="margin-top:8px" onclick="bxBulk()">${ic('plus')} ${R('Добавить всех','Add all')}</button></div>`:''}
   ${BE.site?`<div style="margin-top:10px"><input class="inp" placeholder="${esc(R('Поиск команды сайта','Search site teams'))}" oninput="bxSiteQ(this.value)"><div class="bx-sl" id="bx-sl">${siteList('')}</div></div>`:''}
   <div class="bx-tl">${BE.teams.map(trH).join('')}</div>
-  ${n?`<div class="bx-sum">${R('Порядок = посев: сильнейшие вверху (№1 играет с самым слабым).','Order = seeding: strongest on top (#1 meets the weakest).')}</div>`:`<div class="bx-sum">${R('Добавь команды: впиши названия, вставь списком или выбери с сайта. Логотип — нажми на кружок.','Add teams: type names, paste a list or pick from the site. Logo — tap the circle.')}</div>`}</div>
- <div class="bx-sec"><h3>${R('Сетка','Bracket')}</h3>${ct?`<div class="bx-sum" style="margin:0">${ct.n} ${R('команд','teams')} → ${ct.R0} ${R('раунд(ов)','round(s)')}, ${ct.total} ${R('матчей','matches')}${ct.byes?`, ${ct.byes} ${R('автопроход(ов)','bye(s)')}`:''}</div>`:`<div class="bx-sum" style="margin:0">${R('Нужно минимум 2 команды.','At least 2 teams are needed.')}</div>`}<label class="bx-ck"><input type="checkbox" ${BE.third?'checked':''} ${n<4?'disabled':''} onchange="BE_.third=this.checked;BE_.dirty=true;bxRe()"> ${R('Матч за 3-е место','Third place match')}</label>${Object.keys(BE.res).length?`<button class="btn k" style="margin-top:10px" onclick="bxResetRes()">${R('Сбросить все результаты','Reset all results')}</button>`:''}</div>
+  ${hasDup?`<div class="bx-note w">${R('Есть команды с одинаковыми названиями (подсвечены красным).','Some teams share a name (highlighted in red).')}</div>`:''}
+  ${n?`<div class="bx-sum">${R('Порядок = посев. №1 играет с самой слабой командой, №2 — с предпоследней и т.д. Стрелками меняй порядок или нажми «Перемешать» для случайной жеребьёвки. Если команд не степень двойки, сильнейшие проходят первый раунд без игры.','Order = seeding. #1 meets the weakest team, #2 the second weakest, etc. Use arrows to reorder or hit “Shuffle” for a random draw. If the team count is not a power of two, top seeds skip the first round.')}</div>`:`<div class="bx-sum">${R('Логотип — нажми на кружок рядом с командой.','Logo — tap the circle next to a team.')}</div>`}</div>
+ <div class="bx-sec">${secH(3,R('Сетка','Bracket'),R('Так выглядит первый раунд. Обновляется сразу.','This is the first round. Updates instantly.'),s.n>=2)}
+  <div id="bx-pv">${pvHtml()}</div>
+  <label class="bx-opt"><input type="checkbox" ${BE.third?'checked':''} ${n<4?'disabled':''} onchange="BE_.third=this.checked;BE_.dirty=true;bxRe()"><span><b>${R('Матч за 3-е место','Third place match')}</b><small>${R('Проигравшие в полуфиналах сыграют за бронзу. Нужно от 4 команд.','Semifinal losers play for bronze. Needs 4+ teams.')}</small></span></label>
+  ${Object.keys(BE.res).length?`<button class="btn k" style="margin-top:10px" onclick="bxResetRes()">${R('Сбросить все результаты','Reset all results')}</button>`:''}</div>
+ <div class="bx-sec">${secH(4,R('Доступ','Access'),R('Кто увидит сетку. Это можно поменять позже.','Who can see the bracket. You can change it later.'),true)}${visBox(BE.choice,'bxEdVis')}${BE.choice=='public'&&!appr?`<div class="bx-note w">${R('Публичной сетка станет после одобрения администрации. До этого она доступна по ссылке-приглашению.','The bracket goes public after staff approval. Until then it is available by invite link.')}</div>`:''}${appr?`<div class="bx-note">${R('Сетка опубликована. Если изменить название, описание или состав команд — она уйдёт на повторную проверку (счёт можно менять свободно).','The bracket is published. Changing the name, description or teams sends it for re-review (scores can be changed freely).')}</div>`:''}${orig&&orig.pub_req=='rejected'?`<div class="bx-note e">${R('Прошлая заявка отклонена','Previous request declined')}${orig.pub_note?': '+esc(orig.pub_note):''}</div>`:''}</div>
  ${BE.id?`<div class="bx-sec"><h3>${R('Опасная зона','Danger zone')}</h3><button class="btn r" onclick="bxDelete()">${ic('trash')} ${R('Удалить сетку','Delete bracket')}</button></div>`:''}
- </div></div><div class="bx-bar"><button class="btn k" onclick="bxEdClose()">${R('Отмена','Cancel')}</button><button class="btn" onclick="bxSave()" ${BE.busy?'disabled':''}>${ic('check')} ${BE.id?R('Сохранить','Save'):R('Создать сетку','Create bracket')}</button></div>`;
+ </div></div><div class="bx-bar"><div class="bx-bst${s.ok?' ok':''}" id="bx-stat">${statTxt(s)}</div><div class="bx-bb"><button class="btn k" onclick="bxEdClose()">${R('Отмена','Cancel')}</button><button class="btn" id="bx-go" onclick="bxSave()" ${!s.ok||BE.busy?'disabled':''}>${ic('check')} ${BE.id?R('Сохранить','Save'):R('Создать сетку','Create bracket')}</button></div></div>`;
  const nb=o.querySelector('.tn-ovb');if(nb)nb.scrollTop=st}
 window.BE_=new Proxy({},{get:(_,k)=>BE&&BE[k],set:(_,k,v)=>{if(BE)BE[k]=v;return true}});
 window.bxRe=edPaint;
@@ -3113,6 +3175,7 @@ window.bxLogo=async(i,inp)=>{const f=inp.files&&inp.files[0],t=BE.teams[i];inp.v
   BE.dirty=true}catch(e){toast(errTxt(e)||R('Не удалось загрузить логотип','Logo upload failed'),5000)}
  t.up=0;if(BE)edPaint()};
 window.bxSave=async()=>{if(!BE||BE.busy)return;const name=clean(BE.name).slice(0,60);if(name.length<2)return toast(R('Укажи название турнира','Enter the tournament name'));
+ if(BE.teams.filter(t=>clean(t.name)).length<2)return toast(R('Добавь минимум 2 команды','Add at least 2 teams'));
  const teams=BE.teams.map(t=>({id:t.id,name:clean(t.name).slice(0,30),logo:su(t.logo||'')})).filter(t=>t.name);
  if(new Set(teams.map(t=>t.name.toLowerCase())).size<teams.length&&!confirm(R('Есть команды с одинаковыми названиями. Всё равно сохранить?','Some teams share a name. Save anyway?')))return;
  const d=prune({v:1,teams,third:BE.third&&teams.length>=4,res:BE.res}),o=BE.orig,appr=!!(o&&o.visibility=='public'&&o.pub_req=='approved'),
