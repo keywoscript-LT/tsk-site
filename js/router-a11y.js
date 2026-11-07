@@ -87,8 +87,8 @@ window.TSKR={seo:seoNow,setH,ent:v=>{ENT=v},pathOf};
 addEventListener('popstate',()=>{route()});
 addEventListener('hashchange',()=>{if(!rel()&&/^#\//.test(location.hash))route()});
 /* старые ссылки вида /#/team/id -> /team/id/ */
-if(!rel()&&/^#\/[\w-]+/.test(location.hash)){const[k0,i0]=parse();if(KNOWN(k0)){try{history.replaceState(null,'',pathOf(k0,i0))}catch(e){}}route()}
-else if(rel())route();
+if(!rel()&&/^#\/[\w-]+/.test(location.hash)){const[k0,i0]=parse();if(KNOWN(k0)){try{history.replaceState(null,'',pathOf(k0,i0))}catch(e){}}try{route()}catch(e){console.warn('[TSK]',e)}}
+else if(rel()){try{route()}catch(e){console.warn('[TSK]',e)}}
 else seoNow();
 /* skeleton пока грузится Supabase */
 const SKC='<div class="g sk-card"><i class="sk sk-av"></i><div class="sk-ln"><i class="sk" style="width:55%"></i><i class="sk" style="width:85%"></i><i class="sk" style="width:35%"></i></div></div>',SK='<div class="mt-3" aria-busy="true" aria-label="Loading"><i class="sk sk-h"></i><div class="space-y-2 mt-4">'+SKC.repeat(5)+'</div></div>';
