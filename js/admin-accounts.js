@@ -1,0 +1,21 @@
+/* ===== v8: админка — аккаунты (просмотр и удаление) ===== */
+(()=>{
+const ACC=window._ACC={list:null,loading:0,err:''};
+const AE={self:['Нельзя удалить свой аккаунт','You cannot delete your own account'],staff:['Это админ: сначала убери его во вкладке «Админы»','This is a staff member: remove them in the Admins tab first'],forbidden:['Нет прав','No permission'],not_found:['Аккаунт не найден','Account not found'],auth:['Войди заново','Please sign in again']};
+async function accLoad(){ACC.loading=1;ACC.err='';let r;try{r=await sb.functions.invoke('admin-users',{body:{a:'list'}})}catch(e){r={error:e}}
+ if(r.error||!r.data||!r.data.users){const er=r.error&&r.error.context&&r.error.context.json?await r.error.context.json().catch(()=>null):null;ACC.err=(er&&er.error)||'server'}else ACC.list=r.data.users;
+ ACC.loading=0;if(S.sec=='accounts')render()}
+window.accReload=()=>{ACC.list=null;ACC.err='';render()};
+window.accDel=async id=>{const a=(ACC.list||[]).find(x=>x.id==id);if(!a)return;const nm=a.nick||(a.email||'').split('@')[0],pr=DB.players.find(p=>p.uid==id);
+ if(!confirm(R(`Удалить аккаунт «${nm}»?\n\nАккаунт удалится навсегда, человек не сможет войти. Привязка Telegram освободится — он сможет зарегистрироваться заново.`+(pr?`\n\nИгровой профиль «${pr.nick}» останется в списке игроков — удали его отдельно, если нужно.`:''),`Delete account “${nm}”?\n\nThis is permanent and the person will not be able to sign in. Their Telegram link is freed so they can register again.`+(pr?`\n\nThe player profile “${pr.nick}” stays in the players list — delete it separately if needed.`:''))))return;
+ const r=await sb.functions.invoke('admin-users',{body:{a:'delete',id}});
+ if(r.error||!r.data||!r.data.ok){const er=r.error&&r.error.context&&r.error.context.json?await r.error.context.json().catch(()=>null):null,e=AE[er&&er.error];return toast(e?R(e[0],e[1]):R('Не удалось удалить аккаунт','Could not delete the account'))}
+ ACC.list=ACC.list.filter(x=>x.id!=id);toast(R('Аккаунт удалён','Account deleted'));try{await load()}catch(_){}render()};
+window.accountsPanel=(secs,k)=>{if(!ACC.list&&!ACC.loading&&!ACC.err)accLoad();
+ const q=(S.aq||'').toLowerCase().trim(),L=(ACC.list||[]).filter(a=>{const pr=DB.players.find(p=>p.uid==a.id);return!q||[a.nick,a.email,pr&&pr.nick].join(' ').toLowerCase().includes(q)}),
+ d=x=>x?new Date(x).toLocaleDateString(S.lang):'—',pill=(t,c)=>`<span class="text-[10px] font-bold uppercase px-1.5 py-px rounded-full" style="color:${c};background:${c}22">${t}</span>`;
+ return`${admHead(secs,k)}<div class="flex gap-2 mb-2"><input class="inp !mt-0 flex-1" placeholder="${R('Поиск аккаунта','Search accounts')}… (${(ACC.list||[]).length})" value="${esc(S.aq||'')}" oninput="S.aq=this.value;render()"><button class="btn k shrink-0" onclick="accReload()">${R('Обновить','Refresh')}</button></div>`
+ +(ACC.loading?`<div class="space-y-1.5">${'<div class="g h-14 animate-pulse"></div>'.repeat(4)}</div>`:ACC.err?`<div class="g p-4 text-sm kc-rd">${R('Не удалось загрузить аккаунты','Could not load accounts')} [${esc(ACC.err)}]<br><span class="k-t4 text-[12px]">${R('Проверь, что функция admin-users задеплоена в Supabase.','Check that the admin-users function is deployed in Supabase.')}</span></div>`
+ :`<div class="grid gap-1.5">${L.map(a=>{const nm=a.nick||(a.email||'').split('@')[0],pr=DB.players.find(p=>p.uid==a.id),em=a.email&&!/@tsk-players\.com$/.test(a.email)?a.email:'';
+ return`<div class="g p-2.5 flex items-center gap-2.5 fd"><div class="h-9 w-9 shrink-0 rounded-full bw-10 grid place-items-center font-head font-black kc-cy">${esc((nm[0]||'?').toUpperCase())}</div><div class="min-w-0 flex-1"><div class="flex items-center gap-1.5 flex-wrap"><b class="truncate text-sm">${esc(nm)}</b>${a.staff?pill('staff','#FFD700'):''}${a.tg?pill('TG','#00F0FF'):''}${pr?pill(R('игрок','player'),'#7CFF6B'):''}</div><div class="text-[11px] k-t5 truncate">${esc(em)}${em?' · ':''}${R('создан','created')} ${d(a.created_at)} · ${R('вход','last login')} ${d(a.last_sign_in_at)}</div></div>${a.staff?'':`<button class="btn r !p-2 shrink-0" aria-label="${R('Удалить аккаунт','Delete account')}" onclick="accDel('${esc(a.id)}')">${ic('trash')}</button>`}</div>`}).join('')||`${EMP.mini(t('none'))}`}</div>`)};
+})();

@@ -1,0 +1,26 @@
+.mx-pg{display:flex;flex-direction:column}
+.mx-pg>section.g{order:3}
+.mx-pg>section.g:first-of-type{margin-top:20px!important}
+.mx-hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 10px 22px}
+.mx-hero .tn-kv{margin:0}
+.mx-hero .tn-kv b{font-size:20px}
+.mx-body{padding:6px 10px 12px}
+.mx-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:768px){.mx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mx-day{grid-column:1/-1}}
+.mx-day{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--tn-mu)}
+.mx-day:before{content:"";width:14px;height:3px;background:var(--tn-st)}
+.mx-day:first-child{margin-top:2px}
+.mx-body .g,.mx-body .g.r{background:var(--tn-sf);border:1px solid var(--tn-bd2);border-radius:2px;box-shadow:0 2px 0 var(--tn-sh);-webkit-backdrop-filter:none;backdrop-filter:none}
+/* верхние блоки страницы «Матчи» (лиги, MVP, прогнозы, серия) — в стиле турниров */
+.tn-page>section.g{position:relative;margin:12px 0 0!important;background:var(--tn-bg);border:1px solid var(--tn-bd);border-radius:2px!important;box-shadow:0 3px 0 var(--tn-sh);overflow:hidden;color:var(--tn-tx);-webkit-backdrop-filter:none;backdrop-filter:none}
+.tn-page>section.g:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--mx-c,var(--tn-ac));z-index:2}
+.tn-page>section.g.p-3{padding-left:18px}
+.tn-page>section.g[data-cz=lg]{--mx-c:var(--tn-ln)}
+.tn-page>section.g[data-cz=mvp]{--mx-c:var(--tn-gd)}
+.tn-page>section.g[data-cz=pred]{--mx-c:var(--tn-ac)}
+.tn-page>section.g[data-cz=streak]{--mx-c:var(--tn-rd)}
+.tn-page>section.g .text-\[15px\]{text-transform:uppercase;letter-spacing:.06em;font-size:14px}
+.tn-page>section.g .rounded-xl,.tn-page>section.g .rounded-full,.tn-page>section.g .cz-b{border-radius:2px!important}
+.tn-page>section.g .g.r{background:var(--tn-s2);border:1px solid var(--tn-bd2);border-radius:2px!important;box-shadow:none}
+.tn-page>section.g .btn{border-radius:2px!important}
+.tn-page>section.g .bd-10{border-color:var(--tn-bd)!important}

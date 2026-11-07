@@ -1,0 +1,34 @@
+.sx{border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.025);margin:0 0 .75rem;overflow:hidden}
+.sx-q{display:flex;align-items:center;gap:.4rem;padding:0 .55rem 0 .9rem;border-bottom:1px solid rgba(255,255,255,.09)}
+.sx-q:focus-within{box-shadow:inset 0 -2px 0 var(--cy)}
+.sx-q input{flex:1;min-width:0;background:none;border:0;outline:0!important;box-shadow:none;color:inherit;padding:.85rem 0;font-size:16px}
+.sx-q input::-webkit-search-cancel-button,.sx-q input::-webkit-search-decoration{-webkit-appearance:none;display:none}
+.sx-x{display:none;place-items:center;width:28px;height:28px;border-radius:8px;color:#8d99ae;flex-shrink:0}
+.sx-x:hover{background:rgba(255,255,255,.08);color:#fff}.sx-q.has .sx-x{display:grid}
+.sx-n{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:#8d99ae;background:rgba(255,255,255,.07);border-radius:6px;padding:.28rem .5rem;flex-shrink:0}
+.sx-r{display:grid;grid-template-columns:1fr 1fr}.sx-r.one{grid-template-columns:1fr}
+.sx-c{display:block;padding:.55rem .9rem .7rem;min-width:0}.sx-c+.sx-c{border-left:1px solid rgba(255,255,255,.09)}
+.sx-l{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8d99ae;margin-bottom:.3rem}
+.sx select{display:block;width:100%;appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238d99ae' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 2px center/11px;border:0;color:inherit;font-weight:700;padding:.2rem 1.2rem .2rem 0;text-overflow:ellipsis;cursor:pointer}
+.sx select option{background:#0b0f16;color:#eef1f6}
+.sx-seg{display:flex;border:1px solid rgba(255,255,255,.14);border-radius:8px;overflow:hidden}
+.sx-seg button,.sx-x,.sx-sw,.sx-ft button{border:0;background:none;font-family:inherit;cursor:pointer}
+.sx-seg button{flex:1;padding:.38rem 0;font-size:12px;font-weight:800;color:#8d99ae;transition:background .15s,color .15s}
+.sx-seg button+button{border-left:1px solid rgba(255,255,255,.14)}.sx-seg button:hover{color:#fff}
+.sx-seg button.on{background:var(--cy);color:#07090E}
+.sx-sw{display:flex;align-items:center;gap:.65rem;width:100%;padding:.65rem .9rem;border-top:1px solid rgba(255,255,255,.09);font-size:13px;font-weight:600;color:#c3cbd8;text-align:left}
+.sx-sw i{position:relative;width:30px;height:18px;border-radius:9px;background:rgba(255,255,255,.2);flex-shrink:0;transition:background .15s}
+.sx-sw i:after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s}
+.sx-sw[aria-checked=true] i{background:var(--cy)}.sx-sw[aria-checked=true] i:after{left:14px;background:#07090E}
+.sx-sw b{margin-left:auto;font-size:11px;color:#8d99ae;font-variant-numeric:tabular-nums}
+.sx-ft{display:none;align-items:center;justify-content:space-between;padding:.5rem .9rem;border-top:1px solid rgba(255,255,255,.09);font-size:12px;color:#8d99ae}
+.sx.act .sx-ft{display:flex}.sx-ft button{font-weight:700;color:var(--cy)}.sx-ft button:hover{text-decoration:underline}
+.light .sx{background:#fff;border-color:rgba(15,23,42,.14)}
+.light .sx-q,.light .sx-c+.sx-c,.light .sx-sw,.light .sx-ft{border-color:rgba(15,23,42,.1)}
+.light .sx-q:focus-within{box-shadow:inset 0 -2px 0 #0284c7}
+.light .sx-n{background:rgba(15,23,42,.06);color:#64748b}.light .sx-l,.light .sx-x,.light .sx-sw b,.light .sx-ft{color:#64748b}
+.light .sx-x:hover{background:rgba(15,23,42,.06);color:#0f172a}
+.light .sx-seg,.light .sx-seg button+button{border-color:rgba(15,23,42,.16)}.light .sx-seg button{color:#64748b}.light .sx-seg button:hover{color:#0f172a}
+.light .sx-seg button.on{background:#0284c7;color:#fff}
+.light .sx-sw{color:#334155}.light .sx-sw i{background:rgba(15,23,42,.22)}.light .sx-sw[aria-checked=true] i{background:#0284c7}.light .sx-sw[aria-checked=true] i:after{background:#fff}
+.light .sx-ft button{color:#0284c7}.light .sx select option{background:#fff;color:#0f172a}

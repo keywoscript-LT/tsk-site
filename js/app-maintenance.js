@@ -1,0 +1,18 @@
+/* ===== ТЕХ. ПЕРЕРЫВ ===== */
+const MT={on:false,w:0};
+const mtTxt=()=>MT.on?'ВКЛЮЧЁН — сайт закрыт':'выключен — сайт открыт';
+async function mtLoad(){if(!sb)return;try{const{data}=await sb.from('site_settings').select('value').eq('key','maintenance').maybeSingle();const on=!!(data&&data.value&&data.value.on);if(on!==MT.on){MT.on=on;mtApply()}}catch(_){}}
+function mtApply(){let o=document.getElementById('mt');const show=MT.on&&MT.w&&!S.user;
+if(show&&!o){o=document.createElement('div');o.id='mt';o.className='fixed inset-0 z-[52] flex items-center justify-center p-6 text-center';o.style.cssText='background:radial-gradient(900px 500px at 50% 0%,rgba(0,240,255,.12),transparent 60%),#07090E;color:#e8edf5;font-family:system-ui,sans-serif';
+o.innerHTML='<div style="max-width:480px"><div style="font-size:44px;font-weight:900;letter-spacing:.08em">TSK<span style="color:#FF2E63">/</span></div><h1 style="font-size:22px;margin:18px 0 8px;color:#00F0FF;text-transform:uppercase;letter-spacing:.06em">Технический перерыв</h1><p style="color:#8b94a7;line-height:1.55;margin:6px 0">Мы обновляем сайт. Скоро вернёмся — загляни позже.</p><p style="color:#8b94a7;font-size:14px;opacity:.8;margin-top:14px">Maintenance break. We are updating the site and will be back soon.</p><button onclick="adminBtn()" style="margin-top:28px;background:none;border:0;color:#8b94a7;opacity:.5;font-size:12px;cursor:pointer;text-decoration:underline">Вход для персонала / Staff login</button></div>';
+document.body.appendChild(o);document.documentElement.style.overflow='hidden'}
+else if(!show&&o){o.remove();document.documentElement.style.overflow=''}
+const st=document.getElementById('mt-st');if(st){st.textContent=mtTxt();st.style.color=MT.on?'#FF2E63':'#00F0FF'}}
+function mtCard(){return`<div class="g p-3 mt-3"><div class="flex items-center justify-between gap-2"><b class="font-head">${R('Технический перерыв','Maintenance mode')}</b><span id="mt-st" class="text-[11px] font-bold uppercase" style="color:${MT.on?'#FF2E63':'#00F0FF'}">${mtTxt()}</span></div><p class="text-[12px] k-t4 mt-1">${R('Сайт закроется для всех, кроме персонала. Для включения нужен ключ владельца.','The site closes for everyone except staff. The owner key is required to enable.')}</p><input id="mt-key" class="inp mt-2" type="password" placeholder="${R('Ключ владельца','Owner key')}" autocomplete="off"><div class="grid grid-cols-2 gap-2 mt-2"><button class="btn r" onclick="mtSet(true)">${R('Включить','Enable')}</button><button class="btn k" onclick="mtSet(false)">${R('Выключить','Disable')}</button></div></div>`}
+async function mtSet(on){const i=$('#mt-key'),k=i?i.value:'';if(on&&!k)return toast(R('Введи ключ владельца','Enter the owner key'));const{data,error}=await sb.rpc('set_maintenance',{p_on:on,p_key:k});if(error)return toast(error.message);if(data&&data.ok===false)return toast(data.error);if(i)i.value='';toast(on?R('Тех. перерыв включён','Maintenance enabled'):R('Тех. перерыв выключен','Maintenance disabled'));mtLoad()}
+/* Cloudflare Turnstile: вставь Site Key сюда (пусто = капча выключена) */
+const TS_KEY='0x4AAAAAAFxD6VXCzLaHHy7_';
+let _tsId=null,_tsTok=null;
+function tsMount(sel){_tsTok=null;_tsId=null;if(!TS_KEY)return;const go=()=>{if(!window.turnstile||!document.querySelector(sel))return setTimeout(go,200);_tsId=turnstile.render(sel,{sitekey:TS_KEY,theme:'dark',callback:t=>{_tsTok=t},'expired-callback':()=>{_tsTok=null},'error-callback':()=>{_tsTok=null}})};go()}
+function tsTok(){return TS_KEY?_tsTok:undefined}
+function tsReset(){_tsTok=null;if(window.turnstile&&_tsId!==null)try{turnstile.reset(_tsId)}catch(_){}}
