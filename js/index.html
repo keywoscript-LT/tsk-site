@@ -1,0 +1,84 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><script>(function(){var p=location.pathname,m=p.match(/^(.*?\/)(?:(?:team|player|news|rank|players|matches|tourn|games|lfg|rules|about|privacy|terms)(?:\/.*)?|index\.html)$/);window.TSK_ROOT=m?m[1]:(p.slice(-1)=='/'?p:p.replace(/[^\/]*$/,''))})()</script><script>window.TSK_V='1';
+/* скрипты: качаются параллельно, выполняются подряд одним куском (см. конец body) */
+window.TSK_LANG0=(()=>{try{const v=localStorage.getItem('tsk-lang');if(/^(ru|en|uk|kk|pl|de|es|pt|fr|it|tr|ja|ko|zh)$/.test(v))return v}catch(e){}const a=[].concat(navigator.languages||[],navigator.language||[]);for(const x of a){const c=String(x).toLowerCase().split('-')[0];if(/^(ru|en|uk|kk|pl|de|es|pt|fr|it|tr|ja|ko|zh)$/.test(c))return c;if('be ky uz tg tk hy az ka'.split(' ').indexOf(c)>-1)return'ru'}return a.length?'en':'ru'})();
+window.TSK_FILES=[["js/bottom-nav.js"],["brawlers.js",1],["js/brawlers-api.js"],["js/battle-cards.js"],["js/ui-states.js"],["js/app-core.js"],["js/app-supabase.js"],["js/app-maintenance.js"],["js/app-state.js"],["js/app-cards.js"],["js/app-views.js"],["js/app-admin.js"],["js/app-data.js"],["js/app-i18n.js"],["js/app-registration.js"],["js/app-account.js"],["js/app-profile.js"],["js/app-bans-rules.js"],["js/app-lfg.js"],["js/app-pwa.js"],["js/app-moderation.js"],["js/app-notify.js"],["js/app-init.js"],["js/pages-static.js"],["js/router-a11y.js"],["js/predictions-data.js"],["js/news-view.js"],["js/rank-v5.js"],["js/players-view.js"],["js/matches-tourn-v7.js"],["js/card-tilt.js"],["js/scroll-reveal.js"],["js/transitions-theme.js"],["js/news-editor.js"],["js/telegram-gate.js"],["js/admin-accounts.js"],["js/predictions-ui.js"],["js/engagement.js"],["js/leagues-mvp-card.js"],["js/games-v16.js"],["js/games-v17.js"],["brawlers-local.js",1],["js/games-hub.js"],["js/access-guard.js"],["js/i18n-new-strings.js"],["js/rank-view.js"],["js/ext-teams.js"],["js/i18n-uk-kk.js"],["js/i18n-extra.js"],["js/lang-menu.js"],["js/init-ui.js"],["js/lang-persist.js"],["js/a11y-lazyimg.js"],["js/news-links.js"],["js/matches-collapse.js"],["js/brackets.js"]];
+(function(){var F=TSK_FILES,P=["pl","de","es","pt","fr","it","tr","ja","ko","zh"],l=TSK_LANG0;if(P.indexOf(l)>-1)F.splice(49,0,['lang/'+l+'.js']);
+window.TSK_LOADING=Promise.all(F.map(function(f){return fetch(TSK_ROOT+f[0]+'?v='+TSK_V).then(function(r){if(!r.ok)throw new Error(f[0]+' '+r.status);return r.text()}).catch(function(e){if(f[1])return'';throw e})}))})();
+window.langLoad=function(n,cb){if(window.LGOK&&LGOK[n])return cb();var s=document.createElement('script');s.src=TSK_ROOT+'lang/'+n+'.js?v='+TSK_V;s.onload=function(){cb()};s.onerror=function(){cb(1)};document.head.appendChild(s)};</script>
+<script>window.nex=function(){return""};window.nart=function(){return""};</script><script>window.__errs=[];addEventListener("error",function(e){try{__errs.push([Date.now(),e.message,e.lineno]);__errs.length>30&&__errs.shift();console.warn("[TSK]",e.message)}catch(_){}});addEventListener("unhandledrejection",function(e){try{var r=e.reason;__errs.push([Date.now(),String(r&&r.message||r)]);console.warn("[TSK]",r)}catch(_){}})</script><script>try{localStorage.getItem("tsk-theme")==="light"&&document.documentElement.classList.add("light")}catch(e){}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07090E">
+<title>TSK Esports — Brawl Stars: рейтинг команд, турниры и матчи</title><meta name="description" content="TSK Esports — международная организация по Brawl Stars: рейтинг команд PPS, расписание и результаты матчей, турниры, составы, поиск команды и переходы игроков."><link rel="canonical" href="https://tsk-esports.vercel.app/"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"><meta name="application-name" content="TSK Esports"><meta property="og:type" content="website"><meta property="og:site_name" content="TSK Esports"><meta property="og:url" content="https://tsk-esports.vercel.app/"><meta property="og:title" content="TSK Esports — Brawl Stars: рейтинг, турниры, матчи"><meta property="og:description" content="Рейтинг команд PPS, расписание и результаты матчей, турниры и составы по Brawl Stars."><meta property="og:image" content="https://tsk-esports.vercel.app/og-image.png"><meta property="og:image:type" content="image/png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="TSK Esports — Brawl Stars: рейтинг, турниры, матчи"><meta name="twitter:description" content="Рейтинг команд PPS, расписание и результаты матчей, турниры и составы по Brawl Stars."><meta name="twitter:image" content="https://tsk-esports.vercel.app/og-image.png"><meta name="twitter:image:alt" content="TSK Esports — международная организация по Brawl Stars"><meta name="color-scheme" content="dark light"><script type="application/ld+json" id="ld-org">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://tsk-esports.vercel.app/#org","name":"TSK Esports","alternateName":["TSK","TSK Esports Brawl Stars"],"url":"https://tsk-esports.vercel.app/","logo":{"@type":"ImageObject","url":"https://tsk-esports.vercel.app/icon-192.png","width":192,"height":192},"image":"https://tsk-esports.vercel.app/icon-192.png","description":"TSK Esports — международная организация по Brawl Stars. Рейтинг команд PPS, расписание и результаты матчей, турниры, составы, поиск команды и переходы игроков.","sameAs":["https://t.me/TSKesports"]},{"@type":"WebSite","@id":"https://tsk-esports.vercel.app/#site","url":"https://tsk-esports.vercel.app/","name":"TSK Esports","alternateName":"TSK","inLanguage":["ru","en","uk","kk"],"publisher":{"@id":"https://tsk-esports.vercel.app/#org"}}]}</script><meta name="format-detection" content="telephone=no"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png"><link rel="shortcut icon" href="/favicon.png"><link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png"><link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="TSK"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://eqbrylfbhscxjslarsph.supabase.co" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><meta property="og:locale" content="ru_RU"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="uk_UA"><meta property="og:locale:alternate" content="kk_KZ"><meta property="og:image:alt" content="TSK Esports — международная организация по Brawl Stars">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<script>window.__twCfg={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],head:['Montserrat','Inter','sans-serif']}}}};window.__twRetry=function(){if(window.__twTried)return;window.__twTried=1;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com/3.4.17';s.onload=function(){try{tailwind.config=window.__twCfg}catch(e){}};s.onerror=function(){var r=document.createElement('script');r.src='https://cdn.tailwindcss.com/3.4.17?r='+Date.now();document.head.appendChild(r);r.onload=s.onload};document.head.appendChild(s)}</script>
+<script>document.write('<link rel="stylesheet" href="'+TSK_ROOT+'tw.css" onerror="window.__twRetry()">')</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>["base","mobile-fix","search-filter","country-picker","compare","polish","tournaments","matches","rating","brackets"].forEach(function(n){document.write('<link rel="stylesheet" href="'+TSK_ROOT+'css/'+n+'.css?v='+TSK_V+'">')})</script>
+
+
+
+
+
+
+
+
+</head><body>
+<a href="#v" class="skip" onclick="var m=document.getElementById('v');m.tabIndex=-1;m.focus();return false">Перейти к содержимому</a>
+<header class="sticky top-0 z-40 bg-[rgba(7,9,14,.88)] backdrop-blur-lg border-b bd-05">
+<div class="max-w-5xl mx-auto px-3 md:px-6 py-2 flex items-center gap-2">
+<a href="#" onclick="go('news');return false" class="flex items-center gap-2 active:scale-95 transition"><img id="hl" class="logo h-8 md:h-10" alt="TSK"><span class="font-head font-black text-[15px] md:text-lg tracking-wider leading-none">TSK <span class="kc-cy font-extrabold">ESPORTS</span></span></a>
+<nav id="top" aria-label="Основная навигация" class="hidden md:flex gap-1 ml-6"></nav>
+<button class="btn k !px-2.5 ml-auto" onclick="langMenu(event)" aria-haspopup="menu" id="lg"></button>
+<button class="btn k !px-2.5" id="me" onclick="meBtn()"></button>
+<button class="btn k !px-2.5" id="ad" onclick="adminBtn()" style="display:none"></button></div>
+</header>
+<noscript><div style="max-width:720px;margin:0 auto;padding:24px;font:16px/1.5 system-ui,sans-serif;color:#eef1f6"><h1>TSK Esports — Brawl Stars</h1><p>TSK Esports — международная организация по Brawl Stars. Рейтинг команд PPS, расписание и результаты матчей, турниры, составы, поиск команды и переходы игроков.</p><ul><li><a href="rank/">Рейтинг команд</a></li><li><a href="players/">Игроки</a></li><li><a href="matches/">Матчи</a></li><li><a href="tourn/">Турниры</a></li><li><a href="lfg/">Поиск команды</a></li><li><a href="rules/">Правила</a></li><li><a href="about/">О нас</a></li><li><a href="https://t.me/TSKesports">Telegram</a></li></ul><p>Для работы сайта нужен включённый JavaScript.</p></div></noscript><main id="v" class="max-w-5xl mx-auto px-3 md:px-6 pt-3 pb-4"></main>
+<footer id="ft"></footer>
+<nav id="bot" aria-label="Нижняя навигация" class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex bg-[rgba(10,13,19,.88)] backdrop-blur-lg border-t bd-10" style="padding-bottom:env(safe-area-inset-bottom)"></nav>
+<div id="m"></div><div id="t" role="status" aria-live="polite" class="fixed top-14 left-1/2 -translate-x-1/2 z-[90]"></div>
+<script>
+TSK_LOADING.then(function(T){
+ var ae=window.addEventListener;window.addEventListener=function(t,f,o){if(t==='load'&&document.readyState==='complete'){setTimeout(f,0);return}return ae.apply(this,arguments)};
+ try{for(var i=0;i<T.length;i++){if(!T[i])continue;var s=document.createElement('script');s.text=T[i]+'\n//# sourceURL='+TSK_ROOT+TSK_FILES[i][0];document.head.appendChild(s)}}finally{window.addEventListener=ae}
+ try{if(window.LGPACKS&&LGPACKS.indexOf(S.lang)>-1&&!(window.LGOK&&LGOK[S.lang]))langLoad(S.lang,function(){ui()})}catch(e){}
+}).catch(function(e){console.error(e);var v=document.getElementById('v');if(v)v.innerHTML='<div style="padding:24px;text-align:center;font:16px system-ui,sans-serif;color:#9aa6b8">Не удалось загрузить сайт. Проверь соединение и <a href="" style="color:#00F0FF">обнови страницу</a>.<br>Failed to load the site — check your connection and reload.</div>'});
+</script>
+
+
+
+
+
+
+<noscript><p style="padding:2rem;color:#eef1f6;font-family:sans-serif">Для работы TSK Esports нужен включённый JavaScript.</p></noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
